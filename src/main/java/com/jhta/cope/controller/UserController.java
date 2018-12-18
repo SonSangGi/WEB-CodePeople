@@ -7,5 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user/*")
 public class UserController {
 
+	@RequestMapping("home")
+	public String home() {
+		return "user/home";
+	}
 	
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+    <!-- 
+    	트랜잭션매니저를 스프링의 빈으로 등록한다.
+     -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	  <property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+    <!-- 
+    	@Transactional 어노테이션이 부착된 클래스의 모든 메소드가 실행될 때 트랜잭션 서비스가 제공되도록 한다.
+     -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+</beans>

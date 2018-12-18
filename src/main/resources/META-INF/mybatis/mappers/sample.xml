@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jhta.cope.dao.SampleDao">
+	
+	<select id="getAllEmployees" resultType="Employee">
+		select employee_id as id,first_name || last_name as name
+		from employees
+	</select>
+
+</mapper>

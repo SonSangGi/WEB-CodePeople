@@ -5,10 +5,10 @@
 <configuration>
 	<settings><setting name="jdbcTypeForNull" value="NULL"/></settings>
 	<typeAliases>
-		<typeAlias alias="Employee" type="com.jhta.cope.vo.Employee"/>
+		<typeAlias alias="User" type="com.jhta.cope.vo.User"/>
 	</typeAliases>
 
 	<mappers>
-		<mapper resource="META-INF/mybatis/mappers/sample.xml" />
+		<mapper resource="META-INF/mybatis/mappers/user.xml" />
 	</mappers>
 </configuration>

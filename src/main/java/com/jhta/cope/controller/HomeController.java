@@ -7,8 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.jhta.cope.service.sample;
-import com.jhta.cope.vo.Employee;
+import com.jhta.cope.service.UserService;
 
 /**
  * Handles requests for the application home page.
@@ -16,15 +15,11 @@ import com.jhta.cope.vo.Employee;
 @Controller
 public class HomeController {
 	@Autowired
-	private sample sample;
+	private UserService userService;
 	
 	@RequestMapping("/home")
 	public String home(Locale locale, Model model) {
 
-		for (Employee employee: sample.getAllEmployees()) {
-			System.out.println(employee.getId()+" : "+employee.getName());
-		}
-		
 		return "home";
 	}
 	

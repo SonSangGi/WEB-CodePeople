@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class SampleTest {
 
 	@Autowired
-	sample sample;
+	UserService sample;
 	
 	
 	@Test

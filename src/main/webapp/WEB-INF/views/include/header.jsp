@@ -43,7 +43,7 @@
             </div>
          </div>
          <div class="col-xs-2 sg-menu-right">
-            <span class="sg-menu-login"style="font-size:15px;color:white;font-weight:bold">로그인 | 회원가입</span>
+            <span class="sg-menu-login"style="font-size:15px;color:white;font-weight:bold"><button class="sg-text-white sg-btn-none" data-toggle="modal" data-target="#login-modal">로그인</button> || <a class="sg-text-white">회원가입</a></span>
             <a class="glyphicon glyphicon-user" style="font-size:25px;"></a>
             <div class="sg-menu-info">
                <div class="sg-info-menu-box">
@@ -59,23 +59,20 @@
                   </div>
                   <div class="sg-info-body">
                      <ul>
-                        <li>a</li>
-                        <li>a</li>
-                        <li>a</li>
-                        <li>a</li>
-                        <li>a</li>
-                        <li>a</li>
+                        <li><a>메뉴1</a></li>
+                        <li><a>메뉴1</a></li>
+                        <li><a>메뉴1</a></li>
+                        <li><a>메뉴1</a></li>
+                        <li><a>메뉴1</a></li>
                      </ul>
-
                   </div>
-
                </div>
             </div>
          </div>
       </div>
       <!--네비게이션바 끝~~-->
       <!--유저 헤더 시작~~-->
-      <div class="sg-user-header" style="background: url(<c:url value='/resources/img/'/>basic-header.jpg) 0% 0% / cover !important;position:relative">
+      <div class="sg-user-header" style="background: url(<c:url value='/resources/img/'/>Productsp-Page-Header-1500x300.jpg) 0% 30% / cover !important;position:relative">
          <div class="container text-center sg-user-show">
             <div class="">
                <div class="text-center">
@@ -83,8 +80,8 @@
                   <img class="sg-profile-img" src="<c:url value='/resources/img/'/>icon.png" width="165px" height="165px" alt="">
                </div>
                <div class="col-xs-12 text-center" style="margin-top:20px;">
-                  <a style="color:white;font-size:25px;font-weight:bold" href="#">홍길동</a>
-                  <span class="sg-text-white">(hong0306)</span>
+                  <a style="font-size:25px;font-weight:bold" href="#">홍길동</a>
+                  <span style="position: absolute;margin-top: 10px;">(hong0306)</span>
                </div>
             </div>
          </div>
@@ -92,4 +89,26 @@
            <i class="fas fa-caret-up sg-size-lg sg-text-white" ></i>
          </div>
       </div>
+      
+      
+      <!-- Modal -->
+<div id="login-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
       <!--유저 헤더 끝~~-->

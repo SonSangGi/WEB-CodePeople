@@ -37,6 +37,8 @@ a:hover {
 	z-index:99;
 	position:absolute;
 	transition: 1s;
+	background-color: rgba(255, 89, 89, 0.5);
+	
 }
 .sg-menu>ul>li>a,.sg-header div>a {
 	font-size: 19px;
@@ -44,9 +46,9 @@ a:hover {
 	font-weight: bold;
 	display: inline-block;
 	z-index: 2;
-	margin-top: 30px;
-	margin-left:30px;
-	padding-bottom: 20px;
+    margin-top: 18px;
+    margin-left: 30px;
+    padding-bottom: 8px;
 	cursor: pointer;
 }
 
@@ -93,6 +95,7 @@ a:hover {
 .sg-profile-img {
 	border-radius: 100px;
 	background-color: white;
+	    border: 1px solid lightblue;
 }
 
 /*메뉴 유저 정보*/
@@ -129,8 +132,12 @@ a:hover {
 }
 
 .sg-info-header {
-	background-color: #4c429c;
+	background-color: #ff7373;
+	font-weight: bold;
 	color:white;
+}
+.sg-user-info::first-line {
+	font-size: 18px;
 }
 .sg-info-body{
 	background-color: #4a5554;
@@ -231,13 +238,21 @@ a:hover {
 	border:1px solid #ff7373;
 	font-size: 17px;
 }
+.sg-btn-none{
+	border:none;
+	background:none;
+	font-size:15px;
+}
+.sg-btn-none:active{
+	border:none;
+}
 /*동적 쿼리*/
 @media screen and (max-width: 880px) {
 	.sg-menu>ul{display: none}
 	.sg-user-show{display: none}
 	.sg-menu-right{text-align: right}
 	.sg-menu-left{margin-left: 0px;padding-left: 0px;}
-	.sg-menu-info {left:-50px;}
+	.sg-menu-info {left:-90px;}
 	#header_alt_logo{width:95px;height:22.5px}
 }
 @media screen and (max-width: 1360px) {

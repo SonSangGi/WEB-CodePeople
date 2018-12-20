@@ -19,6 +19,27 @@
 <body>
 <jsp:include page="../include/header.jsp"/>
 <div class="container">
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 </div>
 <jsp:include page="../include/footer.jsp"/>
 </body>

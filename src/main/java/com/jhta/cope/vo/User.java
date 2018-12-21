@@ -20,6 +20,7 @@ public class User {
 	@NotEmpty
 	private String name;
 	private Date createDate;
+	private int authStatus;
 
 	public int getNo() {
 		return no;
@@ -68,11 +69,20 @@ public class User {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+	
+
+	public int getAuthStatus() {
+		return authStatus;
+	}
+
+	public void setAuthStatus(int authStatus) {
+		this.authStatus = authStatus;
+	}
 
 	@Override
 	public String toString() {
 		return "User [no=" + no + ", id=" + id + ", password=" + password + ", email=" + email + ", name=" + name
-				+ ", createDate=" + createDate + "]";
+				+ ", createDate=" + createDate + ", authStatus=" + authStatus + "]";
 	}
 
 }

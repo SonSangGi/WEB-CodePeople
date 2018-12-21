@@ -16,18 +16,52 @@
 	values (user_no_seq.nextval,#{id},#{password},#{email},#{name},sysdate)
 </insert>
 
-<select id="getUserByNo" parameterType="int" resultType="User">
+<insert id="insertUserAuth" parameterType="map">
+	insert into USER_AUTH(
+	AUTH_EMAIL,
+	AUTH_KEY)
+	
+	values(#{email},#{key})
+</insert>
+
+<update id="userAuth" parameterType="map">
+	update USERS
+	set USER_AUTH_STATUS = 1
+	where (select count(*)
+	from user_auth
+	where AUTH_EMAIL = #{email}
+	and AUTH_KEY = #{key}) > 0
+	and user_email = #{email}
+</update>
+
+<select id="getUserById" parameterType="string" resultType="User">
 	select 
 		USER_NO				as no,
 		USER_ID				as id,
 		USER_PASSWORD		as password,
 		USER_EMAIL			as email,
 		USER_NAME			as name,
-		USER_CREATE_DATE	as createDate
+		USER_CREATE_DATE	as createDate,
+		USER_AUTH_STATUS	as authStatus
 	from
 		USERS
 	where
-		user_no = #{value}
+		user_id = #{value}
+</select>
+
+<select id="getUserByEmail" parameterType="string" resultType="User">
+	select 
+		USER_NO				as no,
+		USER_ID				as id,
+		USER_PASSWORD		as password,
+		USER_EMAIL			as email,
+		USER_NAME			as name,
+		USER_CREATE_DATE	as createDate,
+		USER_AUTH_STATUS	as authStatus
+	from
+		USERS
+	where
+		USER_EMAIL = #{value}
 </select>
 
 </mapper>

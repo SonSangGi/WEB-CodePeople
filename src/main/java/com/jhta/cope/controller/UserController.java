@@ -3,11 +3,22 @@ package com.jhta.cope.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.google.api.Google;
+import org.springframework.social.google.api.impl.GoogleTemplate;
+import org.springframework.social.google.api.plus.Person;
+import org.springframework.social.google.api.plus.PlusOperations;
+import org.springframework.social.google.connect.GoogleConnectionFactory;
+import org.springframework.social.oauth2.AccessGrant;
+import org.springframework.social.oauth2.GrantType;
+import org.springframework.social.oauth2.OAuth2Operations;
+import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jhta.cope.service.UserService;
 import com.jhta.cope.util.SessionUtils;
+import com.jhta.cope.vo.Avatar;
 import com.jhta.cope.vo.User;
 
 @Controller
@@ -27,7 +39,52 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	@Autowired
+	GoogleConnectionFactory googleConnectionFactory;
+	@Autowired
+	OAuth2Parameters googleOAuth2Parameters;
 
+	// 구글 로그인&회원가입
+	@RequestMapping(value = "googlelogin", method = RequestMethod.GET)
+	public String googleLogin(@RequestParam("code") String code) throws Exception {
+
+		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
+		AccessGrant accessGrant = oauthOperations.exchangeForAccess(code, googleOAuth2Parameters.getRedirectUri(),
+				null);
+		String accessToken = accessGrant.getAccessToken();
+		Long expireTime = accessGrant.getExpireTime();
+		if (expireTime != null && expireTime < System.currentTimeMillis()) {
+			accessToken = accessGrant.getRefreshToken();
+			System.out.printf("accessToken is expired. refresh token = {}", accessToken);
+		}
+		Connection<Google> connection = googleConnectionFactory.createConnection(accessGrant);
+		Google google = connection == null ? new GoogleTemplate(accessToken) : connection.getApi();
+
+		PlusOperations plusOperations = google.plusOperations();
+		Person profile = plusOperations.getGoogleProfile();
+		User user = userService.getUserById(profile.getId());
+		if (user == null) {
+			user = new User();
+			user.setId(profile.getId())
+				.setEmail(profile.getAccountEmail())
+				.setName(profile.getDisplayName())
+				.setPassword(profile.getId());
+			userService.insertUser(user, "google");
+		}
+		SessionUtils.addAttribute("LOGIN_USER", user);
+
+		return "redirect:/home.do";
+	}
+
+	// 구글 로그인 맵핑
+	@RequestMapping("/googleSignIn")
+	public String googleSign() {
+		OAuth2Operations auth2Operations = googleConnectionFactory.getOAuthOperations();
+		String url = auth2Operations.buildAuthenticateUrl(GrantType.AUTHORIZATION_CODE, googleOAuth2Parameters);
+		return "redirect:" + url;
+	}
+
+	// 기본 로그인
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestParam("id") String id, @RequestParam("password") String password,
 			HttpServletRequest request) {
@@ -57,6 +114,7 @@ public class UserController {
 
 	}
 
+	// 회원가입 매핑
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String registerform(Model model) {
 		User user = new User();
@@ -64,6 +122,7 @@ public class UserController {
 		return "user/registerform";
 	}
 
+	// 회원가입&유효성 검사
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public String registersubmit(@ModelAttribute("userform") @Valid User user, BindingResult errors) throws Exception {
 		if (!errors.hasErrors()) {
@@ -79,7 +138,7 @@ public class UserController {
 		}
 		return "user/registercomplete";
 	}
-
+	
 	@RequestMapping(value = "/emailConfirm")
 	public String emailConfirm(@RequestParam("userEmail") String userEmail, @RequestParam("key") String key,
 			Model model) {

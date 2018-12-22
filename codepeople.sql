@@ -358,17 +358,17 @@ CREATE TABLE Users
 	-- user_no
 	user_no number(5,0) NOT NULL,
 	-- user_id
-	user_id varchar2(20) NOT NULL UNIQUE,
+	user_id varchar2(100) NOT NULL UNIQUE,
 	-- user_password
-	user_password varchar2(20) NOT NULL,
+	user_password varchar2(100) NOT NULL,
 	-- user_email
-	user_email varchar2(40) NOT NULL UNIQUE,
+	user_email varchar2(100) NOT NULL UNIQUE,
 	-- user_name
 	user_name varchar2(24) NOT NULL,
 	-- user_create_date
 	user_create_date date NOT NULL,
 	-- user_auth_status
-	user_auth_status number(1,1) DEFAULT 0 NOT NULL,
+	user_auth_status number(2,0) DEFAULT 0 NOT NULL,
 	PRIMARY KEY (user_no)
 );
 
@@ -629,13 +629,13 @@ ALTER TABLE user_badge
 
 
 ALTER TABLE user_chat
-	ADD FOREIGN KEY (recv_user)
+	ADD FOREIGN KEY (send_user)
 	REFERENCES Users (user_no)
 ;
 
 
 ALTER TABLE user_chat
-	ADD FOREIGN KEY (send_user)
+	ADD FOREIGN KEY (recv_user)
 	REFERENCES Users (user_no)
 ;
 
@@ -647,13 +647,13 @@ ALTER TABLE user_log
 
 
 ALTER TABLE user_follow
-	ADD FOREIGN KEY (fllower)
+	ADD FOREIGN KEY (following)
 	REFERENCES user_avatar (user_no)
 ;
 
 
 ALTER TABLE user_follow
-	ADD FOREIGN KEY (following)
+	ADD FOREIGN KEY (fllower)
 	REFERENCES user_avatar (user_no)
 ;
 

@@ -43,7 +43,19 @@
             <artifactId>spring-context-support</artifactId>
             <version>${org.springframework-version}</version>
         </dependency>
-	
+        
+        <!-- google Auth -->
+		<dependency>
+		    <groupId>org.springframework.social</groupId>
+		    <artifactId>spring-social-google</artifactId>
+		    <version>1.0.0.RELEASE</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpcore</artifactId>
+		    <version>4.4.10</version>
+		</dependency>
+		
 		<!-- 첨부파일 업로드 지원 라이브러리 -->
 		<dependency>
 			<groupId>commons-fileupload</groupId>

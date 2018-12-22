@@ -15,8 +15,8 @@
 		
 				alert(userEmail + '\n이메일 인증이 정상적으로 완료되었습니다.');
 		
-				window.open('', '_self', ''); // 브라우저창 닫기
-				window.close(); // 브라우저 창 닫기
+				window.open('', '_self', ''); 
+				window.close(); 
 			</script>
 		</c:when>
 		
@@ -24,16 +24,16 @@
 			<script type="text/javascript">
 				alert('이미 인증된 아이디입니다.');
 		
-				window.open('', '_self', ''); // 브라우저창 닫기
-				window.close(); // 브라우저 창 닫기
+				window.open('', '_self', ''); 
+				window.close(); 
 			</script>
 		</c:when>
 		<c:otherwise>
 			<script type="text/javascript">
 				alert('유효하지않은 인증입니다.');
 		
-				window.open('', '_self', ''); // 브라우저창 닫기
-				window.close(); // 브라우저 창 닫기
+				window.open('', '_self', ''); 
+				window.close();
 			</script>
 		</c:otherwise>
 	</c:choose>

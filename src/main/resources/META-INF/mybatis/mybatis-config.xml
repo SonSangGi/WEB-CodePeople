@@ -6,6 +6,7 @@
 	<settings><setting name="jdbcTypeForNull" value="NULL"/></settings>
 	<typeAliases>
 		<typeAlias alias="User" type="com.jhta.cope.vo.User"/>
+		<typeAlias alias="Avatar" type="com.jhta.cope.vo.Avatar"/>
 	</typeAliases>
 
 	<mappers>

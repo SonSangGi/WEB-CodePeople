@@ -63,8 +63,8 @@
 										style="width: 70px; height: 70px; border-radius: 100px; margin: 10px; float: left;">
 								</div>
 								<div class="sg-user-info">
-									<p>손상기</p>
-									<p>100</p>
+									<p>${LOGIN_USER.name }</p>
+									<p>100exp</p>
 									<p>
 										<a href="/user/logout.do">로그아웃</a>
 									</p>
@@ -127,18 +127,15 @@
 				<div class="col-md-8">
 					<h1 class="text-center sg-text-alert">어서오세요!</h1>
 					<form id="form-login" action="/user/login.do" method="post">
-						<label for="id">아이디</label> <input type="text" name="id"
-							autocomplete="off" id="input-login-id"> <label
-							for="password">비밀번호</label> <input type="password"
-							name="password" id="input-login-pwd">
-						<button class="sg-btn sg-btn-primary"
-							style="display: block; width: 100%; margin-top: 30px;">로그인</button>
+						<label for="id">아이디</label> <input type="text" name="id" autocomplete="off" id="input-login-id"> 
+						<label for="password">비밀번호</label> 
+						<input type="password" name="password" id="input-login-pwd">
+						<button class="sg-btn sg-btn-primary" style="display: block; width: 100%; margin-top: 30px;">로그인</button>
 					</form>
 					<a href="#">아이디/비밀번호 찾기</a> <a href="/user/signup.do">회원가입</a>
 				</div>
 				<div class="col-md-4" style="padding-top: 60px; height: 100%;">
-					<button type="button" name="button" class="btn btn-lg"
-						style="display: block; width: 100%; margin-top: 30px;">샘플</button>
+					<a href="/user/googleSignIn.do"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png"></a>
 					<button type="button" name="button" class="btn btn-lg"
 						style="display: block; width: 100%; margin-top: 30px;">샘플</button>
 					<button type="button" name="button" class="btn btn-lg"
@@ -182,19 +179,18 @@
 			$(".sg-modal-fade").fadeIn();
 		});
 
-		$("#form-login").submit(function(event) {
-			event.preventdefault();
+		$("#form-login").submit(function() {
 			var userId = $("#input-login-id");
 			var userPwd = $("#input-login-pwd");
 
 			if ("" == userId.val()) {
 				$(".sg-text-alert").text("아이디를 입력하세요!");
-				return;
+				return false;
 			}
 
 			if ("" == userPwd.val()) {
 				$(".sg-text-alert").text("비밀번호를 입력하세요!");
-				return;
+				return false;
 			}
 			$.ajax({
 				type : "post",

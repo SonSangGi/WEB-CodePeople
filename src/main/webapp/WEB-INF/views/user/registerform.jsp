@@ -40,7 +40,7 @@
                <div class="">
                   <label for="">비밀번호</label>
                   <form:input type="password" class="sg-input-text" path="password" style="width:24%"/>
-                  <input type="password" class="sg-input-text" name="password" style="width:25%" placeholder="한번 더 입력해주세요."/>
+                  <input type="password" class="sg-input-text" style="width:25%" placeholder="한번 더 입력해주세요."/>
                   <form:errors path="password"></form:errors>
                </div>
                <div class="">

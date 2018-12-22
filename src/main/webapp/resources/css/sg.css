@@ -232,7 +232,7 @@ a:hover {
 	width: 10%;
 	position: absolute;
 	text-align: right;
-	left: 50px;
+	left: 10px;
 }
 
 .sg-modal-login input[type="text"], .sg-modal-login input[type="password"]

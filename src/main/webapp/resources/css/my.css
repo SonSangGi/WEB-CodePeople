@@ -1,0 +1,205 @@
+.my-graph {
+  border-radius: 10px;
+  width: 80%;
+  height: 8px;
+  background-color: lightgrey
+}
+
+.my-graph>div {
+  background-color: skyblue;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.my-graph-info {
+  width: 80%;
+  font-size: 11px;
+  color: grey;
+}
+
+.my-graph-info>span:last-child {
+  float: right;
+}
+
+.sg-li {
+  width: 10px;
+  height: 10px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  display: inline-block;
+  position: absolute;
+  left: -5px;
+  background-color: white;
+  margin-top: 6px;
+}
+
+.sg-li:hover {
+  background-color: rgb(200, 255, 162)
+}
+
+.sg-text-sub {
+  color: grey;
+  font-size: 12px;
+}
+
+.my-graph {
+  border-radius: 10px;
+  width: 80%;
+  height: 8px;
+  background-color: lightgrey
+}
+
+.my-graph>div {
+  background-color: skyblue;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.my-graph-info {
+  width: 80%;
+  font-size: 11px;
+  color: grey;
+}
+
+.my-graph-info>span:last-child {
+  float: right;
+}
+
+.sg-li {
+  width: 10px;
+  height: 10px;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  display: inline-block;
+  position: absolute;
+  left: -5px;
+  background-color: white;
+  margin-top: 6px;
+}
+
+.sg-li:hover {
+  background-color: rgb(200, 255, 162)
+}
+
+.sg-text-sub {
+  color: grey;
+  font-size: 12px;
+}
+.info-container{
+  font-size: 16px;
+}
+dt{
+  width: 60px;
+  float: left;
+  text-align: right;
+}
+dd{
+  padding-left: 80px;
+  margin-bottom: 10px;
+}
+
+.my-pay-item li{
+  padding: 0px 30px 50px 30px;
+  width: 45%;
+  display: inline-block;
+}
+.my-pay-item li:nth-child(2n-1){
+  border-right: 1px solid lightgray;
+}
+.my-pay-item img:hover{
+  width: 200px;
+}  .my-video-box{
+     float: left;
+     opacity: 0.7;
+     border:1px solid lightgray;
+     padding: 2px;
+   }
+   .my-video{
+
+   }
+   .my-video-box:hover{
+     opacity: 1;
+   }
+   .my-graph{
+     border-radius: 10px;width:80%;height:8px;background-color:lightgrey
+   }
+   .my-graph>div{
+     background-color:skyblue;height:100%;border-radius: 10px;
+   }
+   .my-graph-info{
+     width: 80%;
+     font-size: 11px;
+     color:grey;
+   }
+   .my-graph-info>span:last-child{
+     float: right;
+   }
+   .sg-li{
+     width:10px;height:10px;border:1px solid lightgray;border-radius:10px;display:inline-block;position: absolute;left:-5px;background-color:white;
+     margin-top: 6px;
+   }
+   .sg-li:hover{
+     background-color: rgb(200, 255, 162)
+   }
+   .sg-text-sub{
+     color:grey;font-size:12px;
+   }
+   .badge-top{
+      margin-bottom: 30px;
+   }
+    .sg-badge-tier div{
+       border: 1px solid #ffde00;
+       border-radius: 100px;
+       display: inline-block;
+       opacity: 0.5;
+    }
+    .sg-badge-tier div:hover{
+       opacity: 1;
+    }
+    .sg-badge-tier div.sg-active{
+       opacity: 1;
+    }
+    .sg-badge-tier div>img{
+       border-radius: 100px;
+       width: 170px;
+       height: 170px;
+       background-color: silver;
+    }
+    .sg-badge-sub{
+       display: inline-block;
+       width: 28%;
+       background-color: white;
+       border:1px solid lightgray;
+       border-radius: 5px;
+       padding: 20px;
+       margin-right: 40px;
+       margin-bottom:30px;
+    }
+    i{
+       padding:3px 3px 3px 5px;
+       width: 55px;
+       height: 55px;
+       font-size: 45px;
+       background-color: white;
+       border:3px solid black;
+       border-radius: 50px;
+    }
+    .sg-badge-success>.sg-badge-
+    .sg-badge-sub>span{position: absolute;right:0px;top:0px;background-color: #008aa2;margin: 10px;width: 50px;height: 30px;border-radius: 5px;color: white;text-align: center;padding: 3px;font-size: 17px;}
+    .sg-badge-contents>p{margin: 0px}
+    .sg-badge-contents>h3{margin: 0px;margin-bottom: 5px;}
+    .sg-badge-contents{
+       width:50%;display:inline-block;margin-left:30px;
+    }
+    .sg-badge-default>.sg-badge-sub{
+       opacity: 0.5;
+    }
+    .sg-badge-default>.sg-badge-sub:hover{
+       opacity: 1;
+    }
+    .my-review-item li{
+       margin-bottom: 5px;
+    }
+    .my-pay-item li{
+       padding-bottom: 50px;
+    }

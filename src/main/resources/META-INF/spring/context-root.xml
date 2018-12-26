@@ -25,15 +25,18 @@
       </property>
    </bean>
    
+   <!-- Google 인증 및 로그인 -->
    <bean id="googleConnectionFactory" class="org.springframework.social.google.connect.GoogleConnectionFactory">
    	<constructor-arg value="313137637786-lrq4tkem6id22jkv4i47jgjp551creur.apps.googleusercontent.com"/>
    	<constructor-arg value="dxjAYDa5jdUkWD9BmX2gmIIp"/>
    </bean>
-   
    <bean id="googleOAuth2Parameters" class="org.springframework.social.oauth2.OAuth2Parameters">
    	<property name="scope" value="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email"/>
-   	<property name="redirectUri" value="http://localhost/user/googlelogin.do"/>
+   	<property name="redirectUri" value="http://127.0.0.1/user/googlelogin.do"/>
    </bean>
+   
+	 <bean id="naverLoginBO" class="com.jhta.cope.util.NaverLoginBO"/>
+	   
    
    <!-- 파일 다운로드 관련 -->
    	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

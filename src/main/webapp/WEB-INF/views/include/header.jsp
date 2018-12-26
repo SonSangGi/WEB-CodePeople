@@ -136,8 +136,7 @@
 				</div>
 				<div class="col-md-4" style="padding-top: 60px; height: 100%;">
 					<a href="/user/googleSignIn.do"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png"></a>
-					<button type="button" name="button" class="btn btn-lg"
-						style="display: block; width: 100%; margin-top: 30px;">샘플</button>
+					<a href="/user/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195"></a>
 					<button type="button" name="button" class="btn btn-lg"
 						style="display: block; width: 100%; margin-top: 30px;">샘플</button>
 				</div>

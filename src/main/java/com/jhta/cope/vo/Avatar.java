@@ -47,4 +47,11 @@ public class Avatar {
 		this.exp = exp;
 	}
 
+	@Override
+	public String toString() {
+		return "Avatar [userNo=" + userNo + ", image=" + image + ", bgImg=" + bgImg + ", nick=" + nick + ", exp=" + exp
+				+ "]";
+	}
+
+	
 }

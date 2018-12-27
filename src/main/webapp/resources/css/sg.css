@@ -42,22 +42,27 @@ a:hover {
 	background-color: rgba(255, 89, 89, 0.5);
 }
 
-.sg-menu>ul>li>a, .sg-header div>a {
+.sg-menu>ul>li>a,.sg-header div>a {
 	font-size: 19px;
-	color: white;
-	font-weight: bold;
-	display: inline-block;
-	z-index: 2;
-	margin-top: 18px;
-	margin-left: 30px;
-	padding-bottom: 8px;
-	cursor: pointer;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    z-index: 2;
+    margin-top: 14px;
+    margin-left: 30px;
+    padding-bottom: 15px;
+    cursor: pointer;
+}
+.cope-logo{
+	width: 150px;
+    margin-top: 10px;
 }
 
 .sg-user-header {
-	padding-top: 90px;
+	padding-top: 56px;
 	opacity: 0.9;
 	width: 100%;
+	transition:0.6;
 }
 
 /*상단 메뉴*/
@@ -67,6 +72,7 @@ a:hover {
 }
 
 .sg-menu>ul>li>ul {
+	top: 57px;
 	background-color: white;
 	min-width: 150px;
 	padding: 10px;
@@ -98,6 +104,7 @@ a:hover {
 
 /*메뉴 유저 정보*/
 .sg-menu-info {
+	top: 57px;
 	background-color: white;
 	width: 250px;
 	display: none;
@@ -149,7 +156,15 @@ a:hover {
 	color: white;
 	padding: 5px;
 }
-
+.sg-info-body>ul>li>a{
+	color:white;font-size:17px;text-align:center;font-weight:bold
+}
+.sg-info-body>ul>li>a:hover{
+	color:#ff7373;
+}
+.sg-info-body>ul>li>i{
+	float:right;
+}
 .sg-fixed {
 	background-color: white;
 	position: fixed;
@@ -211,13 +226,13 @@ a:hover {
 
 .sg-modal-fade>div {
 	background-color: white;
-	border: 1px solid grey;
-	min-height: 500px;
-	border-radius: 30px;
-	position: fixed;
-	top: 15%;
-	left: 25%;
-	width: 50%;
+    border: 1px solid grey;
+    min-height: 400px;
+    border-radius: 30px;
+    position: fixed;
+    top: 15%;
+    left: 30%;
+    width: 40%;
 }
 
 .sg-modal-login {
@@ -232,7 +247,7 @@ a:hover {
 	width: 10%;
 	position: absolute;
 	text-align: right;
-	left: 10px;
+	left: 10%;
 }
 
 .sg-modal-login input[type="text"], .sg-modal-login input[type="password"]

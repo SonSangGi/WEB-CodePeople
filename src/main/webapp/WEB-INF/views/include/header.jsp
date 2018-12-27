@@ -8,7 +8,9 @@
 <div class="wrapper">
 	<div class="sg-header">
 		<div class="col-sm-offset-2 col-sm-8 sg-menu-left" style="display: block">
-			<a href="/home.do" style="float: left"><img alt="CODEPEOPLE LOGO" src="<c:url value='/resources/img/'/>cope_logo.png" style="width: 150px;"></a>
+			<span>
+			<a href="/home.do" style="float: left"><img alt="CODEPEOPLE LOGO" src="<c:url value='/resources/img/user/'/>cope_logo.png" class="cope-logo"></a>
+			</span>
 			<div class="sg-menu" style="margin-left: 30%;">
 				<ul>
 					<li><a href="#">강의</a>
@@ -52,19 +54,20 @@
 					</nav>
 				</c:when>
 				<c:otherwise>
-					<a class="glyphicon glyphicon-user" style="font-size: 25px;"></a>
+					<a style="margin:0px;padding:0px;"><img src="<c:url value='/resources/img/user/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
+					<span style="font-size:15px;display: inline-block;padding-top: 16px;">${LOGIN_USER.name}</span></a>
 					<div class="sg-menu-info">
 						<div class="sg-info-menu-box">
 							<div class="sg-info-header">
 								<div class="sg-user-img">
 									<img
-										src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/300.png"
+										src="<c:url value='/resources/img/user/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}"
 										alt=""
-										style="width: 70px; height: 70px; border-radius: 100px; margin: 10px; float: left;">
+										style="width: 70px; height: 70px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
 								</div>
 								<div class="sg-user-info">
 									<p>${LOGIN_USER.name }</p>
-									<p>100exp</p>
+									<p>${LOGIN_USER.avatar.exp }exp</p>
 									<p>
 										<a href="/user/logout.do">로그아웃</a>
 									</p>
@@ -72,11 +75,11 @@
 							</div>
 							<div class="sg-info-body">
 								<ul>
-									<li><a>메뉴1</a></li>
-									<li><a>메뉴1</a></li>
-									<li><a>메뉴1</a></li>
-									<li><a>메뉴1</a></li>
-									<li><a>메뉴1</a></li>
+									<li><a href="/user/my/dashboard.do">대시보드</a><i class="fas fa-clipboard-list"></i></li>
+									<li><a href="/user/my/home.do">알림</a><i class="fas fa-bell"></i></li>
+									<li><a href="/user/my/video.do">내 강좌들</a><i class="glyphicon glyphicon-folder-open"></i></li>
+									<li><a href="/user/my/info.do">결제 내역</a><i class="glyphicon glyphicon-credit-card"></i></li>
+									<li><a href="#">위시리스트</a><i class="fas fa-heart"></i></li>
 								</ul>
 							</div>
 						</div>
@@ -86,29 +89,30 @@
 
 		</div>
 	</div>
+	<!--  -->
 	<!--네비게이션바 끝~~-->
 	<!--유저 헤더 시작~~-->
 	<div class="sg-user-header"
-		style="background: url(<c:url value='/resources/img/'/>Productsp-Page-Header-1500x300.jpg) 0% 30% / cover !important;position:relative">
+		style="background: url(<c:url value='/resources/img/user/'/>Productsp-Page-Header-1500x300.jpg) 0% 30% / cover !important;position:relative">
 		<div class="container text-center sg-user-show">
-			<div class="">
+			<div>
 				<c:choose>
 					<c:when test="${LOGIN_USER == null }">
-						<div class="text-center">
-							<img class="sg-profile-img" src="<c:url value='/resources/img/'/>icon.png" width="165px" height="165px">
+						<div class="text-center" style="margin-top: 20px;">
+							<img class="sg-profile-img" src="<c:url value='/resources/img/user/'/>icon.png" width="165px" height="165px">
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">
-							<a style="font-size: 25px; font-weight: bold" href="#">손님</a>
+							<a style="font-size: 25px; font-weight: bold" href="#">비회원</a>
 							 <span style="position: absolute; margin-top: 10px;"></span>
 						</div>
 					</c:when>
 					<c:otherwise>
-						<div class="text-center">
-							<img class="sg-profile-img" src="<c:url value='/resources/img/'/>icon.png" width="165px" height="165px">
+						<div class="text-center" style="margin-top: 20px;">
+							<img class="sg-profile-img" src="<c:url value='/resources/img/user/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" width="165px" height="165px">
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">
-							<a style="font-size: 25px; font-weight: bold" href="#">${LOGIN_USER.name }</a>
-							 <span style="position: absolute; margin-top: 10px;">(${LOGIN_USER.id })</span>
+							<a style="font-size: 25px; font-weight: bold" href="/user/my/home.do">${LOGIN_USER.name }</a>
+							<span></span>
 						</div>
 					</c:otherwise>
 				</c:choose>
@@ -130,15 +134,17 @@
 						<label for="id">아이디</label> <input type="text" name="id" autocomplete="off" id="input-login-id"> 
 						<label for="password">비밀번호</label> 
 						<input type="password" name="password" id="input-login-pwd">
-						<button class="sg-btn sg-btn-primary" style="display: block; width: 100%; margin-top: 30px;">로그인</button>
+						<button class="sg-btn sg-btn-primary" style="display: block;width: 100%;height: 58px;margin-top: -3px;">로그인</button>
 					</form>
-					<a href="#">아이디/비밀번호 찾기</a> <a href="/user/signup.do">회원가입</a>
+					<div style="text-align:right;">
+						<a href="#">아이디/비밀번호 찾기</a>
+					</div>
 				</div>
 				<div class="col-md-4" style="padding-top: 60px; height: 100%;">
-					<a href="/user/googleSignIn.do"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png"></a>
-					<a href="/user/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195"></a>
-					<button type="button" name="button" class="btn btn-lg"
-						style="display: block; width: 100%; margin-top: 30px;">샘플</button>
+					<a href="/user/googleSignIn.do"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png" style="    margin-bottom: 20px;
+    margin-top: 25px;"></a>
+					<a href="/user/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195" style="margin-bottom: 20px;"></a>
+					<a href="/user/signup.do" style="height:60px;width:195px;display:block;text-align:center" class="sg-btn sg-btn-primary sg-btn-lg">회원가입</a>
 				</div>
 			</div>
 		</div>
@@ -146,14 +152,19 @@
 
 	<script>
 
-		var reqListener = '${param.fail}' || "";
-		if(reqListener != ""){
+	$("input[id^='input-login']").focus(function(){$(this).animate({'padding-left':'13%'}).prev().animate({left:'0%','font-size':'12px'})});
+	$("input[id^='input-login']").focusout(function(){if($(this).val()==""){$(this).css('padding-left','20%').prev().animate({left:'10%','font-size':'15px'})}});
+	
+		function shake(){
 			 $(".sg-modal-box").animate({left:"24%"},70);
 			 $(".sg-modal-box").animate({left:"26%"},70);
 			 $(".sg-modal-box").animate({left:"24%"},70);
 			 $(".sg-modal-box").animate({left:"26%"},70);
 			 $(".sg-modal-box").animate({left:"25%"},70);
-		
+		}
+		var reqListener = '${param.fail}' || "";
+		if(reqListener != ""){
+			shake();
 		if (reqListener == "login") {
 			$(".sg-modal-fade").show();
 			$(".sg-text-alert").text("아이디 혹은 비밀번호가 일치하지 않습니다.");
@@ -183,11 +194,13 @@
 			var userPwd = $("#input-login-pwd");
 
 			if ("" == userId.val()) {
+				shake();
 				$(".sg-text-alert").text("아이디를 입력하세요!");
 				return false;
 			}
 
 			if ("" == userPwd.val()) {
+				shake();
 				$(".sg-text-alert").text("비밀번호를 입력하세요!");
 				return false;
 			}

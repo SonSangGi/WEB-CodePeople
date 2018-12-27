@@ -31,22 +31,25 @@
          <hr>
 
          <div class="">
-            <form:form action="signup.do" method="POST" style="padding:30px;" modelAttribute="userform">
+         <a href="/user/googleSignIn.do" style="margin-left: 120px;"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png"></a>
+			<a href="/user/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195"></a>
+					
+            <form:form action="signup.do" method="POST" style="padding:30px;" modelAttribute="userform" id="form-signup">
                <div class="">
                   <label for="">아이디</label>
-                  <form:input type="text" class="sg-input-text" path="id"/>
-                  <form:errors path="id"></form:errors>
+                  <form:input type="text" class="sg-input-text" path="id" id="reg-id"/>
+                  <span id="alert-id"><form:errors path="id"></form:errors></span>
                </div>
                <div class="">
                   <label for="">비밀번호</label>
-                  <form:input type="password" class="sg-input-text" path="password" style="width:24%"/>
-                  <input type="password" class="sg-input-text" style="width:25%" placeholder="한번 더 입력해주세요."/>
-                  <form:errors path="password"></form:errors>
+                  <form:input type="password" id="reg-password" class="sg-input-text" path="password" style="width:24%"/>
+                  <input type="password" id="reg-password2" name="password2" class="sg-input-text" style="width:25%" placeholder="한번 더 입력해주세요."/>
+                  <span id="alert-password"><form:errors path="password"></form:errors></span>
                </div>
                <div class="">
                   <label for="">이메일</label>
-                  <form:input type="text" class="sg-input-text" path="email"/>
-                  <form:errors path="email"></form:errors>
+                  <form:input type="text" class="sg-input-text" path="email" id="reg-email"/>
+                  <span id="alert-email"><form:errors path="email"></form:errors></span>
                </div>
                <div class="">
                   <label for="">이름</label>
@@ -116,7 +119,7 @@
                </div>
 
                <hr>
-               <button type="button" name="btn-reg-submit" class="sg-btn sg-btn-primary sg-btn-md sg-nb">취소</button>
+               <button type="button" class="sg-btn sg-btn-primary sg-btn-md sg-nb">취소</button>
                <button name="btn-reg-submit" class="sg-btn sg-btn-3rd sg-btn-md sg-nb">가입</button>
             </form:form>
          </div>
@@ -124,5 +127,93 @@
 
       </div>
 <%@include file="/WEB-INF/views/include/footer.jsp" %>
+
+	<script type="text/javascript">
+	
+		var idAuth = false;
+		var pwdAuth = false;
+		var emailAuth = false;
+	
+		$("#form-signup").submit(function(){
+			if(!idAuth){
+				$("#reg-id").focus();
+				return false;
+			}
+			if(!pwdAuth){
+				$("#reg-password").focus();
+				return false;
+			}
+			if(!emailAuth){
+				$("#reg-email").focus();
+				return false;
+			}
+			
+		})
+		
+		$("#reg-id").keyup(function(event){
+			var id = $(this).val();
+			if(id == ""){$("#alert-id").text("");}
+			else if(!/[A-za-z0-9]{6,15}/g.test(id)){
+				$("#alert-id").text("아이디는 6글자 이상 15글자 이하,특수문자 없이 입력해주세요.");
+							idAuth = false;
+			}else{
+				$.ajax({
+					url:"joinValueCheck.do",
+					type:"get",
+					dataType:"json",
+					data:{id:id},
+					success:function(result){
+						if(result){
+							$("#alert-id").text("사용가능한 아이디입니다!");
+							idAuth = true;
+						}else{
+							$("#alert-id").text("중복된 아이디입니다.");
+							idAuth = false;
+						}
+					}
+				})
+			}
+		});
+		
+		$("#reg-email").keyup(function(event){
+			var email = $(this).val();
+			if(email == ""){$("#alert-email").text("");}
+			else if(!/^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i.test(email)){
+				$("#alert-email").text("이메일 형식이 올바르지 않습니다.");
+							emailAuth = false;
+			}else{
+				$.ajax({
+					url:"joinValueCheck.do",
+					type:"get",
+					dataType:"json",
+					data:{email:email},
+					success:function(result){
+						if(result){
+							$("#alert-email").text("사용가능한 이메일 입니다!");
+							emailAuth = true;
+						}else{
+							$("#alert-email").text("중복된 이메일입니다.");
+							emailAuth = false;
+						}
+					}
+				})
+			}
+		});
+		
+		$("#form-signup").on("keyup","input[name^=password]",function(event){
+			var pwd = $("#reg-password").val();
+			var pwd2 = $("#reg-password2").val();
+			if(pwd==""){
+				$("#alert-password").text("비밀번호를 입력해주세요.");
+				pwdAuth = false;
+			}else if(pwd != pwd2 && pwd2.length > 1){
+				$("#alert-password").text("비밀번호가 일치하지 않습니다.");
+				pwdAuth = false;
+			}else if(pwd == pwd2){
+				$("#alert-password").text("비밀번호가 일치합니다!");
+				pwdAuth = true;
+			}
+		})
+	</script>
 </body>
 </html>

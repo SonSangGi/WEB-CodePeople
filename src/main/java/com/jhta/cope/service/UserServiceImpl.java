@@ -1,10 +1,13 @@
 package com.jhta.cope.service;
 
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.ibatis.javassist.bytecode.stackmap.MapMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jhta.cope.dao.UserDao;
 import com.jhta.cope.handler.MailHandler;
 import com.jhta.cope.vo.Avatar;
+import com.jhta.cope.vo.Badge;
 import com.jhta.cope.vo.TempKey;
 import com.jhta.cope.vo.User;
 
@@ -24,11 +28,12 @@ public class UserServiceImpl implements UserService {
 	@Inject
 	JavaMailSender mailSender;
 
-	@Transactional
 	@Override
 	public void insertUser(User user) throws Exception {
 
 		userDao.insertUser(user);
+		
+		System.out.println(user);
 		
 		User getUser = userDao.getUserByEmail(user.getEmail());
 		if (getUser != null) {
@@ -44,15 +49,20 @@ public class UserServiceImpl implements UserService {
 					.append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
 			mailHandler.setTo(user.getEmail());
 			mailHandler.send();
-			
+
 			this.insertAvatar(user.getId());
+			this.insertUserBadge(user.getNo(), 0);
 			userDao.insertUserAuth(map);
 		}
 	}
-	
-	public void insertUser(User user,String from) throws Exception {
-		userDao.insertUser(user);
-		this.insertAvatar(user.getId());
+
+	public void insertUser(User user, String from) throws Exception {
+		User confirmUser = userDao.getUserById(user.getId());
+		if (confirmUser == null) {
+			userDao.insertUser(user);
+			this.insertAvatar(user.getId());
+			this.insertUserBadge(user.getNo(), 0);
+		}
 	}
 
 	@Override
@@ -74,6 +84,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User getUserByEmail(String userEmail) {
+		return userDao.getUserByEmail(userEmail);
+	}
+
+	@Override
 	public User userAuth(Map<String, Object> map) {
 		User user = userDao.getUserByEmail((String) map.get("email"));
 		if (user != null) {
@@ -84,4 +99,23 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public List<Badge> notHaveBadge(int userNo) {
+		return userDao.notHaveBadge(userNo);
+	}
+
+	@Override
+	public List<Badge> haveBadge(int userNo) {
+		return userDao.haveBadge(userNo);
+	}
+
+	@Override
+	public void insertUserBadge(int userNo,int badgeNo) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("badgeNo", badgeNo);
+		
+		userDao.insertUserBadge(map);
+	}
+	
 }

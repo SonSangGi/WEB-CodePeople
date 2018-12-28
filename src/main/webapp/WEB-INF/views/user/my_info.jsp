@@ -19,9 +19,17 @@
             <div class="row info-container">
                <div class="col-xs-6">
                   <h3>내 정보</h3>
-                  <div class="">
-
-                  <img src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/300.png" alt="" style="float:left;width:100px;height:100px;">
+                  <div class="user-icon-box text-center">
+				<a onclick="iconModify()" style="cursor:pointer;"><img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" style="float:left;width:100px;height:100px;"></a>
+				<div style="background-color:white;padding:10px;width:150px;position:absolute;border:1px solid lightgray;bottom:-58px;left:-130px;display:none;background-color:white;" class="alert-profile">
+				<a onclick="iconModify()">프로필 변경</a>
+				<form action="/user/my/iconmodify.do" id="form-icon-modify" method="post"  enctype="multipart/form-data">
+				<input type="file" style="display:none" class="icon-modify" name="file">
+				</form>
+				<c:if test="${LOGIN_USER.avatar.image != 'Default' }">
+				<hr style="margin:3px;width:100%;">
+				<a>프로필 삭제</a></c:if>
+				</div>
                </div>
                   <dt>아이디</dt>
                   <dd>${LOGIN_USER.id }</dd>
@@ -75,6 +83,35 @@
          </div>
       </div>
          
+      <script>
+      $(".sg-profile-img,.alert-profile").mouseover(function(){
+    	  $(".alert-profile").show();
+      });
 
+      $(".sg-profile-img,.alert-profile").mouseout(function(){
+    	  $(".alert-profile").hide();
+      });
+      function iconModify(){
+    	  $(".icon-modify").click();
+      };
+      $(".icon-modify").on("change",function(){
+    	  var formData = new FormData($("#form-icon-modify")[0]);
+    	  $.ajax({
+    		  url:"/user/my/iconmodify.do",
+    		  type:"post",
+    		  data: formData,
+    		  processData:false,
+    		  contentType:false,
+    		  success:function(result){
+    			  console.log("업로드 되었습니다.");
+    			  $(".sg-profile-img").attr("src","<c:url value='/resources/img/user/icon/'/>"+result);
+    		  },
+    		  error:function(err){
+    			  console.log("에러")
+    			  console.log(err);
+    		  }
+    	  })
+      })
+      </script>
 <%@include file="/WEB-INF/views/include/footer.jsp"%></body>
 </html>

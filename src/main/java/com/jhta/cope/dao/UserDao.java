@@ -1,8 +1,10 @@
 package com.jhta.cope.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.jhta.cope.vo.Avatar;
+import com.jhta.cope.vo.Badge;
 import com.jhta.cope.vo.User;
 
 public interface UserDao {
@@ -10,6 +12,11 @@ public interface UserDao {
 	public void insertAvatar(Avatar avatar);
 	public User getUserById(String userId);
 	public User getUserByEmail(String userEmail);
+	public List<Badge> notHaveBadge(int userNo);
+	public List<Badge> haveBadge(int userNo);
 	public void insertUserAuth(Map<String, Object> map);
+	public void insertUserBadge(Map<String, Object> map);
 	public void userAuth(Map<String, Object> map);
+	public void updateUser(User user);
+	public void updateAvatar(Avatar avatar);
 }

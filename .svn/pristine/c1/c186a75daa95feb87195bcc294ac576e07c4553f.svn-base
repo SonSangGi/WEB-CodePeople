@@ -1,0 +1,120 @@
+package com.jhta.cope.service;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.javassist.bytecode.stackmap.MapMaker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jhta.cope.dao.UserDao;
+import com.jhta.cope.handler.MailHandler;
+import com.jhta.cope.vo.Avatar;
+import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.TempKey;
+import com.jhta.cope.vo.User;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	@Autowired
+	UserDao userDao;
+	@Inject
+	JavaMailSender mailSender;
+
+	@Override
+	public void insertUser(User user) throws Exception {
+
+		userDao.insertUser(user);
+		
+		System.out.println(user);
+		
+		User getUser = userDao.getUserByEmail(user.getEmail());
+		if (getUser != null) {
+			Map<String, Object> map = new HashMap<>();
+			String key = new TempKey().getKey(false, 50);
+			map.put("email", user.getEmail());
+			map.put("key", key);
+			MailHandler mailHandler = new MailHandler(mailSender);
+			mailHandler.setFrom("ssg3799@gmail.com", "CodePeople");
+			mailHandler.setSubject("[CodePeople 이메일 인증]");
+			mailHandler.setText(new StringBuffer().append("<h1>메일인증</h1>")
+					.append("<a href='http://localhost/user/emailConfirm.do?userEmail=").append(user.getEmail())
+					.append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
+			mailHandler.setTo(user.getEmail());
+			mailHandler.send();
+
+			this.insertAvatar(user.getId());
+			this.insertUserBadge(user.getNo(), 0);
+			userDao.insertUserAuth(map);
+		}
+	}
+
+	public void insertUser(User user, String from) throws Exception {
+		User confirmUser = userDao.getUserById(user.getId());
+		if (confirmUser == null) {
+			userDao.insertUser(user);
+			this.insertAvatar(user.getId());
+			this.insertUserBadge(user.getNo(), 0);
+		}
+	}
+
+	@Override
+	public void insertAvatar(String userId) throws Exception {
+		User user = userDao.getUserById(userId);
+		if (user != null) {
+			Avatar avatar = new Avatar();
+			avatar.setUserNo(user.getNo());
+			avatar.setNick(user.getName());
+			avatar.setBgImg("Default");
+			avatar.setImage("Default");
+			userDao.insertAvatar(avatar);
+		}
+	}
+
+	@Override
+	public User getUserById(String userId) {
+		return userDao.getUserById(userId);
+	}
+
+	@Override
+	public User getUserByEmail(String userEmail) {
+		return userDao.getUserByEmail(userEmail);
+	}
+
+	@Override
+	public User userAuth(Map<String, Object> map) {
+		User user = userDao.getUserByEmail((String) map.get("email"));
+		if (user != null) {
+			userDao.userAuth(map);
+		} else {
+			user = null;
+		}
+		return user;
+	}
+
+	@Override
+	public List<Badge> notHaveBadge(int userNo) {
+		return userDao.notHaveBadge(userNo);
+	}
+
+	@Override
+	public List<Badge> haveBadge(int userNo) {
+		return userDao.haveBadge(userNo);
+	}
+
+	@Override
+	public void insertUserBadge(int userNo,int badgeNo) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("badgeNo", badgeNo);
+		
+		userDao.insertUserBadge(map);
+	}
+}

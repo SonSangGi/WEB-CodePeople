@@ -54,15 +54,13 @@
 					</nav>
 				</c:when>
 				<c:otherwise>
-					<a style="margin:0px;padding:0px;"><img src="<c:url value='/resources/img/user/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
+					<a style="margin:0px;padding:0px;"><img src="<c:url value='/resources/img/user/icon/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
 					<span style="font-size:15px;display: inline-block;padding-top: 16px;">${LOGIN_USER.name}</span></a>
 					<div class="sg-menu-info">
 						<div class="sg-info-menu-box">
 							<div class="sg-info-header">
 								<div class="sg-user-img">
-									<img
-										src="<c:url value='/resources/img/user/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}"
-										alt=""
+									<img src="<c:url value='/resources/img/user/icon/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}"
 										style="width: 70px; height: 70px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
 								</div>
 								<div class="sg-user-info">
@@ -99,7 +97,7 @@
 				<c:choose>
 					<c:when test="${LOGIN_USER == null }">
 						<div class="text-center" style="margin-top: 20px;">
-							<img class="sg-profile-img" src="<c:url value='/resources/img/user/'/>icon.png" width="165px" height="165px">
+							<img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>icon.png" width="165px" height="165px">
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">
 							<a style="font-size: 25px; font-weight: bold" href="#">비회원</a>
@@ -108,7 +106,7 @@
 					</c:when>
 					<c:otherwise>
 						<div class="text-center" style="margin-top: 20px;">
-							<img class="sg-profile-img" src="<c:url value='/resources/img/user/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" width="165px" height="165px">
+							<a href="/user/my/info.do"><img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" width="165px" height="165px"></a>
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">
 							<a style="font-size: 25px; font-weight: bold" href="/user/my/home.do">${LOGIN_USER.name }</a>

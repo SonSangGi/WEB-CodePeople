@@ -60,6 +60,21 @@
 		<association column="USER_NO" property="avatar" javaType="Avatar" select="getAvatar"/>
 	</resultMap>
 	
+	<select id="getUserByNo" parameterType="int" resultMap="UserDetailResultMap">
+		select
+			USER_NO,
+			USER_ID,
+			USER_PASSWORD,
+			USER_EMAIL,
+			USER_NAME,
+			USER_CREATE_DATE,
+			USER_AUTH_STATUS
+		from
+			USERS
+		where
+			user_no = #{value}
+	</select>
+	
 	<select id="getUserById" parameterType="string" resultMap="UserDetailResultMap">
 		select
 			USER_NO,
@@ -74,6 +89,7 @@
 		where
 			user_id = #{value}
 	</select>
+	
 	<select id="getAvatar" parameterType="int" resultType="Avatar">
 		select
 			USER_NO as userNo,
@@ -85,6 +101,7 @@
 			USER_AVATAR
 		where USER_NO = #{value}
 	</select>
+	
 	<select id="getUserByEmail" parameterType="string"
 		resultType="User">
 		select

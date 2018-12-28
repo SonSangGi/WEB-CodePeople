@@ -1,0 +1,184 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<%@include file="/WEB-INF/views/include/style.jsp" %>
+<link rel="stylesheet" href='<c:url value="/resources/css/user/my.css?ver=0"/>'>
+</head>
+<body>
+<%@include file="/WEB-INF/views/include/header.jsp"%>
+
+
+<div class="container">
+     
+     <%@include file="/WEB-INF/views/user/my_header.jsp" %>
+     
+     <div class="user-info-body" style="min-height:300px;margin-top:30px;padding-left:30px;">
+         <div class="badge-top">
+            <h3 class="text-center" style="margin:30px">현재 홍길동님의 티어는 브론즈 입니다.</h3>
+            <div class="sg-badge-tier">
+               <div class="sg-active">
+                  <img src="img/bronze.png" alt="">
+                  <span style="font-size:16px;margin:3px;font-weight:bold">브론즈</span>
+               </div>
+               <div class="">
+                  <img src="img/silver.png" alt="">
+               </div>
+               <div class="">
+                  <img src="img/gold.png" alt="">
+               </div>
+               <div class="">
+                  <img src="img/platinum.png" alt="">
+               </div>
+               <div class="">
+                  <img src="img/diamond.png" alt="">
+               </div>
+               <div class="">
+                  <img src="img/challenger.png" alt="">
+               </div>
+            </div>
+            <hr>
+         </div>
+         <div class="sg-badge-container">
+            <div class="sg-badge-success">
+               <h3>현재까지 3개의 뱃지를 획득하셨습니다!</h3>
+               <br>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>초보</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-apple-alt"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>초보</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="far fa-angry"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>초보</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+         </div>
+         <hr>
+         <h3>아직 20개의 뱃지가 남았습니다..</h3>
+         <br>
+         <div class="sg-badge-default">
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+            <div class="sg-badge-sub">
+               <i class="fas fa-atom"></i>
+               <div class="sg-badge-contents" style="">
+                  <h3>얻지못한 뱃지</h3>
+                  <p>강의 1개 수강</p>
+               </div>
+               <span>300</span>
+            </div>
+         </div>
+
+         </div>
+	</div>
+
+
+<%@include file="/WEB-INF/views/include/footer.jsp"%></body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings><setting name="jdbcTypeForNull" value="NULL"/></settings>
+	<typeAliases>
+		<typeAlias alias="User" type="com.jhta.cope.vo.User"/>
+		<typeAlias alias="Avatar" type="com.jhta.cope.vo.Avatar"/>
+		<typeAlias alias="Badge" type="com.jhta.cope.vo.Badge"/>
+		<typeAlias alias="PaidLecture" type="com.jhta.cope.vo.PaidLecture"/>
+		<typeAlias alias="PaidLectureDetail" type="com.jhta.cope.vo.PaidLectureDetail"/>
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="META-INF/mybatis/mappers/user.xml" />
+		<mapper resource="META-INF/mybatis/mappers/paidlecture.xml" />
+		<mapper resource="META-INF/mybatis/mappers/manager.xml" />
+	</mappers>
+</configuration>

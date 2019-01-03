@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.jhta.cope.dao.QnaDao">
+	
+	<!-- 하위 객체들이 전부 들어있는 QNA -->
+	<resultMap type="Qna" id="getQnaByNoResultMap">
+		<id column="QNA_NO" property="no"/>
+		<result column="QNA_TITLE" property="title"/>
+		<result column="QNA_CONTENTS" property="contents"/>
+		<result column="QNA_CREATE_DATE" property="createDate"/>
+		<association column="QNA_WRITER" property="writer" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"/>
+		<collection property="answers" column="QNA_NO" javaType="java.util.ArrayList" ofType="QnaAnswer" select="getAnswerByNo"/>
+	</resultMap>
+	<!-- 하위 객체가 전부 들어있는 Answer -->
+	<resultMap type="QnaAnswer" id="getAnswerByNoResultMap">
+		<id column="ANSWER_NO" property="no"/>
+		<result column="ANSWER_CONTENTS" property="contents"/>
+		<result column="ANSWER_CREATE_DATE" property="createDate"/>
+		<result column="QNA_NO" property="qnaNo"/>
+		<association column="ANSWER_WRITER" property="writer" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"/>
+		<collection property="comments" column="ANSWER_NO" javaType="java.util.ArrayList" ofType="QnaComment" select="getQnaCommentByNo"/>
+	</resultMap>
+	<resultMap type="QnaComment" id="getQnaCommentByNoResultMap">
+		<id column="COMMENT_NO" property="no"/>
+		<result column="ANSWER_NO" property="answerNo"/>
+		<result column="CO_CONTENTS" property="contents"/>
+		<result column="CO_CREATE_DATE" property="createDate"/>
+		<association column="CO_WRITER" property="writer" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"/>
+	</resultMap>
+	
+	<select id="getAnswerByNo" parameterType="int" resultMap="getAnswerByNoResultMap">
+	select 
+	    ANSWER_NO,
+	    ANSWER_WRITER,
+	    ANSWER_CONTENTS,
+	    ANSWER_CREATE_DATE,
+	    QNA_NO
+	from
+	    QNA_ANSWER
+	where
+		QNA_NO = #{value}
+	order by ANSWER_CREATE_DATE
+	</select>
+	
+	<select id="getAllAnswers" resultMap="getAnswerByNoResultMap">
+   		select 
+	       ANSWER_NO,
+	       ANSWER_WRITER,
+	       <![CDATA[REGEXP_REPLACE(ANSWER_CONTENTS,'<[^>]*>','') as ANSWER_CONTENTS]]>,
+	       ANSWER_CREATE_DATE,
+	       QNA_NO
+	  	from
+       		QNA_ANSWER
+       order by ANSWER_CREATE_DATE
+   </select>
+	
+	<select id="getQnaByNo" parameterType="int" resultMap="getQnaByNoResultMap">
+		select 
+		    QNA_NO,
+		    QNA_TITLE,
+		    QNA_WRITER,
+		    QNA_CONTENTS,
+		    QNA_VIEWS,
+		    QNA_CREATE_DATE
+		from
+	    	QNA
+	    where
+	    	QNA_NO = #{value}
+	</select>
+	
+	<select id="getAllQnas" resultMap="getQnaByNoResultMap">
+		select 
+		    QNA_NO,
+		    QNA_TITLE,
+		    QNA_WRITER,
+		    QNA_CONTENTS,
+		    QNA_VIEWS,
+		    QNA_CREATE_DATE
+		from
+	    	QNA
+	    	order by QNA_CREATE_DATE
+	</select>
+	
+	<select id="getAllQnasByCriteria" parameterType="Criteria" resultMap="getQnaByNoResultMap">
+		select 
+			QNA_NO,
+		    QNA_TITLE,
+		    QNA_WRITER,
+		    QNA_CONTENTS,
+		    QNA_CREATE_DATE,
+		    QNA_VIEWS
+		from (
+		        select 
+		        		<choose>
+			                <when test="sort == 'rep'">
+			                	ROW_NUMBER() over (order by B.rep desc) rn,
+			                </when>
+			                <when test="sort == 'view'">
+			                	ROW_NUMBER() over (order by A.qna_create_date desc) rn,
+			                </when>
+			                <otherwise>
+			               		ROW_NUMBER() over (order by A.qna_create_date desc) rn,
+			                </otherwise>
+		                </choose>
+		                A.QNA_NO,
+		                A.QNA_TITLE,
+		                A.QNA_WRITER,
+		                A.QNA_CONTENTS,
+		                A.QNA_CREATE_DATE,
+		                A.QNA_VIEWS
+		        from QNA A<if test="sort='rep'">,
+				        	(select count(D.answer_contents) as rep,C.QNA_NO 
+   							 from
+							 qna C, qna_answer D where C.qna_no = D.qna_no(+) group by C.qna_no) B
+		        		</if> 
+		        <where>
+		        	<if test="searchType == 'all' and keyword != null">
+		        		(LOWER(A.QNA_TITLE) like '%' || #{keyword} || '%' or
+		        		LOWER(A.QNA_WRITER) like '%' || #{keyword} || '%' or
+		        		LOWER(A.QNA_CONTENTS) like '%' || #{keyword} || '%')
+		        	</if>
+		        	<if test="searchType == 'title' and keyword != null">
+		        		LOWER(A.QNA_TITLE) like '%' || #{keyword} || '%'
+		        	</if>
+		        	<if test="searchType == 'writer' and keyword != null">
+		        		LOWER(A.QNA_WRITER) like '%' || #{keyword} || '%'
+		        	</if>
+		        	<if test="searchType == 'contents' and keyword != null">
+		        		LOWER(A.QNA_CONTENTS) like '%' || #{keyword} || '%'
+		        	</if>
+		        	<if test="sort='rep'">AND A.QNA_NO = B.QNA_NO</if>
+		        </where>
+		        )
+		    where rn &gt;= #{beginIndex}
+		    and rn &lt;= #{endIndex}
+	</select>
+	
+	<select id="getQnaCommentByNo" parameterType="int" resultMap="getQnaCommentByNoResultMap">
+		select
+			COMMENT_NO,
+			ANSWER_NO,
+			CO_WRITER,
+			CO_CONTENTS,
+			CO_CREATE_DATE
+		from qna_comment
+		where answer_no = #{value}
+		order by CO_CREATE_DATE
+	</select>
+	
+	<select id="getQnaCount" resultType="int">
+		select 
+			count(*)
+		from
+	    	QNA
+	</select>
+	
+	
+		<select id="getAnswerCount" parameterType="int" resultType="int">
+		select 
+			count(*)
+		from
+	    	QNA_ANSWERS
+	    where QNA_NO = #{value}
+	</select>
+	
+	<insert id="insertQna" parameterType="Qna">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select SEQ_qna_qna_no.nextval from dual
+		</selectKey>
+			insert into QNA(
+					QNA_NO,
+					QNA_TITLE,
+					QNA_WRITER,
+					QNA_CONTENTS,
+					QNA_CREATE_DATE,
+					QNA_VIEWS)
+			values (#{no},#{title},#{writer.no},#{contents},sysdate,0)
+	</insert>
+	
+	<insert id="insertAnswer" parameterType="QnaAnswer">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select seq_qna_answer_answer_no.nextval from dual
+		</selectKey>
+		insert into 
+				QNA_ANSWER(
+				ANSWER_NO,
+				ANSWER_WRITER,
+				ANSWER_CONTENTS,
+				ANSWER_CREATE_DATE,
+				QNA_NO)
+		values(#{no},#{writer.no},#{contents},sysdate,#{qnaNo})
+	</insert>
+	
+	<insert id="insertAnswerComment" parameterType="QnaComment">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select seq_qna_comment_comment_no.nextval from dual
+		</selectKey>
+		insert into
+				QNA_COMMENT(
+				COMMENT_NO,
+				ANSWER_NO,
+				CO_WRITER,
+				CO_CONTENTS,
+				CO_CREATE_DATE)
+		values(#{no},#{answerNo},#{writer.no},#{contents},sysdate)
+	</insert>
+</mapper>

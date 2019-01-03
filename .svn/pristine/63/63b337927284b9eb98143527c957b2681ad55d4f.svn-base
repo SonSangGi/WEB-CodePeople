@@ -1,0 +1,51 @@
+package com.jhta.cope.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.jhta.cope.dao.InstructorDao;
+import com.jhta.cope.dao.PaidLectureDao;
+import com.jhta.cope.dao.UserDao;
+import com.jhta.cope.vo.Instructor;
+import com.jhta.cope.vo.PaidLecture;
+import com.jhta.cope.vo.PaidLectureDetail;
+import com.jhta.cope.vo.User;
+
+@Service
+public class PaidLectureServiceImpl implements PaidLectureService{
+
+	@Autowired
+	PaidLectureDao paidLectureDao;
+	
+	@Autowired
+	InstructorDao instructorDao;
+	
+	@Autowired
+	UserDao userDao;
+	
+	
+	@Override
+	public PaidLectureDetail getPaidLectureDetailByNo(int no) {
+		return paidLectureDao.getPaidLectureDetailByNo(no);
+	}
+	
+	@Override
+	public List<PaidLecture> getPaidLectureByLang(String lang) {
+		List<PaidLecture> paidLectures = paidLectureDao.getPaidLectureByLang(lang);
+		for (PaidLecture paidLecture : paidLectures) {
+			int instructorNo = paidLecture.getInstructor().getNo();
+			Instructor instructor = instructorDao.getInstructorByNo(instructorNo);
+
+			int userNo = instructor.getUser().getNo();
+			User user = userDao.getUserByNo(userNo);
+			instructor.setUser(user);
+			
+			paidLecture.setInstructor(instructor);
+		}
+		return paidLectures;
+	}
+
+
+}

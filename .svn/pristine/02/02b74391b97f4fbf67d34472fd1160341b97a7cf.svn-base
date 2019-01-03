@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.jhta.cope.dao.FreeLectureDao">
+	<insert id="insertFreeLecture" parameterType="FreeLecture">
+	<selectKey keyProperty="no" resultType="int"  order="BEFORE">
+		select freeLecture_seq.nextval from dual
+	</selectKey>
+		insert into FREE_LECTURE (
+			FREE_LECTURE_NO,
+			LECTURE_TITLE,
+			LECTURE_IMAGE,
+			LECTURE_CONTENTS,
+			LECTURE_TIME,
+			LECTURE_LEVEL,
+			LECTURE_LECTURE_SUMMARY
+		)
+		values (#{no}, #{lectureTitle}, #{lectureImg}, #{lectureContent}, #{lectureTime}, #{lectureLevel}, #{lectureSummary})
+	</insert>
+	
+	<insert id="insertFreeLectureSection" parameterType="FreeLectureSection">
+		<selectKey keyProperty="no" resultType="int"  order="BEFORE">
+			select freeSection_seq.nextval from dual
+		</selectKey>
+		insert into FREE_LECTURE_SECTION (
+			LECTURE_SECTION_NO,
+			FREE_LECTURE_NO,
+			SECTION_TITLE,
+			SECTION_CONTENTS,
+			SECTION_COUNT,
+			SECTION_VIEWS,
+			SECTION_CREATE_DATE
+		)
+		values (#{no}, #{lectureNo}, #{sectionTitles}, #{sectionContents}, #{count}, 0 , sysdate)
+	</insert>
+	<select id="getAllFreeLecture" resultType="FreeLecture">
+		select
+			FREE_LECTURE_NO as no,
+			LECTURE_TITLE as lectureTitle,
+			LECTURE_IMAGE as lectureImg,
+			LECTURE_CONTENTS as lectureContent,
+			LECTURE_TIME as lectureTime,
+			LECTURE_LEVEL as lectureLevel,
+			LECTURE_LECTURE_SUMMARY as lectureSummary
+		from
+			FREE_LECTURE
+	</select>
+
+</mapper>

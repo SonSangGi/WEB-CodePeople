@@ -1,0 +1,13 @@
+package com.jhta.cope.service;
+
+import java.util.List;
+
+import com.jhta.cope.vo.Instructor;
+import com.jhta.cope.vo.PaidLecture;
+import com.jhta.cope.vo.PaidLectureDetail;
+import com.jhta.cope.vo.User;
+
+public interface PaidLectureService {
+	public PaidLectureDetail getPaidLectureDetailByNo(int no);
+	public List<PaidLecture> getPaidLectureByLang(String lang);
+}

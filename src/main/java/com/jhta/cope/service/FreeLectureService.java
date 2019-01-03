@@ -1,0 +1,14 @@
+package com.jhta.cope.service;
+
+import java.util.List;
+
+import com.jhta.cope.vo.FreeLecture;
+import com.jhta.cope.vo.FreeLectureSection;
+
+public interface FreeLectureService {
+
+	public void insertFreeLecture(FreeLecture freeLecture, List<FreeLectureSection> sections);
+	public void insertFreeLectureSection(FreeLectureSection freeLectureSection);
+	public List<FreeLecture> getAllFreeLecture();
+	public FreeLecture getFreeLecture(int freeLectureNo);
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.jhta.cope.dao.InstructorDao">
+
+	<select id="getInstructorByNo" parameterType="int" resultType="Instructor">
+		select 
+			INSTRUCTOR_NO as no,
+			USER_NO as "user.no",
+			INSTRUCTOR_SUMMARY as summary,
+			INSTRUCTOR_DESCRIPTION as description
+		from 
+			INSTRUCTOR
+		where 
+			INSTRUCTOR_NO = #{value}
+	</select>
+	
+	
+</mapper>

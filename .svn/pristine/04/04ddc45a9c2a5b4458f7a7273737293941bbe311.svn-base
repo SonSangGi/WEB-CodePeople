@@ -1,0 +1,393 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8" />
+	<link rel="apple-touch-icon" sizes="76x76" href="/resources/img/manager/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/resources/img/manager/favicon.png">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+<c:if test="${sessionScope.LOGIN_USER.authStatus ne '9'}">
+	<script type="text/javascript">
+		alert('권한이 없는 페이지 입니다');
+		window.location.href = 'http://127.0.0.1/home.do';
+	</script>
+</c:if>
+
+	<title>관리자 - 유저</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+
+    <!-- Bootstrap core CSS     -->
+    <link href="/resources/css/manager/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animation library for notifications   -->
+    <link href="/resources/css/manager/animate.min.css" rel="stylesheet"/>
+
+    <!--  Paper Dashboard core CSS    -->
+    <link href="/resources/css/manager/paper-dashboard.css" rel="stylesheet"/>
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="/resources/css/manager/demo.css" rel="stylesheet" />
+
+    <!--  Fonts and icons     -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+    <link href="/resources/css/manager/themify-icons.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="wrapper">
+	<div class="sidebar" data-background-color="white" data-active-color="danger">
+
+    <!--
+		Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
+		Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+	-->
+	<!-- 사이드바 -->
+    	<div class="sidebar-wrapper">
+            <div class="logo">
+                <a href="dashboard.do" class="simple-text">
+                    관리자 페이지
+                </a>
+            </div>
+
+            <ul class="nav">
+                <li>
+                    <a href="dashboard.do">
+                        <i class="ti-panel"></i>
+                        <p>통계</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="users.do">
+                        <i class="ti-user"></i>
+                        <p>유저</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="post.do">
+                        <i class="ti-view-list-alt"></i>
+                        <p>게시글/댓글</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="acknowledge.do">
+                        <i class="ti-check"></i>
+                        <p>강사 승인</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="rtchat.do">
+                        <i class="ti-text"></i>
+                        <p>실시간 채팅</p>
+                    </a>
+                </li>
+            </ul>
+    	</div>
+    </div>
+    <!-- 사이드바 끝 -->
+
+	<!-- 메인 판넬 -->
+    <div class="main-panel">
+		<nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar bar1"></span>
+                        <span class="icon-bar bar2"></span>
+                        <span class="icon-bar bar3"></span>
+                    </button>
+                    <a class="navbar-brand" href="users.do">유저</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="ti-panel"></i>
+								<p>Stats</p>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="ti-bell"></i>
+                                    <p class="notification">5</p>
+									<p>Notifications</p>
+									<b class="caret"></b>
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li><a href="#">Notification 1</a></li>
+                                <li><a href="#">Notification 2</a></li>
+                                <li><a href="#">Notification 3</a></li>
+                                <li><a href="#">Notification 4</a></li>
+                                <li><a href="#">Another notification</a></li>
+                              </ul>
+                        </li>
+						<li>
+                            <a href="#">
+								<i class="ti-settings"></i>
+								<p>Settings</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                   	<div class="col-md-4" style="padding-bottom: 20px">
+                    	<form action="users.do" method="post">
+                   			<input style="float:left; width:75%" class="form-control" type="search" id="search-bar" placeholder="이름 입력" name="userName"/>
+                   			<input style="float:right; width:20%" type="submit" class="btn btn-primary" value="찾기"/>
+                   		</form>
+                   	</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">강사 리스트</h4>
+                                <p class="category">이곳은 강사들을 모여주는 리스트 입니다</p>
+                            </div>
+                            <div class="content table-responsive table-full-width">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+	                                        <th style="width: 30%">번호</th>
+	                                    	<th style="width: 70%">아이디</th>
+                                    	</tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="user" items="${users }">
+                                    <c:if test="${user.authStatus eq '2'}">
+                                        <tr>
+                                        	<td id="teacher-no-${user.no }">${user.no }</td>
+                                        	<td><a id="teacher-modal-${user.no }" data-toggle="modal" data-target="#teacher-info">${user.id }</a></td>
+                                        </tr>
+                                    </c:if>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card card">
+                            <div class="header">
+                                <h4 class="title">학생 리스트</h4>
+                                <p class="category">이곳은 학생들을 보여주는 리스트 입니다</p>
+                            </div>
+                            <div class="content table-responsive table-full-width">
+                                <table id="student-table" class="table table-hover">
+                                    <thead>
+                                    	<tr>
+	                                        <th style="width: 30%">번호</th>
+	                                    	<th style="width: 70%">아이디</th>
+                                    	</tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="user" items="${users }">
+                                    <c:if test="${user.authStatus eq '1'}">
+                                        <tr>
+                                        	<td id="student-no-${user.no }">${user.no }</td>
+                                        	<td><a id="student-modal-${user.no }" data-toggle="modal" data-target="#student-info">${user.id }</a></td>
+                                        </tr>
+                                    </c:if>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+        <footer class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+                            <a href="http://www.creative-tim.com">
+                                Creative Tim
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://blog.creative-tim.com">
+                               Blog
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://www.creative-tim.com/license">
+                                Licenses
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+				<div class="copyright pull-right">
+                    &copy; <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative Tim</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- 메인 판넬 끝 -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="teacher-info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">세부 정보</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="content table-responsive table-full-width">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th style="width: 10%">번호</th>
+								<th style="width: 20%">아이디</th>
+								<th style="width: 15%">이름</th>
+								<th style="width: 30%">이메일</th>
+								<th style="width: 25%">구매금액</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="teacher-info-ajax">
+								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--  -->
+
+<!-- Modal -->
+<div class="modal fade" id="student-info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">세부 정보</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="content table-responsive table-full-width">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th style="width: 10%">번호</th>
+								<th style="width: 20%">아이디</th>
+								<th style="width: 15%">이름</th>
+								<th style="width: 30%">이메일</th>
+								<th style="width: 25%">구매금액</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="student-info-ajax">
+								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--  -->
+
+</body>
+
+<!--   Core JS Files   -->
+    <script src="/resources/js/manager/jquery.min.js" type="text/javascript"></script>
+	<script src="/resources/js/manager/bootstrap.min.js" type="text/javascript"></script>
+
+	<!--  Checkbox, Radio & Switch Plugins -->
+	<script src="/resources/js/manager/bootstrap-checkbox-radio.js"></script>
+
+	<!--  Charts Plugin -->
+	<script src="/resources/js/manager/chartist.min.js"></script>
+
+    <!--  Notifications Plugin    -->
+    <script src="/resources/js/manager/bootstrap-notify.js"></script>
+
+    <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
+	<script src="/resources/js/manager/paper-dashboard.js"></script>
+
+	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+	<script src="/resources/js/manager/demo.js"></script>
+	
+	<script type="text/javascript">
+	$(function() {
+		$('a[id*="teacher-modal"]').on('click', function() {
+			$.ajax({
+				url:'users/ajax.do',
+				method:'POST',
+				data:{
+					userNo:$(this).closest('tr').children('td').first().text()
+				},
+				dataType:'json',
+				success:function(result) {
+					var html  = '<td>'+result.no+'</td>'
+                		html +=	'<td>'+result.id+'</td>'
+                		html +=	'<td>'+result.name+'</td>'
+                		html +=	'<td>'+result.email+'</td>'
+                		html +=	'<td></td>';
+                		
+					$('#teacher-info-ajax').html(html);
+				},
+				error: function(request, status, error) {
+					console.log('실패');
+				}
+			});
+		});
+		
+		$('a[id*="student-modal"]').on('click', function() {
+			
+			$.ajax({
+				url:'users/ajax.do',
+				method:'POST',
+				data:{
+					userNo:$(this).closest('tr').children('td').first().text()
+				},
+				dataType:'json',
+				success:function(result) {
+					var html  = '<td>'+result.no+'</td>'
+                		html +=	'<td>'+result.id+'</td>'
+                		html +=	'<td>'+result.name+'</td>'
+                		html +=	'<td>'+result.email+'</td>'
+                		html +=	'<td></td>';
+                		
+					$('#student-info-ajax').html(html);
+				},
+				error: function(request, status, error) {
+					console.log('실패');
+				}
+			});
+		});
+	});
+	</script>
+
+</html>

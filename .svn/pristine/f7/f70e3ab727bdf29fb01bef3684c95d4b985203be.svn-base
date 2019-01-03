@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jhta.cope.dao.UserDao">
+	
+	<insert id="insertUser" parameterType="User">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select user_no_seq.nextval from dual
+		</selectKey>
+		insert into USERS(
+			USER_NO,
+			USER_ID,
+			USER_PASSWORD,
+			USER_EMAIL,
+			USER_NAME,
+			USER_CREATE_DATE)
+		values (#{no},#{id},#{password},#{email},#{name},sysdate)
+	</insert>
+	<insert id="insertAvatar" parameterType="Avatar">
+		insert into USER_AVATAR(
+			USER_NO,
+			AVATAR_IMAGE,
+			AVATAR_BG,
+			AVATAR_NICK,
+			AVATAR_EXP
+		)
+		values(#{userNo},#{image},#{bgImg},#{nick},0)
+	</insert>
+	<insert id="insertUserAuth" parameterType="map">
+		insert into USER_AUTH(
+			AUTH_EMAIL,
+			AUTH_KEY)
+		values(#{email},#{key})
+	</insert>
+
+	<update id="userAuth" parameterType="map">
+		update 
+			USERS 
+		set 
+			USER_AUTH_STATUS = 1
+		where 
+			(select count(*)
+			from user_auth
+			where AUTH_EMAIL = #{email}
+			and AUTH_KEY = #{key}) > 0
+		and 
+			user_email = #{email}
+	</update>
+	
+	<resultMap type="User" id="UserDetailResultMap">
+		<id column="USER_NO" property="no"/>
+		<result column="USER_ID" property="id"/>
+		<result column="USER_PASSWORD" property="password"/>
+		<result column="USER_EMAIL"  property="email"/>
+		<result column="USER_NAME" property="name"/>
+		<result column="USER_CREATE_DATE" property="createDate"/>
+		<result column="USER_AUTH_STATUS" property="authStatus"/>
+		<association column="USER_NO" property="avatar" javaType="Avatar" select="getAvatar"/>
+	</resultMap>
+	
+	<select id="getUserByNo" parameterType="int" resultMap="UserDetailResultMap">
+		select
+			USER_NO,
+			USER_ID,
+			USER_PASSWORD,
+			USER_EMAIL,
+			USER_NAME,
+			USER_CREATE_DATE,
+			USER_AUTH_STATUS
+		from
+			USERS
+		where
+			user_no = #{value}
+	</select>
+	
+	<select id="getUserById" parameterType="string" resultMap="UserDetailResultMap">
+		select
+			USER_NO,
+			USER_ID,
+			USER_PASSWORD,
+			USER_EMAIL,
+			USER_NAME,
+			USER_CREATE_DATE,
+			USER_AUTH_STATUS
+		from
+			USERS
+		where
+			user_id = #{value}
+	</select>
+	
+	<select id="getAvatar" parameterType="int" resultType="Avatar">
+		select
+			USER_NO as userNo,
+			AVATAR_IMAGE as image,
+			AVATAR_BG as bgImg,
+			AVATAR_NICK as nick,
+			AVATAR_EXP as exp
+		from 
+			USER_AVATAR
+		where USER_NO = #{value}
+	</select>
+	
+	<select id="getUserByEmail" parameterType="string"
+		resultType="User">
+		select
+			USER_NO as no,
+			USER_ID as id,
+			USER_PASSWORD as password,
+			USER_EMAIL as email,
+			USER_NAME as name,
+			USER_CREATE_DATE as createDate,
+			USER_AUTH_STATUS as authStatus
+		from 
+			USERS
+		where
+			USER_EMAIL = #{value}
+	</select>
+	
+	<select id="haveBadge" parameterType="int" resultType="Badge">
+		select 
+			A.BADGE_NO as no,
+			A.BADGE_NAME as name,
+			A.BADGE_ICON as icon,
+			A.BADGE_EXP as exp,
+			A.BADGE_CONDITION as condition
+		from 
+			BADGE A, USER_BADGE B
+		where 
+			B.USER_NO = #{value}
+		and 
+			A.BADGE_NO = B.BADGE_NO
+	</select>
+	
+	<select id="notHaveBadge" parameterType="int" resultType="Badge">
+		select 
+			A.BADGE_NO as no,
+			A.BADGE_NAME as name,
+			A.BADGE_ICON as icon,
+			A.BADGE_EXP as exp,
+			A.BADGE_CONDITION as condition
+		from 
+			BADGE A, USER_BADGE B
+		where 
+			B.BADGE_NO != A.BADGE_NO
+		and 
+			B.USER_NO = #{value}
+	</select>
+	<insert id="insertUserBadge" parameterType="map">
+		insert into USER_BADGE(
+				USER_NO,
+				BADGE_NO,
+				CREATE_DATE)
+		values(#{userNo},#{badgeNo},sysdate)
+	</insert>
+	
+	<update id="updateUser" parameterType="User">
+		update
+			USERS
+		set 
+		    USER_PASSWORD = #{password}
+		    USER_NAME = #{name}
+		    USER_AUTH_STATUS = #{authStatus}
+		where 
+			USER_NO = #{no}
+	</update>
+	<update id="updateAvatar" parameterType="Avatar">
+		update 
+			USER_AVATAR
+		set 
+		    AVATAR_IMAGE = #{image},
+		    AVATAR_BG   = #{bgImg},
+		    AVATAR_NICK = #{nick},
+		    AVATAR_EXP = #{exp}
+		where 
+			USER_NO = #{userNo}
+	</update>
+</mapper>

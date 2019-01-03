@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.jhta.cope.dao.ManagerDao">
+	
+	<select id="getAllUser" parameterType="String" resultType="User">
+		select
+			USER_NO				as no,
+			USER_ID				as id,
+			USER_EMAIL			as email,
+			USER_NAME			as name,
+			USER_CREATE_DATE	as createDate,
+			USER_AUTH_STATUS	as authStatus
+		from
+			USERS
+	</select>
+	
+	<select id="getUserByName" parameterType="String" resultType="User">
+		select
+			USER_NO				as no,
+			USER_ID				as id,
+			USER_EMAIL			as email,
+			USER_NAME			as name,
+			USER_CREATE_DATE	as createDate,
+			USER_AUTH_STATUS	as authStatus
+		from
+			USERS
+		where
+			USER_NAME = #{value}
+	</select>
+	
+	<select id="getUserByNo" parameterType="String" resultType="User">
+		select
+			USER_NO				as no,
+			USER_ID				as id,
+			USER_EMAIL			as email,
+			USER_NAME			as name,
+			USER_CREATE_DATE	as createDate,
+			USER_AUTH_STATUS	as authStatus
+		from
+			USERS
+		where
+			USER_NO = #{value}
+	</select>
+	
+</mapper>

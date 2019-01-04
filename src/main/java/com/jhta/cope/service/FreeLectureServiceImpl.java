@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jhta.cope.dao.FreeLectureDao;
 import com.jhta.cope.vo.FreeLecture;
+import com.jhta.cope.vo.FreeLectureComent;
 import com.jhta.cope.vo.FreeLectureSection;
 
 @Service
@@ -38,5 +39,20 @@ public class FreeLectureServiceImpl implements FreeLectureService {
 	public FreeLecture getFreeLecture(int freeLectureNo) {
 		FreeLecture freeLecture = freeLectureDao.getFreeLecture(freeLectureNo);
 		return freeLecture;
+	}
+	@Override
+	public List<FreeLectureSection> getFreeLectureSectionByLectureNo(int freeLectureNo) {
+		List<FreeLectureSection> freeLectureSections = freeLectureDao.getFreeLectureSectionByLectureNo(freeLectureNo);
+		return freeLectureSections;
+	}
+	@Override
+	public FreeLectureSection getFreeLectureSectionByCount(int count) {
+		FreeLectureSection freeLectureSection = freeLectureDao.getFreeLectureSectionByCount(count);
+		return freeLectureSection;
+	}
+	@Override
+	public List<FreeLectureComent> getFreeLectureComentesBySno(int sno) {
+		List<FreeLectureComent> freeLectureComents = freeLectureDao.getFreeLectureComentesBySno(sno);
+		return freeLectureComents;
 	}
 }

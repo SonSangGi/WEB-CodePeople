@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+.video-box {
+	width: 480px;
+	float: left;
+}
+
+.watcha-box {
+	width: 550px;
+	float: right;
+}
+
+.small-box {
+	width: 25%;
+	float: left;
+}
+
+.title-inputbox {
+	width: 400px;
+	height: 35px;
+	margin: 0px 0px 0px 380px;
+	font-size: 17px;
+}
+
+.category-select {
+	width: 400px;
+	height: 35px;
+	padding: 0px 0px 0px 20px;
+	margin: 0px 0px 0px 380px;
+	font-size: 17px;
+}
+
+.small-viewBox {
+	width: 25%;
+	float: left;
+}
+
+.add-lecture {
+	width: 500px;
+	height: 80px;
+	font-size: 50px;
+	margin: 10px 400px 10px 320px;
+}
+
+.moment-sort {
+	float: right;
+	margin-right: 20px;
+	border: 3px solid #ff7373;
+	border-radius: 10px;
+	width: 110px;
+	font-size: 15px;
+}
+
+.file-uploader {
+	margin: 0px 0px 0px 440px;
+	background-color: #afeeee;
+	border: #afeeee;
+	width: 300px;
+	border-radius: 10px;
+}
+
+.feedback-checkbox {
+	margin: 0px 0px 0px 500px;
+	float: left;
+}
+
+.test1 {
+	margin: 0px 0px 0px 600px;
+}
+
+
+.searchInputbox {
+	
+}
+
+.searchBar {
+	
+}

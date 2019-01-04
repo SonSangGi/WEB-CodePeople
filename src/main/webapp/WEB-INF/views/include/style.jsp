@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="<c:url value="/resources/bootstrap/css/bootstrap.min.css"/>">
 <link rel="stylesheet" href="<c:url value="/resources/bootstrap/css/bootstrap-theme.min.css"/>">
 <script src="<c:url value="/resources/bootstrap/js/bootstrap.min.js"/>"></script>
-<link rel="stylesheet" href='<c:url value="/resources/css/sg.css?ver=1"/>'>
+<link rel="stylesheet" href='<c:url value="/resources/css/sg.css?ver=7"/>'>
 <link rel="stylesheet" href="<c:url value="/resources/css/chat.css"/>">
-<script src="<c:url value="/resources/js/sg.js?ver=0"/>"></script>
+<script src="<c:url value="/resources/js/sg.js?ver=3"/>"></script>
 <script src="<c:url value="/resources/js/chat.js?ver=0"/>"></script>

@@ -1,96 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
-<c:set var="user" value="${LOGIN_USER }"></c:set>
-<head>
-	<meta charset="utf-8" />
-	<link rel="apple-touch-icon" sizes="76x76" href="/resources/img/manager/apple-icon.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="/resources/img/manager/favicon.png">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<%@include file="/WEB-INF/views/manager/common/head.jsp" %>
 
-<c:if test="${sessionScope.LOGIN_USER.authStatus ne '9'}">
-	<script type="text/javascript">
-		alert('권한이 없는 페이지 입니다');
-		window.location.href = 'http://127.0.0.1/home.do';
-	</script>
-</c:if>
-
-    <title>관리자 - 통계 페이지</title>
-
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
-
-
-    <!-- Bootstrap core CSS     -->
-    <link href="/resources/css/manager/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Animation library for notifications   -->
-    <link href="/resources/css/manager/animate.min.css" rel="stylesheet"/>
-
-    <!--  Paper Dashboard core CSS    -->
-    <link href="/resources/css/manager/paper-dashboard.css" rel="stylesheet"/>
-
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="/resources/css/manager/demo.css" rel="stylesheet" />
-
-    <!--  Fonts and icons     -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
-    <link href="/resources/css/manager/themify-icons.css" rel="stylesheet">
-
-</head>
 <body>
-
 <div class="wrapper">
-    <div class="sidebar" data-background-color="white" data-active-color="danger">
 
-    <!--
-		Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-		Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-	-->
-
-    	<div class="sidebar-wrapper">
-            <div class="logo">
-                <a href="dashboard.do" class="simple-text">
-                    관리자 페이지
-                </a>
-            </div>
-
-            <ul class="nav">
-                <li class="active">
-                    <a href="dashboard.do">
-                        <i class="ti-panel"></i>
-                        <p>통계</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="users.do">
-                        <i class="ti-user"></i>
-                        <p>유저</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="post.do">
-                        <i class="ti-view-list-alt"></i>
-                        <p>게시글/댓글</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="acknowledge.do">
-                        <i class="ti-check"></i>
-                        <p>강사 승인</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="rtchat.do">
-                        <i class="ti-text"></i>
-                        <p>실시간 채팅</p>
-                    </a>
-                </li>
-            </ul>
-    	</div>
-    </div>
+    <%@include file="/WEB-INF/views/manager/common/sidebar.jsp" %>
 
     <div class="main-panel">
         <nav class="navbar navbar-default">
@@ -104,7 +21,7 @@
                     </button>
                     <a class="navbar-brand" href="javascript:void(0)">통계</a>
                 </div>
-                <%@include file="/WEB-INF/views/manager/navbar.jsp" %>
+                <%@include file="/WEB-INF/views/manager/common/navbar.jsp" %>
             </div>
         </nav>
 
@@ -286,76 +203,31 @@
                 </div>
             </div>
         </div>
-
-
-        <footer class="footer">
-            <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-
-                        <li>
-                            <a href="http://www.creative-tim.com">
-                                Creative Tim
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://blog.creative-tim.com">
-                               Blog
-                            </a>
-                        </li>
-                        <li>
-                            <a href="http://www.creative-tim.com/license">
-                                Licenses
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Creative Tim</a>
-                </div>
-            </div>
-        </footer>
+        
+		<%@include file="/WEB-INF/views/manager/common/footer.jsp" %>
 
     </div>
 </div>
 
-
 </body>
 
-    <!--   Core JS Files   -->
-    <script src="/resources/js/manager/jquery.min.js" type="text/javascript"></script>
-	<script src="/resources/js/manager/bootstrap.min.js" type="text/javascript"></script>
+<%@include file="/WEB-INF/views/manager/common/commonjs.jsp" %>
 
-	<!--  Checkbox, Radio & Switch Plugins -->
-	<script src="/resources/js/manager/bootstrap-checkbox-radio.js"></script>
+<script type="text/javascript">
+   	$(document).ready(function(){
 
-	<!--  Charts Plugin -->
-	<script src="/resources/js/manager/chartist.min.js"></script>
+       	demo.initChartist();
 
-    <!--  Notifications Plugin    -->
-    <script src="/resources/js/manager/bootstrap-notify.js"></script>
+       	$.notify({
+           	icon: 'ti-gift',
+           	message: "환영합니다 관리자님"
 
-    <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
-	<script src="/resources/js/manager/paper-dashboard.js"></script>
+           },{
+               type: 'success',
+               timer: 4000
+           });
 
-	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-	<script src="/resources/js/manager/demo.js"></script>
-
-	<script type="text/javascript">
-    	$(document).ready(function(){
-
-        	demo.initChartist();
-
-        	$.notify({
-            	icon: 'ti-gift',
-            	message: "환영합니다 관리자님"
-
-            },{
-                type: 'success',
-                timer: 4000
-            });
-
-    	});
-	</script>
+   	});
+</script>
 
 </html>

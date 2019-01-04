@@ -13,25 +13,20 @@
 }
 
 .yb_contents_title {
-	margin-bottom: 20px;
+	margin-bottom: 45px;
 }
 
 .yb-contents {
-	width: 75%;
+	width: 80%;
 }
 
 .yb-contents-sidebar {
-	width: 25%;
+	width: 20%;
 }
 
 iframe {
 	width: 800px;
 	height: 400px;
-}
-
-.yb_contents_text p {
-	font-size: 17px;
-	line-height: 180%;
 }
 
 h2 {
@@ -44,20 +39,18 @@ h3 {
 }
 
 h4 {
-	margin-top: 20px;
+	margin-top: 40px;
 	margin-bottom: 10px;
-	font-size: 22px;
+	font-size: 24px;
+}
+
+.yb_course_contents p {
+	font-size: 17px;
+	line-height: 180%;
 }
 
 .fab.fa-java {
 	color: #ff7373;
-}
-
-.yb_contents_sub ul {
-	margin-left: 20px;
-	list-style-type: disc;
-	font-size: 16px;
-	line-height: 250%;
 }
 
 .yb_reiview_score {
@@ -136,6 +129,9 @@ h4 {
 	text-align: center;
 	margin-bottom: 10px;
 }
+.yb-contents-sidebar-contens p {
+	text-align: left;
+}
 </style>
 </head>
 <body>
@@ -145,7 +141,7 @@ h4 {
 			<div class="yb_contents_title">
 				<h1>${freeLecture.lectureTitle}</h1>
 			</div>
-			<div class="yb_course_video">
+			<div class="yb_course_contents">
 				${freeLecture.lectureContent }
 			</div>
 			<div class="yb_course_reviews" id="">
@@ -173,7 +169,7 @@ h4 {
 								<div class="yb_comment-body-inner">
 									<div class="yb_comment-avatar">
 										<img
-											src="http://optimal.inven.co.kr/upload/2017/10/09/bbs/i15099200313.jpg">
+											src="/resources/img/user/icon/icon.png">
 									</div>
 									<div class="yb_comment-body">
 										<div>
@@ -196,7 +192,7 @@ h4 {
 								<div class="yb_comment-body-inner">
 									<div class="yb_comment-avatar">
 										<img
-											src="http://optimal.inven.co.kr/upload/2017/10/09/bbs/i15099200313.jpg">
+											src="/resources/img/user/icon/icon.png">
 									</div>
 									<div class="yb_comment-body">
 										<div>
@@ -219,7 +215,7 @@ h4 {
 								<div class="yb_comment-body-inner">
 									<div class="yb_comment-avatar">
 										<img
-											src="http://optimal.inven.co.kr/upload/2017/10/09/bbs/i15099200313.jpg">
+											src="/resources/img/user/icon/icon.png">
 									</div>
 									<div class="yb_comment-body">
 										<div>
@@ -244,14 +240,14 @@ h4 {
 		<div class="yb-contents-sidebar col-md-3">
 			<div class="yb_sidebar_admin">
 				<img
-					src="http://optimal.inven.co.kr/upload/2017/10/09/bbs/i15099200313.jpg">
+					src="/resources/img/user/icon/icon.png">
 				<p>관리자</p>
 				<hr>
 			</div>
-			<div class="">
+			<div class="yb-contents-sidebar-contens">
 				<div class="row">
 					<div class="col-md-4">
-						<p class="text-left">평생</p>
+						<p>평생</p>
 					</div>
 					<div class="col-md-3 col-md-offset-5">
 						<i class="far fa-clock"> </i>
@@ -260,7 +256,20 @@ h4 {
 				<hr>
 				<div class="row">
 					<div class="col-md-4">
-						<p class="text-left">초급</p>
+					<c:choose>
+						<c:when test="${freeLecture.lectureLevel eq 1}">
+							<p>입문</p>
+						</c:when>
+						<c:when test="${freeLecture.lectureLevel eq 2}">
+							<p>초급</p>
+						</c:when>
+						<c:when test="${freeLecture.lectureLevel eq 3}">
+							<p>중급</p>
+						</c:when>
+						<c:when test="${freeLecture.lectureLevel eq 4}">
+							<p>고급</p>
+						</c:when>
+					</c:choose>
 					</div>
 					<div class="col-md-3 col-md-offset-5">
 						<i class="fas fa-signal"></i>
@@ -269,7 +278,7 @@ h4 {
 				<hr>
 				<div class="row">
 					<div class="col-md-4">
-						<p class="text-left">12시간</p>
+						<p>${freeLecture.lectureTime}시간</p>
 					</div>
 					<div class="col-md-3 col-md-offset-5">
 						<i class="far fa-calendar-alt"></i>
@@ -278,7 +287,7 @@ h4 {
 				<hr>
 			</div>
 			<p>
-				<a class="button" href="">배우러 가기</a>
+				<a class="button" href="/free/section.do?freeLectureNo=${freeLecture.no }">배우러 가기</a>
 			</p>
 		</div>
 	</div>

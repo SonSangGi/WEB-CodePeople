@@ -17,7 +17,7 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 public class NaverLoginBO {
 	private final static String CLIENT_ID = "tadWze2jQB_OzepBWxyQ";
 	private final static String CLIENT_SECRET = "cU8PAbQzsE";
-	private final static String REDIRECT_URI = "http://127.0.0.1/user/naverlogin.do";
+	private final static String REDIRECT_URI = "http://127.0.0.1/login/naverlogin.do";
 	private final static String SESSION_STATE = "oauth_state";
 	/* 프로필 조회 API URL */
 	private final static String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";

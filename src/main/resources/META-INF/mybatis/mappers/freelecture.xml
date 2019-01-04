@@ -61,5 +61,53 @@
 		where
 			FREE_LECTURE_NO = #{no}
 	</select>
-
+	
+	<resultMap type="FreeLectureSection" id="getFreeLectureSectionByLectureNoResultMap">
+		<id column="FREE_LECTURE_NO" property="no"/>
+		<result column="LECTURE_SECTION_NO" property="lectureNo"/>
+		<result column="SECTION_TITLE" property="sectionTitles"/>
+		<result column="SECTION_CONTENTS" property="sectionContents"/>
+		<result column="SECTION_COUNT" property="count"/>
+		<result column="SECTION_CREATE_DATE" property="createDate"/>
+		<collection property="comments" column="LECTURE_SECTION_NO" javaType="java.util.ArrayList" ofType="FreeLectureComent" select="getFreeLectureComentesBySno"></collection>
+	</resultMap>
+	
+	<select id="getFreeLectureSectionByLectureNo" parameterType="int" resultMap="getFreeLectureSectionByLectureNoResultMap">
+		select
+			FREE_LECTURE_NO,
+			LECTURE_SECTION_NO,
+			SECTION_TITLE,	
+			SECTION_CONTENTS,
+			SECTION_COUNT,
+			SECTION_VIEWS,
+			SECTION_CREATE_DATE
+		from
+			FREE_LECTURE_SECTION
+		where
+			FREE_LECTURE_NO	= #{no}
+		order by SECTION_COUNT 	
+	</select>
+	
+	<resultMap type="FreeLectureComent" id="getFreeLectureComentesBySnoResultMap">
+		<id column="LECTURE_COMENT_NO" property="cno"/>
+		<result column="LECTURE_SECTION_NO" property="sno"/>		
+		<result column="COMENT_CONTENTS" property="contents"/>
+		<result column="COMENT_LIKE" property="like"/>
+		<result column="COMENT_CREATE_DATE" property="createDate"/>		
+		<association property="writer" column="USER_NO" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"></association>
+	</resultMap>
+	
+	<select id="getFreeLectureComentesBySno" parameterType="int" resultMap="getFreeLectureComentesBySnoResultMap">
+		select
+			LECTURE_COMENT_NO,
+			LECTURE_SECTION_NO,
+			USER_NO,
+			COMENT_CONTENTS,
+			COMENT_LIKE,
+			COMENT_CREATE_DATE
+		from
+			FREE_LECTURE_COMENT
+		where
+			LECTURE_SECTION_NO = #{value}
+	</select>
 </mapper>

@@ -80,7 +80,7 @@ h4 {
 					${freeLecture.lectureSummary }
 				</p>
 				<p>
-					<a target="_blank" id="yb-course-button21" class="button" href="/free/detail.do?freeLectureNo=${freeLecture.no }">
+					<a id="yb-course-button21" class="button" href="/free/detail.do?freeLectureNo=${freeLecture.no }">
 						배우러 가기 </a>
 				</p>
 			</div>
@@ -98,7 +98,7 @@ h4 {
 					모르는 입문자</span>를 대상으로 알려주는 게임 개발 강좌들 입니다. <br> 직접 꿈꾸던 게임들을 만들어 보세요!
 			</p>
 			<p>
-				<a target="_blank" id="yb-course-button21" class="button" href="">
+				<a id="yb-course-button21" class="button" href="">
 					배우러 가기 </a>
 			</p>
 		</div>

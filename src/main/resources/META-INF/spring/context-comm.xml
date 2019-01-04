@@ -9,14 +9,5 @@
 
 	<context:annotation-config/>
 	<context:component-scan base-package="com.jhta.cope.service"/>
-	
-	<bean id="loginInterceptor" class="com.jhta.cope.interceptor.LoginInterceptor"></bean>
-	
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/*"/>
-			<ref bean="loginInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors>
-	
+
 </beans>

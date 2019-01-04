@@ -62,4 +62,20 @@ public class QnaServiceImpl implements QnaService{
 		return qnaDao.getAllAnswers();
 	}
 
+	@Override
+	public List<Qna> getQnaByUserNo(int userNo) {
+		return qnaDao.getQnaByUserNo(userNo);
+	}
+
+	@Override
+	public List<QnaComment> getCommentByUserNo(int userNo) {
+		return qnaDao.getCommentByUserNo(userNo);
+	}
+
+	@Override
+	public List<QnaAnswer> getAnswerByUserNo(int userNo) {
+		return qnaDao.getAnswerByUserNo(userNo);
+	}
+
+
 }

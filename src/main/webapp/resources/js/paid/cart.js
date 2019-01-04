@@ -1,32 +1,62 @@
 $(function() {
-   
+	
+	// 숫자 1000단위 콤마 정규표현식
+	function addComma(num) {
+		  var regexp = /\B(?=(\d{3})+(?!\d))/g;
+		  return num.toString().replace(regexp, ',');
+	}
+
+	var values = [];
+	$('.paid-lecture-for-payment').each(function(index, field) {
+		values.push($(field).val());
+	});
+	
+	
+	var jsonData = JSON.stringify(values);
+	console.log(jsonData);
+	
+
     $(".close").on('click', function(event) {
-        let totalPrice = parseInt($("#paid-cart-totalprice").text());
-        const removePrice = parseInt($(this).siblings().children().children('#paid-cart-price').text());
+		let totalPrice = $("#paid-cart-totalprice").text();
+		totalPrice = parseInt(totalPrice.replace(/,/g,""));
+		
+        let removePrice = $(this).siblings().children().children('#paid-cart-price').text();
+        removePrice = parseInt(removePrice.replace(/,/g,""));
         totalPrice -= removePrice;
+        
+        totalPrice = addComma(totalPrice);
         $("#paid-cart-totalprice").text(totalPrice);
         $(this).parent().remove();
     });
+ 
     
-    
-    function getAllPrice() {
-        $("#paid-cart-price").each(function() {
-            let price = parseInt($(this).text());
-            price += price;
-            $("#paid-cart-totalprice").text(price);
-        });
-    };
-
-    getAllPrice();
-	
 	$("#paid-cart-btn").click(function() {
-		var price = parseInt($("#paid-cart-totalprice").text());
-
+		
+	    $.ajax({
+	    	type : "POST",
+	    	url : "/paid/payment.do",
+	    	data : {"values": jsonData},
+	    	error : function(error) {
+	    		alert("error");
+	    	},
+	    	success : function(data) {
+	    		location.href = "/paid/payment.do";
+	    	}
+	    });
+		
+	    let price = $("#paid-cart-totalprice").text();
+		price = parseInt(price.replace(/,/g,""));
+		
 		if (price === 0) {
 			alert('상품을 선택해주세요');
 			return;
 		}
 		
+		if (!$("#poliyChecked").prop("checked")) {
+			alert("요금 및 환불 정책 동의가 필요합니다");
+			return;
+		}
+
 		var IMP = window.IMP;
 		
 		IMP.init('imp10706386');	// 가맹점 식별코드 넣기
@@ -50,12 +80,15 @@ $(function() {
 		        msg += '상점 거래ID : ' + rsp.merchant_uid;
 		        msg += '결제 금액 : ' + rsp.paid_amount;
 		        msg += '카드 승인번호 : ' + rsp.apply_num;
+		        
 		    } else {
 		        var msg = '결제 실패 : ';
 		        msg += rsp.error_msg;
 		    }
-	
+		    
 		    alert(msg);
+		    
+		    
 		});
 		return false;
 	});

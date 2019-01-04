@@ -1,6 +1,7 @@
 package com.jhta.cope.vo;
 
 import java.util.Date;
+import java.util.List;
 
 public class FreeLectureSection {
 
@@ -10,6 +11,7 @@ public class FreeLectureSection {
 	private String sectionContents;
 	private int count;
 	private int views;
+	private List<FreeLectureComent> comments;
 	private Date createDate;
 	
 	public FreeLectureSection() {}
@@ -22,21 +24,21 @@ public class FreeLectureSection {
 		this.no = no;
 	}
 
-	public String getTitle() {
+	public String getSectionTitles() {
 		return sectionTitles;
 	}
 
-	public FreeLectureSection setTitle(String title) {
-		this.sectionTitles = title;
+	public FreeLectureSection setSectionTitles(String sectionTitles) {
+		this.sectionTitles = sectionTitles;
 		return this;
 	}
 
-	public String getContents() {
+	public String getSectionContents() {
 		return sectionContents;
 	}
 
-	public FreeLectureSection setContents(String contents) {
-		this.sectionContents = contents;
+	public FreeLectureSection setSectionContents(String sectionContents) {
+		this.sectionContents = sectionContents;
 		return this;
 	}
 
@@ -75,11 +77,19 @@ public class FreeLectureSection {
 		this.lectureNo = lectureNo;
 	}
 
+	public List<FreeLectureComent> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<FreeLectureComent> comments) {
+		this.comments = comments;
+	}
+
 	@Override
 	public String toString() {
 		return "FreeLectureSection [no=" + no + ", lectureNo=" + lectureNo + ", title=" + sectionTitles + ", contents="
 				+ sectionContents + ", count=" + count + ", views=" + views + ", createDate=" + createDate + ", getNo()="
-				+ getNo() + ", getTitle()=" + getTitle() + ", getContents()=" + getContents() + ", getCount()="
+				+ getNo() + ", getTitle()=" + getSectionTitles() + ", getContents()=" + getSectionContents() + ", getCount()="
 				+ getCount() + ", getViews()=" + getViews() + ", getCreateDate()=" + getCreateDate()
 				+ ", getLectureNo()=" + getLectureNo() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
 				+ ", toString()=" + super.toString() + "]";

@@ -1,7 +1,5 @@
 package com.jhta.cope.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jhta.cope.service.ManagerService;
 import com.jhta.cope.service.QnaService;
 import com.jhta.cope.vo.Qna;

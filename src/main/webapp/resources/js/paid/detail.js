@@ -8,7 +8,7 @@ $(function() {
 	
 	$("#detail-overview").parent().css('background-color', '#ff7373');
 	$("#detail-overview").css('color', 'white');
-	
+
 	
 	$(".section-top-box").on('click', function() {
 		

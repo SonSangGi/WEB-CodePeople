@@ -6,12 +6,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp" %>
-<link rel="stylesheet" href="/resources/css/paid/detail.css?ver=1">
-<link rel="stylesheet" href="/resources/css/paid/contents.css?ver=1">
+<link rel="stylesheet" href="/resources/css/paid/detail.css?ver=2">
+<link rel="stylesheet" href="/resources/css/paid/contents.css?ver=2">
 
 
 <script src="/resources/js/paid/detail.js?ver=2"></script>
-<script src="/resources/js/paid/contents.js?ver=3"></script>
+<script src="/resources/js/paid/contents.js?ver=2"></script>
 
 </head>
 <body>
@@ -33,7 +33,22 @@
                             <span>For </span> ${lectureDetails[0].paidLecture.level }
                         </h3>
                         <div>
-                            <button class="sg-btn-primary" id="paid-continue-btn">continue to LECTURE 24</button>
+                        
+                        
+                        <c:choose>
+                        	<c:when test="${LOGIN_USER eq null}">
+	                        	<div>
+		                            <button class="sg-btn-primary" id="paid-purchase-btn">지금 구매하기</button>
+	                        	</div>
+	                        	<div>
+	    	                        <button class="sg-btn-primary" id="paid-cart-btn">카트에 담기</button>
+	                        	</div>
+                        	</c:when>
+                        	<c:otherwise>
+ 	                           <button class="sg-btn-primary" id="paid-continue-btn">continue to LECTURE 24</button>
+                        	</c:otherwise>
+                        </c:choose>
+                        
                         </div>
 
                     </div>
@@ -43,9 +58,11 @@
                             ${lectureDetails[0].paidLecture.lang }
                         </p>
                         <hr />
-                        <p style='font-weight: bold;'>수강시작일</p>
+                        <p style='font-weight: bold;'>개강일</p>
                         <p id='paid-date-top'>
-                            2018.10.11
+                        
+                        <fmt:formatDate pattern = "yyyy-MM-dd" value = "${lectureDetails[0].paidLecture.createDate }" />
+
                         </p>
                         <hr />
                         <p style='font-weight: bold;'>담당 마스터</p>
@@ -70,10 +87,10 @@
                 <ul>
                     <li><a href=# id="detail-overview">OVERVIEW</a></li>
                     <li><a href=# id="detail-contents">COURSE CONTENTS</a></li>
-                    <li><a href=#>MY NOTE</a></li>
-                    <li><a href=#>Q&A</a></li>
-                    <li><a href=#>BOOKMARK</a></li>
-                    <li><a href=#>공지사항</a></li>
+                    <li><a href=# id="detail-note">MY NOTE</a></li>
+                    <li><a href=# id="detail-bookmark">BOOKMARK</a></li>
+                    <li><a href=# id="detail-question">Q&A</a></li>
+                    <li><a href=# id="detail-announce">공지사항</a></li>
                 </ul>
             </div>
             <div class="col-xs-12">
@@ -82,9 +99,7 @@
            
 
 				<div class="paid-contents">
-				
 					<!-- ajax 페이지 갱신 -->
-				
 				</div>
 
 </div>       

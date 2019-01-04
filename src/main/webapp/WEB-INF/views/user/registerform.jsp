@@ -31,8 +31,8 @@
          <hr>
 
          <div class="">
-         <a href="/user/googleSignIn.do" style="margin-left: 120px;"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png"></a>
-			<a href="/user/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195"></a>
+         <a href="/login/googleSignIn.do" style="margin-left: 120px;"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png"></a>
+			<a href="/login/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195"></a>
 					
             <form:form action="signup.do" method="POST" style="padding:30px;" modelAttribute="userform" id="form-signup">
                <div class="">

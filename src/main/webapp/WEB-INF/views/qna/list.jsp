@@ -39,6 +39,21 @@
       color:black;
       text-decoration: underline;
     }
+    .sg-pn-item{
+    display:inline-block;
+    }
+    .sg-pn-item a{
+    padding: 0px 7px 0px 7px;
+    border: 2px solid #40e0d0;
+    border-radius: 3px;
+    font-weight: 600;
+    color: #289086;
+    font-size: 13px;
+    }
+    .sg-pn-item a.active{
+    background-color: #40e0d0;
+    color:white;
+    }
   </style>
 </head>
 <body>
@@ -51,13 +66,13 @@
     <h1><a href="/qna/list.do?sort=new" style="font-size:20px;color:black;"><img alt="QNA 게시판" src="/resources/img/qna/QNA_LOGO.png" width="100" style="margin-right:30px;">무엇이든 물어보세요!</a></h1>
     <hr>
     <div style="height: 37px;line-height: 37px;margin-left: 27px;">
-	    <form action="list.do">
+	    <form action="list.do" id="qna-search-form">
     		<div style="display:inline-block;">
     			<button class="sort-link ${param.sort eq 'new' ? 'active':''}" value="new">최신순</button>
     			<button class="sort-link ${param.sort eq 'rep' ? 'active':''}" value="rep">답변순</button>
     			<button class="sort-link ${param.sort eq 'view' ? 'active':''}" value="view">조회순</button>
 	    		<input type="hidden" name="sort" id="sort-value" value="${param.sort }">
-	    		
+	    		<input type="hidden" name="cp" id="cp-value" value="${param.cp }">
 	    	</div>
 		    <div style="text-align: center;display: inline-block;float: right;">
 		    	<select name="searchType" style="border:2px solid rgb(76, 254, 210);border-radius:3px;height:37px;position:absolute;right:196px;">
@@ -99,7 +114,7 @@
       	<c:otherwise>
 	      <c:forEach items="${qnas }" var="qna" varStatus="status">
 		        <tr>
-		          <td>${status.index+1 }</td>
+		          <td>${qna.no }</td>
 		          <td style="text-align:left;"><a href="detail.do?qnaNo=${qna.no}">${qna.title }</a></td>
 		          <td>${fn:length(qna.answers)}</td>
 		          <td><img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }</td>
@@ -111,9 +126,22 @@
 	</c:choose>
       </tbody>
     </table>
-     <div style="float:right;">
+    <div class="text-center">
+    	<ul style="display: inline-block;">
+    		<c:if test="${pagination.currentBlock gt 1 }">
+				<li class="sg-pn-item"><a href="javascript:searchQna(${pagination.prevBlock })">&laquo;</a></li>
+			</c:if>
+    		<c:forEach var="pnum" begin="${pagination.beginPage }" end="${pagination.endPage }">
+    			<li class="sg-pn-item"><a class="${pnum eq param.cp ? 'active':'' }" href="javascript:searchQna(${pnum })">${pnum }</a></li>
+    		</c:forEach>
+    		<c:if test="${pagination.currentBlock lt pagination.totalBlocks }">
+				<li class="sg-pn-item"><a href="javascript:searchQna(${pagination.nextBlock })">&raquo;</a></li>
+			</c:if>
+    	</ul>
+    	 <div style="float:right;">
 		    <a class="sg-btn sg-btn-3rd sg-nb" href="add.do">질문하기</a>
 	    </div>
+    </div>
   </div>
     <!--컨테이너 끝-->
 
@@ -125,6 +153,11 @@
 		$('.sort-link').click(function() {
 			$("#sort-value").val($(this).val());
 		});
+		
+		function searchQna(cp){
+			$("#cp-value").val(cp);
+			$('#qna-search-form').submit();
+		}
 	</script>
 	<%@include file="/WEB-INF/views/include/footer.jsp"%></body>
 </html>

@@ -19,5 +19,21 @@
 	<context:component-scan base-package="com.jhta.cope.controller" />
 	
 	<context:property-placeholder location="classpath:/META-INF/spring/config.properties"/>
+		
+	<beans:bean id="loginInterceptor" class="com.jhta.cope.interceptor.LoginInterceptor"/>
+	
+	<!-- 인터셉터 설정입니다. 로그인 체크 필요없는 url 입력해주세요. -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<exclude-mapping path="/home.do"/>
+			<exclude-mapping path="/qna/detail.do"/>
+			<exclude-mapping path="/qna/list.do"/>
+			<exclude-mapping path="/login/**"/>
+			<exclude-mapping path="/free/**"/>
+			<beans:ref bean="loginInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
 	
 </beans:beans>

@@ -147,6 +147,7 @@
 		and 
 			B.USER_NO = #{value}
 	</select>
+	
 	<insert id="insertUserBadge" parameterType="map">
 		insert into USER_BADGE(
 				USER_NO,

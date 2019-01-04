@@ -11,6 +11,7 @@
 		<result column="QNA_TITLE" property="title"/>
 		<result column="QNA_CONTENTS" property="contents"/>
 		<result column="QNA_CREATE_DATE" property="createDate"/>
+		<result column="QNA_VIEWS" property="views"/>
 		<association column="QNA_WRITER" property="writer" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"/>
 		<collection property="answers" column="QNA_NO" javaType="java.util.ArrayList" ofType="QnaAnswer" select="getAnswerByNo"/>
 	</resultMap>
@@ -45,6 +46,20 @@
 	order by ANSWER_CREATE_DATE
 	</select>
 	
+	<select id="getAnswerByUserNo" parameterType="int" resultMap="getAnswerByNoResultMap">
+	select 
+	    ANSWER_NO,
+	    ANSWER_WRITER,
+	    ANSWER_CONTENTS,
+	    ANSWER_CREATE_DATE,
+	    QNA_NO
+	from
+	    QNA_ANSWER
+	where
+		answer_writer = #{value}
+	order by ANSWER_CREATE_DATE
+	</select>
+	
 	<select id="getAllAnswers" resultMap="getAnswerByNoResultMap">
    		select 
 	       ANSWER_NO,
@@ -69,6 +84,20 @@
 	    	QNA
 	    where
 	    	QNA_NO = #{value}
+	</select>
+	
+	<select id="getQnaByUserNo" parameterType="int" resultMap="getQnaByNoResultMap">
+		select 
+		    QNA_NO,
+		    QNA_TITLE,
+		    QNA_WRITER,
+		    QNA_CONTENTS,
+		    QNA_VIEWS,
+		    QNA_CREATE_DATE
+		from
+	    	QNA
+	    where
+	    	QNA_WRITER = #{value}
 	</select>
 	
 	<select id="getAllQnas" resultMap="getQnaByNoResultMap">
@@ -99,7 +128,7 @@
 			                	ROW_NUMBER() over (order by B.rep desc) rn,
 			                </when>
 			                <when test="sort == 'view'">
-			                	ROW_NUMBER() over (order by A.qna_create_date desc) rn,
+			                	ROW_NUMBER() over (order by A.qna_views desc) rn,
 			                </when>
 			                <otherwise>
 			               		ROW_NUMBER() over (order by A.qna_create_date desc) rn,
@@ -147,6 +176,18 @@
 			CO_CREATE_DATE
 		from qna_comment
 		where answer_no = #{value}
+		order by CO_CREATE_DATE
+	</select>
+	
+		<select id="getCommentByUserNo" parameterType="int" resultMap="getQnaCommentByNoResultMap">
+		select
+			COMMENT_NO,
+			ANSWER_NO,
+			CO_WRITER,
+			CO_CONTENTS,
+			CO_CREATE_DATE
+		from qna_comment
+		where co_writer = #{value}
 		order by CO_CREATE_DATE
 	</select>
 	
@@ -207,4 +248,12 @@
 				CO_CREATE_DATE)
 		values(#{no},#{answerNo},#{writer.no},#{contents},sysdate)
 	</insert>
+	
+	<update id="updateQna" parameterType="Qna">
+	
+	</update>
+	
+	<update id="updateAnswer" parameterType="QnaAnswer">
+	
+	</update>
 </mapper>

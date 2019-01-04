@@ -9,9 +9,14 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		System.out.println("인터셉터 들어옴");
 			if(request.getSession().getAttribute("LOGIN_USER") == null) {
+				String[] url = request.getRequestURI().split("/");
+				String uri = url[1];
+				if(uri.equals("qna")) {
+					response.sendRedirect("/qna/list.do?fail=lp");
+				}else {
 				response.sendRedirect("/home.do?fail=lp");
+				}
 				return false;
 			}
 		return true;

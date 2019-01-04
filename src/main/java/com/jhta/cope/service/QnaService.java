@@ -14,6 +14,9 @@ public interface QnaService {
 	public List<Qna> getAllQnas();
 	public List<Qna> getAllQnasByCriteria(Criteria criteria);
 	public Qna getQnaByNo(int no);
+	public List<Qna> getQnaByUserNo(int userNo);
+	public List<QnaComment> getCommentByUserNo(int userNo);
+	public List<QnaAnswer> getAnswerByUserNo(int userNo);
 	public List<QnaComment> getCommentByQnaNo(int no);
 	public int getQnaCount();
 	public void insertQna(Qna Qna);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,7 +34,9 @@ public class QnaController {
 
 	@Autowired
 	QnaService qnaService;
-
+	
+	
+	//QNA 맵핑 및 페이징처리, 검색, 정렬 등
 	@RequestMapping(value = "list")
 	public String list(Model model, Integer cp, @RequestParam(required = false, name = "keyword") String keyword,
 			@RequestParam(required = false, name = "searchType") String searchType,
@@ -43,16 +46,15 @@ public class QnaController {
 		if (cp == null) {
 			cp = 1;
 		}
-		System.out.println(keyword);
-		System.out.println(searchType);
 		int rows = 10;
 		Criteria criteria = new Criteria(cp, rows);
 		criteria.setSearchType(searchType);
 		criteria.setKeyword(keyword);
 		criteria.setSort(sort);
 
-		Pagination pagination = new Pagination(cp, 10, qnaService.getQnaCount());
+		Pagination pagination = new Pagination(cp, rows, qnaService.getQnaCount());
 		List<Qna> qnas = qnaService.getAllQnasByCriteria(criteria);
+		model.addAttribute("pagination",pagination);
 		model.addAttribute("qnas", qnas);
 		
 		return "qna/list";
@@ -61,7 +63,6 @@ public class QnaController {
 	@RequestMapping(value = "detail")
 	public String detail(Model model, int qnaNo) {
 		Qna qna = qnaService.getQnaByNo(qnaNo);
-		
 		model.addAttribute("qna", qna);
 		return "qna/detail";
 	}
@@ -70,30 +71,25 @@ public class QnaController {
 	public String form(Model model) {
 		return "qna/form";
 	}
-
+	
+	// 질문하기 등록
 	@RequestMapping(value = "add", method = RequestMethod.POST)
 	public String add(Qna qna) {
 		qna.setWriter((User) SessionUtils.getAttribute("LOGIN_USER"));
 		qnaService.insertQna(qna);
+		
 		return "redirect:list.do";
 	}
 
-	@RequestMapping(value = "addAns", method = RequestMethod.POST)
-	public String addAnswer(QnaAnswer qnaAnswer,int qnaNo) {
-		qnaAnswer.setWriter((User) SessionUtils.getAttribute("LOGIN_USER"));
-		qnaAnswer.setQnaNo(qnaNo);
-		qnaService.insertAnswer(qnaAnswer);
-		return "redirect:detail.do?qnaNo="+qnaNo;
-	}
 	
-
+	// 질문하기 사진 업로드
 	@RequestMapping(value = "upload", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public String upload(@RequestParam("uploadFile") MultipartFile mf, HttpServletRequest request) {
 		String today = new SimpleDateFormat("ddhhmmss").format(new Date());
 		String saveDirectory = "C:/project/codepeople/src/main/webapp/resources/img/qna";
 		String path = "/resources/img/qna/";
-		String fileName = today + mf.getOriginalFilename();
+		String fileName = today + new Random().nextInt(1000);
 		try {
 			mf.transferTo(new File(saveDirectory, fileName));
 			EtcUtils.saveFile(request, saveDirectory, path, fileName);
@@ -103,6 +99,19 @@ public class QnaController {
 			return "";
 		}
 	}
+	
+	//답글 작성
+	@RequestMapping(value = "addAns", method = RequestMethod.POST)
+	public String addAnswer(QnaAnswer qnaAnswer,int qnaNo) {
+		qnaAnswer.setWriter((User) SessionUtils.getAttribute("LOGIN_USER"));
+		qnaAnswer.setQnaNo(qnaNo);
+		qnaService.insertAnswer(qnaAnswer);
+		String id = qnaService.getQnaByNo(qnaNo).getWriter().getId();
+		
+		return "redirect:detail.do?qnaNo="+qnaNo;
+	}
+	
+	//댓글 작성
 	@RequestMapping(value="comment")
 	@ResponseBody
 	public QnaComment insertComment(QnaComment qnaComment,int answerNo) {

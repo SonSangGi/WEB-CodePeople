@@ -21,7 +21,9 @@
 
 
     <!--컨테이너-->
-    <div class="" style="max-width:70%;padding:50px 0px 50px 20%;">
+    <div class="" style="max-width:70%;padding:0px 0px 50px 20%;">
+    <h1><a href="/qna/list.do?sort=new" style="font-size:20px;color:black;"><img alt="QNA 게시판" src="/resources/img/qna/QNA_LOGO.png" width="100" style="margin-right:30px;">무엇이든 물어보세요!</a></h1>
+    <hr>
       <div class="" style="">
         <h4 style="font-size:20px;padding-bottom:20px;"><i class="fab fa-quora" style="font-size:44px;color:rgb(69, 196, 171)"></i>${qna.title }</h4>
         <p style="font-size:16px;">${qna.contents}</p>

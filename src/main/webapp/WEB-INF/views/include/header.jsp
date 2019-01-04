@@ -3,8 +3,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!--네비게이션 바~~-->
-<style>
-</style>
 <div class="wrapper">
 	<div class="sg-header">
 		<div class="col-sm-offset-2 col-sm-8 sg-menu-left" style="display: block">
@@ -44,7 +42,7 @@
 			<c:choose>
 				<c:when test="${LOGIN_USER eq null}">
 					<nav class="sg-menu-login" style="font-size: 15px; color: white; font-weight: bold; margin-top: 20px;">
-						<a href="#" class="sg-text-white login-in">로그인</a> || <a href="/user/signup.do" class="sg-text-white">회원가입</a>
+						<a href="#" class="sg-text-white login-in">로그인</a> || <a href="/login/signup.do" class="sg-text-white">회원가입</a>
 					</nav>
 				</c:when>
 				<c:otherwise>
@@ -61,7 +59,7 @@
 									<p>${LOGIN_USER.name }</p>
 									<p>${LOGIN_USER.avatar.exp }exp</p>
 									<p>
-										<a href="/user/logout.do">로그아웃</a>
+										<a href="/login/logout.do">로그아웃</a>
 									</p>
 								</div>
 							</div>
@@ -84,8 +82,8 @@
 	<!--  -->
 	<!--네비게이션바 끝~~-->
 	<!--유저 헤더 시작~~-->
-	<div class="sg-user-header"
-		style="background: url(/resources/img/user/Productsp-Page-Header-1500x300.jpg) 0% 30% / cover !important;position:relative">
+	<div class="sg-user-header sg-background"
+		style="background: url(/resources/img/user/background/<c:choose><c:when test="${LOGIN_USER == null }">Productsp-Page-Header-1500x300.jpg</c:when><c:otherwise>${LOGIN_USER.avatar.bgImg != 'Default' ? LOGIN_USER.avatar.bgImg:'Productsp-Page-Header-1500x300.jpg'}</c:otherwise></c:choose>) 0% 30% / cover !important;">
 		<div class="container text-center sg-user-show">
 			<div>
 				<c:choose>
@@ -103,7 +101,7 @@
 							<a href="/user/my/info.do"><img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" width="165px" height="165px"></a>
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">
-							<a style="font-size: 25px; font-weight: bold" href="/user/my/home.do">${LOGIN_USER.name }</a>
+							<a style="    font-size: 25px;font-weight: bold;color: black;border-radius: 30px;padding: 5px;background-color: #ffffff7a;" href="/user/my/home.do">${LOGIN_USER.name }</a>
 							<span></span>
 						</div>
 					</c:otherwise>
@@ -122,7 +120,7 @@
 			<div class="sg-modal-login">
 				<div class="col-md-8">
 					<h1 class="text-center sg-text-alert">어서오세요!</h1>
-					<form id="form-login" action="/user/login.do" method="post">
+					<form id="form-login" action="/login/login.do" method="post">
 						<label for="id">아이디</label> <input type="text" name="id" autocomplete="off" id="input-login-id"> 
 						<label for="password">비밀번호</label> 
 						<input type="password" name="password" id="input-login-pwd">
@@ -133,10 +131,10 @@
 					</div>
 				</div>
 				<div class="col-md-4" style="padding-top: 60px; height: 100%;">
-					<a href="/user/googleSignIn.do"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png" style="    margin-bottom: 20px;
+					<a href="/login/googleSignIn.do"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png" style="    margin-bottom: 20px;
     margin-top: 25px;"></a>
-					<a href="/user/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195" style="margin-bottom: 20px;"></a>
-					<a href="/user/signup.do" style="height:60px;width:195px;display:block;text-align:center" class="sg-btn sg-btn-primary sg-btn-lg">회원가입</a>
+					<a href="/login/naverSignIn.do"><img alt="Connect with Naver" src="http://static.nid.naver.com/oauth/small_g_in.PNG" height="60" width="195" style="margin-bottom: 20px;"></a>
+					<a href="/login/signup.do" style="height:60px;width:195px;display:block;text-align:center" class="sg-btn sg-btn-primary sg-btn-lg">회원가입</a>
 				</div>
 			</div>
 		</div>

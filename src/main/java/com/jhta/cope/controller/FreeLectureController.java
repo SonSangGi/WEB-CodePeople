@@ -1,19 +1,11 @@
 package com.jhta.cope.controller;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -24,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jhta.cope.dao.FreeLectureDao;
+
 import com.jhta.cope.service.FreeLectureService;
 import com.jhta.cope.vo.FreeLecture;
+import com.jhta.cope.vo.FreeLectureComent;
 import com.jhta.cope.vo.FreeLectureSection;
 import com.jhta.cope.vo.Photo;
 
@@ -70,14 +63,14 @@ public class FreeLectureController {
 		ArrayList<FreeLectureSection> sections = new ArrayList<>();
 		for (int i = 0; i < sectionContents.length; i++) {
 			FreeLectureSection section = new FreeLectureSection();
-			section.setContents(sectionContents[i]).setTitle(sectionTitles[i]).setCount(i+1);
+			section.setSectionContents(sectionContents[i]).setSectionTitles(sectionTitles[i]).setCount(i+1);
 			sections.add(section);
 		}
 		
 		freeLectureService.insertFreeLecture(freeLecture, sections);
 		
 		
-		return "redirect:/home.do";
+		return "redirect:/free/list.do";
 		
 		
 	}
@@ -116,11 +109,31 @@ public class FreeLectureController {
 		return "freelecture/list";
 	}
 	
-	@RequestMapping("/detail")
+	@RequestMapping(value="/detail", method=RequestMethod.GET)
 	public String detail(Model model, @RequestParam("freeLectureNo") int freeLectureNo) {
 		
 		FreeLecture freeLecture = freeLectureService.getFreeLecture(freeLectureNo);
 		model.addAttribute("freeLecture", freeLecture);
 		return "freelecture/detail";
+	}
+	
+	@RequestMapping(value="/section", method=RequestMethod.GET)
+	public String section(Model model, @RequestParam("freeLectureNo") int freeLectureNo, Integer count) {
+		List<FreeLectureSection> freeLectureSections = freeLectureService.getFreeLectureSectionByLectureNo(freeLectureNo);
+		if(count == null) {
+			count = 1;
+		}
+		for (FreeLectureSection freeLectureSection : freeLectureSections) {
+			if(count == freeLectureSection.getCount()) {
+				List<FreeLectureComent> coments = freeLectureSection.getComments();
+				for (FreeLectureComent freelectureCommet : coments) {
+					System.out.println(freelectureCommet);
+				}
+				model.addAttribute("freeSection", freeLectureSection);
+			}
+		}
+		
+		model.addAttribute("freeLectureSections", freeLectureSections);
+		return "freelecture/section";
 	}
 }

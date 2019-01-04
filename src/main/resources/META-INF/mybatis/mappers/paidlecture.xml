@@ -80,6 +80,10 @@
 		    PAID_LECTURE
 		where
 			PAID_LECTURE_NO = #{value}
+		and
+			EXPOSURE_STATUS = 'Y'
+		and
+			APPROVE_STATUS = 'Y'
 	</select>
 	
 	<select id="getPaidLectureByLang" parameterType="String" resultType="PaidLecture">
@@ -103,6 +107,26 @@
 		    PAID_LECTURE
 		where
 			LECTURE_LANG = #{value}
+		and
+			EXPOSURE_STATUS = 'Y'
+		and
+			APPROVE_STATUS = 'Y'
+			
+	</select>
+
+	<select id="getCountPaidLectureByLang" parameterType="String" resultType="int">
+	
+		SELECT
+			COUNT(*)
+		from
+			PAID_LECTURE
+		where
+			LECTURE_LANG = #{value}
+		and
+			EXPOSURE_STATUS = 'Y'
+		and
+			APPROVE_STATUS = 'Y'
+
 	</select>
 	
 	

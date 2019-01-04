@@ -16,5 +16,8 @@ public interface QnaDao {
 	public void insertQna(Qna qna);
 	public void insertAnswer(QnaAnswer qnaAnswer);
 	public void insertAnswerComment(QnaComment qnaComment);
+	public List<Qna> getQnaByUserNo(int userNo);
+	public List<QnaAnswer> getAnswerByUserNo(int userNo);
+	public List<QnaComment> getCommentByUserNo(int userNo);
 	public int getQnaCount();
 }

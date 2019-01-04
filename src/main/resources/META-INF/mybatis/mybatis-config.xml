@@ -17,7 +17,8 @@
 		<typeAlias alias="Criteria" type="com.jhta.cope.vo.Criteria"/>
 		<typeAlias alias="FreeLecture" type="com.jhta.cope.vo.FreeLecture"/>
 		<typeAlias alias="FreeLectureSection" type="com.jhta.cope.vo.FreeLectureSection"/>
-	
+		<typeAlias alias="FreeLectureComent" type="com.jhta.cope.vo.FreeLectureComent"/>
+		<typeAlias alias="Cart" type="com.jhta.cope.vo.Cart"/>
 	</typeAliases>
 
 	<mappers>
@@ -27,5 +28,6 @@
 		<mapper resource="META-INF/mybatis/mappers/manager.xml" />
 		<mapper resource="META-INF/mybatis/mappers/instructor.xml" />
 		<mapper resource="META-INF/mybatis/mappers/freelecture.xml" />
+		<mapper resource="META-INF/mybatis/mappers/cart.xml" />
 	</mappers>
 </configuration>

@@ -43,7 +43,7 @@ import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.User;
 
 @Controller
-@RequestMapping("/user/*")
+@RequestMapping("/login/*")
 public class LoginController {
 
 	@Autowired

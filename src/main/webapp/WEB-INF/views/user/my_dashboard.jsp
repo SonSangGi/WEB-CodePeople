@@ -19,7 +19,7 @@
          <div class="user-info-body" style="min-height:300px;margin-top:30px;padding-left:30px;">
         <div class="row">
 
-          <div class="col-xs-5" style="border:1px solid lightgray">
+          <div class="col-xs-6" style="border-right:1px solid lightgray">
             <h3>강의 현황</h3>
 
             <div class="my-cource-box">
@@ -86,7 +86,7 @@
           <div class="col-xs-1"></div>
 
 
-          <div class="col-xs-5" style="border:1px solid lightgray;">
+          <div class="col-xs-6">
             <div class="">
               <h3>수강 완료 강의</h3>
 
@@ -138,7 +138,7 @@
       
       
     </div>
-
+    
 
 <%@include file="/WEB-INF/views/include/footer.jsp"%></body>
 </html>

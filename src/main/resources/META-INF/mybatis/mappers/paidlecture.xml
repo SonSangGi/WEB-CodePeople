@@ -59,6 +59,7 @@
 			DETAIL_NO = #{value}
 	</select>
 	
+	
 	<select id="getPaidLectureByNo" parameterType="int" resultType="PaidLecture">
 		select 
 		    PAID_LECTURE_NO as no,

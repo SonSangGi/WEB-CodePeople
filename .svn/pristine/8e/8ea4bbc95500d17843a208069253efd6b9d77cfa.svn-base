@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jhta.cope.dao.PaidLectureDao">
+	
+	<resultMap type="PaidLectureDetail" id="PaidLectureDetailByDetailNoResultMap">
+		<id property="no" column="DETAIL_NO"/>
+		<result property="filePath" column="filePath"/>
+		<result property="sectionNo" column="sectionNo"/>
+		<result property="sectionName" column="sectionName"/>
+		<result property="lessonNo" column="lessonNo"/>
+		<result property="lessonName" column="lessonName"/>
+		<result property="lessonLength" column="lessonLength"/>
+		<association property="paidLecture" column="PAID_LECTURE_NO" javaType="PaidLecture" select="getPaidLectureByNo"/>
+	</resultMap>
+
+	<resultMap type="PaidLectureDetail" id="PaidLectureDetailByLectureNoResultMap">
+		<id property="paidLecture.no" column="PAID_LECTURE_NO"/>
+		<result property="filePath" column="filePath"/>
+		<result property="sectionNo" column="section_no"/>
+		<result property="sectionName" column="section_name"/>
+		<result property="lessonNo" column="lesson_no"/>
+		<result property="lessonName" column="lesson_name"/>
+		<result property="lessonLength" column="lesson_length"/>
+		<association property="paidLecture" column="PAID_LECTURE_NO" javaType="PaidLecture" select="getPaidLectureByNo"/>
+	</resultMap>
+	
+	<select id="getPaidLectureDetailByLectureNo" resultMap="PaidLectureDetailByLectureNoResultMap" parameterType="int">
+		select
+			DETAIL_NO,
+			PAID_LECTURE_NO,
+			FILEPATH,
+			SECTION_NO,
+			SECTION_NAME,
+			LESSON_NO,
+			LESSON_NAME,
+			LESSON_LENGTH
+		from
+			PAID_LECTURE_DETAIL
+		where
+			PAID_LECTURE_NO = #{value}
+	</select>
+	
+	<select id="getPaidLectureDetailByDetailNo" resultMap="PaidLectureDetailByDetailNoResultMap" parameterType="int">
+		select
+			DETAIL_NO,
+			PAID_LECTURE_NO,
+			FILEPATH,
+			SECTION_NO,
+			SECTION_NAME,
+			LESSON_NO,
+			LESSON_NAME,
+			LESSON_LENGTH
+		from
+			PAID_LECTURE_DETAIL
+		where
+			DETAIL_NO = #{value}
+	</select>
+	
+	<select id="getPaidLectureByNo" parameterType="int" resultType="PaidLecture">
+		select 
+		    PAID_LECTURE_NO as no,
+		    INSTRUCTOR_NO as "instructor.no",
+		    LECTURE_LANG as lang,
+		    LECTURE_TITLE as title,
+		    LECTURE_LEVEL as "level",
+		    LECTURE_SPECIALIZED as specialized,
+		    LECTURE_SUMMARY as summary,
+		    LECTURE_DESCRIPTION as description,
+		    LECTURE_PRICE as price,
+		    LECTURE_THUMNAIL_PATH as thumbnail,
+		    LECTURE_CREATE_DATE as createDate,
+		    LECTURE_LIKES as "like",
+		    LECTURE_VIEW_COUNT as viewCount,
+		    EXPOSURE_STATUS as exposureStatus,
+		    APPROVE_STATUS as approveStatus
+		from
+		    PAID_LECTURE
+		where
+			PAID_LECTURE_NO = #{value}
+		and
+			EXPOSURE_STATUS = 'Y'
+		and
+			APPROVE_STATUS = 'Y'
+	</select>
+	
+	<select id="getPaidLectureByLang" parameterType="String" resultType="PaidLecture">
+		select 
+		    PAID_LECTURE_NO as no,
+		    INSTRUCTOR_NO as "instructor.no",
+		    LECTURE_LANG as lang,
+		    LECTURE_TITLE as title,
+		    LECTURE_LEVEL as "level",
+		    LECTURE_SPECIALIZED as specialized,
+		    LECTURE_SUMMARY as summary,
+		    LECTURE_DESCRIPTION as description,
+		    LECTURE_PRICE as price,
+		    LECTURE_THUMNAIL_PATH as thumbnail,
+		    LECTURE_CREATE_DATE as createDate,
+		    LECTURE_LIKES as "like",
+		    LECTURE_VIEW_COUNT as viewCount,
+		    EXPOSURE_STATUS as exposureStatus,
+		    APPROVE_STATUS as approveStatus
+		from
+		    PAID_LECTURE
+		where
+			LECTURE_LANG = #{value}
+		and
+			EXPOSURE_STATUS = 'Y'
+		and
+			APPROVE_STATUS = 'Y'
+			
+	</select>
+
+	<select id="getCountPaidLectureByLang" parameterType="String" resultType="int">
+	
+		SELECT
+			COUNT(*)
+		from
+			PAID_LECTURE
+		where
+			LECTURE_LANG = #{value}
+		and
+			EXPOSURE_STATUS = 'Y'
+		and
+			APPROVE_STATUS = 'Y'
+
+	</select>
+	
+	
+</mapper>

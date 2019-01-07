@@ -17,5 +17,9 @@
 			INSTRUCTOR_NO = #{value}
 	</select>
 	
+	<select id="createNewLecture">
+	
+	</select>
+	
 	
 </mapper>

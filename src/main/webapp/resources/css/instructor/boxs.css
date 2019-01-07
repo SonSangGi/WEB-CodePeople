@@ -30,6 +30,24 @@
 	font-size: 17px;
 }
 
+.level-select-box {
+	width: 400px;
+	height: 35px;
+	padding: 0px 0px 0px 20px;
+	margin: 0px 0px 0px 380px;
+	font-size: 17px;
+	text-align: center;
+}
+
+
+.summary-box {
+	padding: 0px 0px 0px 20px;
+	margin: 0px 0px 0px 284px;
+	font-size: 17px;
+}
+
+
+
 .small-viewBox {
 	width: 25%;
 	float: left;

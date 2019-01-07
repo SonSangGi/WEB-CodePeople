@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.jhta.cope.dao.FreeLectureDao">
+	<insert id="insertFreeLecture" parameterType="FreeLecture">
+	<selectKey keyProperty="no" resultType="int"  order="BEFORE">
+		select freeLecture_seq.nextval from dual
+	</selectKey>
+		insert into FREE_LECTURE (
+			FREE_LECTURE_NO,
+			LECTURE_TITLE,
+			LECTURE_IMAGE,
+			LECTURE_CONTENTS,
+			LECTURE_TIME,
+			LECTURE_LEVEL,
+			LECTURE_LECTURE_SUMMARY
+		)
+		values (#{no}, #{lectureTitle}, #{lectureImg}, #{lectureContent}, #{lectureTime}, #{lectureLevel}, #{lectureSummary})
+	</insert>
+	
+	<insert id="insertFreeLectureSection" parameterType="FreeLectureSection">
+		<selectKey keyProperty="no" resultType="int"  order="BEFORE">
+			select freeSection_seq.nextval from dual
+		</selectKey>
+		insert into FREE_LECTURE_SECTION (
+			LECTURE_SECTION_NO,
+			FREE_LECTURE_NO,
+			SECTION_TITLE,
+			SECTION_CONTENTS,
+			SECTION_COUNT,
+			SECTION_VIEWS,
+			SECTION_CREATE_DATE
+		)
+		values (#{no}, #{lectureNo}, #{sectionTitles}, #{sectionContents}, #{count}, 0 , sysdate)
+	</insert>
+	<select id="getAllFreeLecture" resultType="FreeLecture">
+		select
+			FREE_LECTURE_NO as no,
+			LECTURE_TITLE as lectureTitle,
+			LECTURE_IMAGE as lectureImg,
+			LECTURE_CONTENTS as lectureContent,
+			LECTURE_TIME as lectureTime,
+			LECTURE_LEVEL as lectureLevel,
+			LECTURE_LECTURE_SUMMARY as lectureSummary
+		from
+			FREE_LECTURE
+	</select>
+	<select id="getFreeLecture" parameterType="int" resultType="FreeLecture">
+		select
+			FREE_LECTURE_NO as no,
+			LECTURE_TITLE as lectureTitle,
+			LECTURE_IMAGE as lectureImg,
+			LECTURE_CONTENTS as lectureContent,
+			LECTURE_TIME as lectureTime,
+			LECTURE_LEVEL as lectureLevel,
+			LECTURE_LECTURE_SUMMARY as lectureSummary
+		from
+			FREE_LECTURE
+		where
+			FREE_LECTURE_NO = #{no}
+	</select>
+	
+	<resultMap type="FreeLectureSection" id="getFreeLectureSectionByLectureNoResultMap">
+		<id column="FREE_LECTURE_NO" property="no"/>
+		<result column="LECTURE_SECTION_NO" property="lectureNo"/>
+		<result column="SECTION_TITLE" property="sectionTitles"/>
+		<result column="SECTION_CONTENTS" property="sectionContents"/>
+		<result column="SECTION_COUNT" property="count"/>
+		<result column="SECTION_CREATE_DATE" property="createDate"/>
+		<collection property="comments" column="LECTURE_SECTION_NO" javaType="java.util.ArrayList" ofType="FreeLectureComent" select="getFreeLectureComentesBySno"></collection>
+	</resultMap>
+	
+	<select id="getFreeLectureSectionByLectureNo" parameterType="int" resultMap="getFreeLectureSectionByLectureNoResultMap">
+		select
+			FREE_LECTURE_NO,
+			LECTURE_SECTION_NO,
+			SECTION_TITLE,	
+			SECTION_CONTENTS,
+			SECTION_COUNT,
+			SECTION_VIEWS,
+			SECTION_CREATE_DATE
+		from
+			FREE_LECTURE_SECTION
+		where
+			FREE_LECTURE_NO	= #{no}
+		order by SECTION_COUNT 	
+	</select>
+	
+	<resultMap type="FreeLectureComent" id="getFreeLectureComentesBySnoResultMap">
+		<id column="LECTURE_COMENT_NO" property="cno"/>
+		<result column="LECTURE_SECTION_NO" property="sno"/>		
+		<result column="COMENT_CONTENTS" property="contents"/>
+		<result column="COMENT_LIKE" property="like"/>
+		<result column="COMENT_CREATE_DATE" property="createDate"/>		
+		<association property="writer" column="USER_NO" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"></association>
+	</resultMap>
+	
+	<select id="getFreeLectureComentesBySno" parameterType="int" resultMap="getFreeLectureComentesBySnoResultMap">
+		select
+			LECTURE_COMENT_NO,
+			LECTURE_SECTION_NO,
+			USER_NO,
+			COMENT_CONTENTS,
+			COMENT_LIKE,
+			COMENT_CREATE_DATE
+		from
+			FREE_LECTURE_COMENT
+		where
+			LECTURE_SECTION_NO = #{value}
+	</select>
+</mapper>

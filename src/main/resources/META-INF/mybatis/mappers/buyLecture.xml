@@ -16,32 +16,16 @@
 			CREATE_DATE)
 		values (#{no}, #{paidLecture.no}, #{user.no}, sysdate)
 	</insert>
-
-<!-- 
-
-	<insert id="insertCart" parameterType="Cart">
-		<selectKey keyProperty="no" resultType="int" order="BEFORE">
-			select cart_no_seq.nextval from dual
-		</selectKey>
-		insert into CART(
-			CART_NO,
-			USER_NO,
-			PAID_LECTURE_NO,
-			CREATE_DATE)
-		values (#{no}, #{user.no}, #{paidLecture.no}, sysdate)
-	</insert>
-
-
-	<select id="getCartByUserNo" parameterType="int" resultType="Cart">
+	
+	<select id="getBuyLectureByUserNo" parameterType="int" resultType="BuyLecture">
 		select
-			CART_NO as no,
-			USER_NO "user.no",
+			BUY_LECTURE_NO as no,
 			PAID_LECTURE_NO as "paidLecture.no",
+			USER_NO "user.no",
 			CREATE_DATE
 		from
-			CART
+			BUY_LECTURE
 		where
 			USER_NO = #{value}
 	</select>
- -->
 </mapper>

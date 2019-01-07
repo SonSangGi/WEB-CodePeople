@@ -14,10 +14,25 @@ $(function() {
 	
 	var jsonData = JSON.stringify(values);
 	console.log(jsonData);
+	console.log($(".paid-cartNo-for-payment").val())
 	
 
     $(".close").on('click', function(event) {
-		let totalPrice = $("#paid-cart-totalprice").text();
+    	let cartNo = $(this).siblings(".paid-cartNo-for-payment")[0].value;
+    	
+	    $.ajax({
+	    	type : "GET",
+	    	url : "/paid/cart/delete.do",
+	    	data : {"cartNo" : cartNo},
+	    	error : function(error) {
+	    		alert("error");
+	    	},
+	    	success : function(data) {
+	    		
+	    	}
+	    });
+	        	
+    	let totalPrice = $("#paid-cart-totalprice").text();
 		totalPrice = parseInt(totalPrice.replace(/,/g,""));
 		
         let removePrice = $(this).siblings().children().children('#paid-cart-price').text();
@@ -27,22 +42,12 @@ $(function() {
         totalPrice = addComma(totalPrice);
         $("#paid-cart-totalprice").text(totalPrice);
         $(this).parent().remove();
+        
     });
- 
     
-	$("#paid-cart-btn").click(function() {
-		
-	    $.ajax({
-	    	type : "POST",
-	    	url : "/paid/payment.do",
-	    	data : {"values": jsonData},
-	    	error : function(error) {
-	    		alert("error");
-	    	},
-	    	success : function(data) {
-	    		location.href = "/paid/payment.do";
-	    	}
-	    });
+    
+    
+	$("#paid-cart-btn").on("click", function() {
 		
 	    let price = $("#paid-cart-totalprice").text();
 		price = parseInt(price.replace(/,/g,""));
@@ -72,9 +77,11 @@ $(function() {
 		    buyer_tel : '010-1234-5678',				// 고객 전화번호
 		    buyer_addr : '서울특별시 강남구 삼성동',	// 고객 주소
 		    buyer_postcode : '123-456'					// 고객 우편번호
+		
 		}, function(rsp) {
 			console.log(rsp);
 		    if (rsp.success) {
+		    	var flag = "success";
 		        var msg = '결제가 완료되었습니다.';
 		        msg += '고유ID : ' + rsp.imp_uid;
 		        msg += '상점 거래ID : ' + rsp.merchant_uid;
@@ -82,15 +89,57 @@ $(function() {
 		        msg += '카드 승인번호 : ' + rsp.apply_num;
 		        
 		    } else {
+		    	var flag = "fail";
 		        var msg = '결제 실패 : ';
 		        msg += rsp.error_msg;
 		    }
 		    
 		    alert(msg);
 		    
+		    if (flag === "success") {
+		    	$.ajax({
+		    		type : "POST",
+		    		url : "/paid/payment.do",
+		    		data : {"values": jsonData},
+		    		error : function(error) {
+		    			alert(msg);
+		    			return false;
+		    		},
+		    		success : function(data) {
+		    			console.log(data);
+		    			location.href = "/paid/payment.do";
+		    		}
+		    	});
+		    }
+		    
+		    return false;
 		    
 		});
-		return false;
 	});
+	
+	
+	
+	
+	
+	
+	
+	
+	$(".comment-update").on("click", function() {
+		
+		
+		
+		
+		
+		
+		
+	});
+	
+	
+	
+	
+	
+	
+	
+	
 	
 });

@@ -1,0 +1,6 @@
+package com.jhta.cope.service;
+
+public interface BuyLectureService {
+
+	public void insertBuyLecture(int userNo, int lectureNo);
+}

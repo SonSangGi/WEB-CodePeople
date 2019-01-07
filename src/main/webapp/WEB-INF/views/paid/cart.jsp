@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/resources/css/paid/cart.css?ver=1">
 <!-- 아임포트 결제모듈 -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-<script src="/resources/js/paid/cart.js?ver=1"></script>
+<script src="/resources/js/paid/cart.js?ver=2"></script>
 
 </head>
 <body>
@@ -31,9 +31,12 @@
 		<div class="paid-cart-orderlists">
 			<div class="col-xs-12 paid-cart-content">
 			<input type="hidden" class="paid-lecture-for-payment" value="${result.paidLecture.no }">
+			<input type="hidden" class="paid-cartNo-for-payment" value="${result.no }">
+			
 				<button type="button" class="close" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
+
 				<div class="col-xs-2 cart-photo">
 					<img id="paid-cart-photo" src="/resources/img/paid/lectureimg/${result.paidLecture.thumbnail}"
 						align="center" />
@@ -58,7 +61,6 @@
 			</div>
 		</div>
 	</c:forEach>
-
 
 
 		<div class="col-xs-8"></div>

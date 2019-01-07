@@ -8,6 +8,7 @@
 		<typeAlias alias="User" type="com.jhta.cope.vo.User"/>
 		<typeAlias alias="Avatar" type="com.jhta.cope.vo.Avatar"/>
 		<typeAlias alias="Badge" type="com.jhta.cope.vo.Badge"/>
+		<typeAlias alias="Chat" type="com.jhta.cope.vo.Chat"/>
 		<typeAlias alias="PaidLecture" type="com.jhta.cope.vo.PaidLecture"/>
 		<typeAlias alias="PaidLectureDetail" type="com.jhta.cope.vo.PaidLectureDetail"/>
 		<typeAlias alias="Qna" type="com.jhta.cope.vo.Qna"/>
@@ -19,15 +20,20 @@
 		<typeAlias alias="FreeLectureSection" type="com.jhta.cope.vo.FreeLectureSection"/>
 		<typeAlias alias="FreeLectureComent" type="com.jhta.cope.vo.FreeLectureComent"/>
 		<typeAlias alias="Cart" type="com.jhta.cope.vo.Cart"/>
+		<typeAlias alias="UserLog" type="com.jhta.cope.vo.UserLog"/>
+		<typeAlias alias="BuyLecture" type="com.jhta.cope.vo.BuyLecture"/>
 	</typeAliases>
 
 	<mappers>
 		<mapper resource="META-INF/mybatis/mappers/user.xml" />
 		<mapper resource="META-INF/mybatis/mappers/qna.xml" />
+		<mapper resource="META-INF/mybatis/mappers/chat.xml" />
 		<mapper resource="META-INF/mybatis/mappers/paidlecture.xml" />
 		<mapper resource="META-INF/mybatis/mappers/manager.xml" />
 		<mapper resource="META-INF/mybatis/mappers/instructor.xml" />
 		<mapper resource="META-INF/mybatis/mappers/freelecture.xml" />
 		<mapper resource="META-INF/mybatis/mappers/cart.xml" />
+		<mapper resource="META-INF/mybatis/mappers/userLog.xml" />
+		<mapper resource="META-INF/mybatis/mappers/buyLecture.xml" />
 	</mappers>
 </configuration>

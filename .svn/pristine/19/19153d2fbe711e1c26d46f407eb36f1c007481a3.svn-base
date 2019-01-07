@@ -1,0 +1,109 @@
+@charset "UTF-8";
+
+.btn-move-backward {
+	width: 150px;
+	height: 30px;
+	border-radius: 10px;
+	border: #40e0d0;
+	background-color: #40e0d0;
+	font-size: 20px;
+	color: white;
+}
+
+
+.btn-submit-lecture {
+	width: 150px;
+	height: 30px;
+	border-radius: 10px;
+	border: #40e0d0;
+	background-color: #40e0d0;
+	font-size: 20px;
+	color: white;
+	float:right;
+}
+
+
+.btn-1st-change {
+	border-radius: 5px;
+	border: 2px solid lightgray;
+	cursor: pointer;
+	padding: 10px 25px 10px 25px;
+	font-weight: bold;
+	font-family: 'Noto Sans KR', sans-serif;
+	transition: 0.3s;
+}
+	
+
+.btn-2rd-change {
+	background-color: #afeeee;
+	border: 2px solid #afeeee;
+	color: black;
+	blur: 10px;
+}
+
+.btn-3rd-change {
+	background-color: #40e0d0;
+	border: 2px solid #40e0d0;
+	color: black;
+}
+
+.btn-download-excelform {
+	width: 400px;
+	height: 50px;
+	border-radius: 30px;
+	border: #afeeee;
+	background-color: #afeeee;
+	font-size: 30px;
+	color: white;
+}
+
+.btn-add-lecture {
+	width: 500px;
+	height: 80px;
+	font-size: 50px;
+	margin: 10px 400px 10px 320px;
+	border: #afeeee;
+	border-radius: 10px;
+	background-color: #afeeee;
+}
+
+.btn-start-link {
+	background-color: #afeeee;
+	border: #afeeee;
+	border-radius: 50px;
+	color: white;
+	font-size: 20px;
+}
+
+.btn-move-report {
+	width: 150px;
+	height: 30px;
+	border-radius: 10px;
+	border: #40e0d0;
+	background-color: #40e0d0;
+	font-size: 20px;
+	color: white;
+	margin: 40px 0px 0px 335px;
+}
+
+.btn-ben-user {
+	border: #ff7373;
+	border-radius: 50px;
+	background-color: #ff7373;
+	color: white;
+	font-size: 15px;
+	margin: 0px 0px 0px 35px;
+}
+
+
+	.moment {
+		float: right;
+		width: 150px;
+		height: 30px;
+		border-radius: 10px;
+		border: #40e0d0;
+		background-color: #40e0d0;
+		font-size: 20px;
+		color: white;
+		margin-right: 20px;
+	}

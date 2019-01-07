@@ -1,0 +1,12 @@
+package com.jhta.cope.service;
+
+import java.util.List;
+
+import com.jhta.cope.vo.Cart;
+
+public interface CartService {
+
+	public void insertCart(int userNo, int lectureNo) throws Exception;
+	public List<Cart> getCartByUserNo(int userNo);
+
+}

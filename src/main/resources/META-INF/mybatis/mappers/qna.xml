@@ -33,44 +33,44 @@
 	</resultMap>
 	
 	<select id="getAnswerByNo" parameterType="int" resultMap="getAnswerByNoResultMap">
-	select 
-	    ANSWER_NO,
-	    ANSWER_WRITER,
-	    ANSWER_CONTENTS,
-	    ANSWER_CREATE_DATE,
-	    QNA_NO
-	from
-	    QNA_ANSWER
-	where
-		QNA_NO = #{value}
-	order by ANSWER_CREATE_DATE
+		select 
+		    ANSWER_NO,
+		    ANSWER_WRITER,
+		    ANSWER_CONTENTS,
+		    ANSWER_CREATE_DATE,
+		    QNA_NO
+		from
+		    QNA_ANSWER
+		where
+			QNA_NO = #{value}
+		order by ANSWER_CREATE_DATE
 	</select>
 	
 	<select id="getAnswerByUserNo" parameterType="int" resultMap="getAnswerByNoResultMap">
-	select 
-	    ANSWER_NO,
-	    ANSWER_WRITER,
-	    ANSWER_CONTENTS,
-	    ANSWER_CREATE_DATE,
-	    QNA_NO
-	from
-	    QNA_ANSWER
-	where
-		answer_writer = #{value}
-	order by ANSWER_CREATE_DATE
+		select 
+		    ANSWER_NO,
+		    ANSWER_WRITER,
+		    ANSWER_CONTENTS,
+		    ANSWER_CREATE_DATE,
+		    QNA_NO
+		from
+		    QNA_ANSWER
+		where
+			answer_writer = #{value}
+		order by ANSWER_CREATE_DATE
 	</select>
 	
 	<select id="getAllAnswers" resultMap="getAnswerByNoResultMap">
    		select 
-	       ANSWER_NO,
-	       ANSWER_WRITER,
-	       <![CDATA[REGEXP_REPLACE(ANSWER_CONTENTS,'<[^>]*>','') as ANSWER_CONTENTS]]>,
-	       ANSWER_CREATE_DATE,
-	       QNA_NO
+	    	ANSWER_NO,
+	    	ANSWER_WRITER,
+	        <![CDATA[REGEXP_REPLACE(ANSWER_CONTENTS,'<[^>]*>','') as ANSWER_CONTENTS]]>,
+	        ANSWER_CREATE_DATE,
+	        QNA_NO
 	  	from
        		QNA_ANSWER
-       order by ANSWER_CREATE_DATE
-   </select>
+        order by ANSWER_CREATE_DATE
+    </select>
 	
 	<select id="getQnaByNo" parameterType="int" resultMap="getQnaByNoResultMap">
 		select 

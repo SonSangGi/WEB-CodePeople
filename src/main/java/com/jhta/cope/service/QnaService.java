@@ -9,7 +9,6 @@ import com.jhta.cope.vo.QnaComment;
 
 public interface QnaService {
 
-	
 	public List<QnaAnswer> getAllAnswers();
 	public List<Qna> getAllQnas();
 	public List<Qna> getAllQnasByCriteria(Criteria criteria);

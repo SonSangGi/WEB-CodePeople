@@ -20,11 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.jhta.cope.handler.ChatHandler;
+import com.jhta.cope.service.ChatService;
 import com.jhta.cope.service.QnaService;
 import com.jhta.cope.service.UserService;
 import com.jhta.cope.util.EtcUtils;
 import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.Chat;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.QnaComment;
@@ -38,7 +41,9 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	QnaService qnaService;
-	
+	@Autowired
+	ChatService chatService;
+
 	@Resource(name = "iconPath")
 	String iconPath;
 
@@ -56,6 +61,23 @@ public class UserController {
 	public String dashboard() {
 		return "user/my_dashboard";
 	}
+
+	@RequestMapping("/chat")
+	public String chat(Model model) {
+		model.addAttribute("friends", ChatHandler.getAllOnUsers());
+		return "user/my_chat";
+	}
+
+	@RequestMapping("/chat/getAll")
+	@ResponseBody
+	public List<Chat> getAllChat(String recvUserId){
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		Chat chat = new Chat().setRecvUser(new User().setId(recvUserId)).setSendUser(user);
+		
+		chat.setRecvUser(new User().setId(recvUserId));
+		List<Chat> chats =  chatService.getChats(chat);
+		return chats;
+	}
 	
 	// 스탯
 	@RequestMapping("/stat")
@@ -67,14 +89,14 @@ public class UserController {
 		model.addAttribute("have", haveBadges);
 		return "user/my_stat";
 	}
-	
-	//작성 글
+
+	// 작성 글
 	@RequestMapping("/write")
 	public String write(Model model) {
-		User user = (User)SessionUtils.getAttribute("LOGIN_USER");
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 		List<Qna> qnas = qnaService.getQnaByUserNo(user.getNo());
 		List<QnaComment> comments = qnaService.getCommentByUserNo(user.getNo());
-		List <QnaAnswer> answers = qnaService.getAnswerByUserNo(user.getNo());
+		List<QnaAnswer> answers = qnaService.getAnswerByUserNo(user.getNo());
 		String reg = "<(/)?([a-zA-Z]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>";
 		for (QnaAnswer qnaAnswer : answers) {
 			qnaAnswer.setContents(qnaAnswer.getContents().replaceAll(reg, ""));
@@ -82,10 +104,10 @@ public class UserController {
 		for (Qna qna : qnas) {
 			qna.setTitle(qna.getTitle().replaceAll(reg, ""));
 		}
-		model.addAttribute("qnas",qnas);
-		model.addAttribute("comments",comments);
-		model.addAttribute("answers",answers);
-		
+		model.addAttribute("qnas", qnas);
+		model.addAttribute("comments", comments);
+		model.addAttribute("answers", answers);
+
 		return "user/my_write";
 	}
 
@@ -112,7 +134,7 @@ public class UserController {
 		}
 		return URLEncoder.encode(fileName, "UTF-8");
 	}
-	
+
 	@RequestMapping(value = "/bgmodify", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public String backgroundModify(MultipartHttpServletRequest mr) throws UnsupportedEncodingException {
@@ -122,7 +144,8 @@ public class UserController {
 		String path = "/resources/img/user/background/";
 		try {
 			mf.transferTo(new File("C:/project/codepeople/src/main/webapp/resources/img/user/background", fileName));
-			EtcUtils.saveFile(mr, "C:/project/codepeople/src/main/webapp/resources/img/user/background", path, fileName);
+			EtcUtils.saveFile(mr, "C:/project/codepeople/src/main/webapp/resources/img/user/background", path,
+					fileName);
 			User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 			user.getAvatar().setBgImg(fileName);
 			userService.updateAvatar(user.getAvatar());

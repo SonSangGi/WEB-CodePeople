@@ -3,12 +3,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<c:if test="${sessionScope.LOGIN_USER.authStatus eq '9'}">
-	<script type="text/javascript">
-		alert('관리자페이지로 이동합니다');
-		window.location.href = 'http://127.0.0.1/manager/dashboard.do';
-	</script>
-</c:if>
 <meta charset="UTF-8">
 <title>코드피플 - 메인페이지</title>
 <link rel="stylesheet" href="/resources/css/home/home.css">

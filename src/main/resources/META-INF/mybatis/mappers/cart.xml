@@ -16,7 +16,16 @@
 			CREATE_DATE)
 		values (#{no}, #{user.no}, #{paidLecture.no}, sysdate)
 	</insert>
-
+	
+	<delete id="deleteCartByUserNo" parameterType="int">
+		delete from CART
+		where USER_NO = #{value}
+	</delete>
+	
+	<delete id="deleteCartByCartNo" parameterType="int">
+		delete from CART
+		where CART_NO = #{value}
+	</delete>
 
 	<select id="getCartByUserNo" parameterType="int" resultType="Cart">
 		select

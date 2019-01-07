@@ -131,6 +131,7 @@
 			B.USER_NO = #{value}
 		and 
 			A.BADGE_NO = B.BADGE_NO
+		order by A.BADGE_EXP
 	</select>
 	
 	<select id="notHaveBadge" parameterType="int" resultType="Badge">
@@ -146,6 +147,7 @@
 			B.BADGE_NO != A.BADGE_NO
 		and 
 			B.USER_NO = #{value}
+		order by A.BADGE_EXP
 	</select>
 	
 	<insert id="insertUserBadge" parameterType="map">
@@ -155,6 +157,8 @@
 				CREATE_DATE)
 		values(#{userNo},#{badgeNo},sysdate)
 	</insert>
+	
+	<insert id="insertFollw"></insert>
 	
 	<update id="updateUser" parameterType="User">
 		update
@@ -166,6 +170,7 @@
 		where 
 			USER_NO = #{no}
 	</update>
+	
 	<update id="updateAvatar" parameterType="Avatar">
 		update 
 			USER_AVATAR
@@ -177,4 +182,5 @@
 		where 
 			USER_NO = #{userNo}
 	</update>
+	
 </mapper>

@@ -5,18 +5,18 @@
 <!--네비게이션 바~~-->
 <div class="wrapper">
 	<div class="sg-header">
-		<div class="col-sm-offset-2 col-sm-8 sg-menu-left" style="display: block">
+		<div class="col-sm-offset-2 col-sm-7 sg-menu-left" style="display: block">
 			<span>
 			<a href="/home.do" style="float: left"><img alt="CODEPEOPLE LOGO" src="/resources/img/user/cope_logo.png" class="cope-logo"></a>
 			</span>
 			<div class="sg-menu" style="margin-left: 30%;">
 				<ul>
-					<li><a href="#">강의</a>
+					<li><a href="/paid/main.do">강의</a>
 						<ul>
 							<li><a href="/paid/home.do?lang=java">Java</a></li>
-							<li><a>javaScript</a></li>
-							<li><a>Spring</a></li>
-							<li><a>로드 맵</a></li>
+							<li><a href="/paid/home.do?lang=javascript">javaScript</a></li>
+							<li><a href="/paid/home.do?lang=spring">Spring</a></li>
+							<li><a href=#>로드 맵</a></li>
 						</ul></li>
 					<li><a href="/free/list.do">외부강의</a></li>
 					<li><a href="#">게시판</a>
@@ -38,7 +38,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="col-xs-2 sg-menu-right">
+		<div class="col-xs-3 sg-menu-right">
 			<c:choose>
 				<c:when test="${LOGIN_USER eq null}">
 					<nav class="sg-menu-login" style="font-size: 15px; color: white; font-weight: bold; margin-top: 20px;">
@@ -48,16 +48,20 @@
 				<c:otherwise>
 					<a style="margin:0px;padding:0px;"><img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
 					<span style="font-size:15px;display: inline-block;padding-top: 16px;">${LOGIN_USER.name}</span></a>
+					<a style="margin-left:20px;" href="/paid/cart.do"><img src="/resources/img/paid/cart.png" width=25px;></a>
 					<div class="sg-menu-info">
 						<div class="sg-info-menu-box">
 							<div class="sg-info-header">
-								<div class="sg-user-img">
-									<img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}"
+								<span class="sg-user-img">
+									<a href="/user/my/home.do">
+										<img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}"
 										style="width: 70px; height: 70px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
-								</div>
+									</a>
+								</span>
 								<div class="sg-user-info">
-									<p>${LOGIN_USER.name }</p>
-									<p>${LOGIN_USER.avatar.exp }exp</p>
+										<p><a href="/user/my/home.do">${LOGIN_USER.name }</a></p>
+									
+										<p><a href="/user/my/home.do">${LOGIN_USER.avatar.exp }exp</a></p>
 									<p>
 										<a href="/login/logout.do">로그아웃</a>
 									</p>
@@ -88,7 +92,7 @@
 			<div>
 				<c:choose>
 					<c:when test="${LOGIN_USER == null }">
-						<div class="text-center" style="margin-top: 20px;">
+						<div c	lass="text-center" style="margin-top: 20px;">
 							<img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>icon.png" width="165px" height="165px">
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">

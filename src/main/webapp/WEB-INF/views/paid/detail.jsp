@@ -1,21 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp" %>
-<link rel="stylesheet" href="/resources/css/paid/detail.css?ver=2">
-<link rel="stylesheet" href="/resources/css/paid/contents.css?ver=2">
-
-
-<script src="/resources/js/paid/detail.js?ver=2"></script>
-<script src="/resources/js/paid/contents.js?ver=2"></script>
+<link rel="stylesheet" href="/resources/css/paid/detail.css?ver=11">
+<link rel="stylesheet" href="/resources/css/paid/contents.css?ver=10">
+<link rel="stylesheet" href="/resources/css/paid/note.css?ver=1">
+<!-- 아임포트 결제모듈 -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+<script src="/resources/js/paid/detail.js?ver=1"></script>
+<script src="/resources/js/paid/contents.js?ver=1"></script>
+<script src="/resources/js/paid/note.js?ver=1"></script>
 
 </head>
 <body>
 <%@include file="/WEB-INF/views/include/header.jsp"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <div class="container">
 
@@ -38,9 +42,19 @@
                         <c:choose>
                         	<c:when test="${LOGIN_USER eq null}">
 	                        	<div>
+		                            <button class="sg-btn-primary nonlogin">지금 구매하기</button>
+	                        	</div>
+	                        	<div>
+	    	                        <button class="sg-btn-primary nonlogin">카트에 담기</button>
+	                        	</div>
+                        	</c:when>
+                        	<c:when test="${paymentFlag == 'N'}">
+	                        	<div>
+	                        		<input type="hidden" class="lecturePrice" value=" ${lectureDetails[0].paidLecture.price }">
 		                            <button class="sg-btn-primary" id="paid-purchase-btn">지금 구매하기</button>
 	                        	</div>
 	                        	<div>
+									<input type="hidden" class="lectureNo" name="lectureNo" value="${lectureDetails[0].paidLecture.no}">
 	    	                        <button class="sg-btn-primary" id="paid-cart-btn">카트에 담기</button>
 	                        	</div>
                         	</c:when>
@@ -99,7 +113,7 @@
            
 
 				<div class="paid-contents">
-					<!-- ajax 페이지 갱신 -->
+					<!-- ajax 페이지 html 갱신 -->
 				</div>
 
 </div>       

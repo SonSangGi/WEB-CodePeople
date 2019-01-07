@@ -1,8 +1,11 @@
 package com.jhta.cope.handler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -10,29 +13,48 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jhta.cope.dao.ChatDao;
+import com.jhta.cope.vo.Chat;
 import com.jhta.cope.vo.User;
 
 public class ChatHandler extends TextWebSocketHandler {
 
-	private static final Map<String, WebSocketSession> sessionMap = new HashMap<String, WebSocketSession>();
+	@Autowired
+	private ChatDao chatDao;
+
+	public static final Map<String, WebSocketSession> sessionMap = new HashMap<String, WebSocketSession>();
 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+
 		String payLoad = message.getPayload();
 		String payLoadItem[] = payLoad.split(":");
 		String protocol = payLoadItem[0];
-		System.out.println(protocol);
+		// 문의 채팅
 		if ("QNA".equals(protocol)) {
 			String msg = payLoadItem[1];
-			String json = new ObjectMapper().writeValueAsString(this.getSessionUser(session));
-			System.out.println(json);
+			String sendUser = new ObjectMapper().writeValueAsString(ChatHandler.getSessionUser(session));
 			for (String key : sessionMap.keySet()) {
 				WebSocketSession ws = sessionMap.get(key);
 				User user = getSessionUser(ws);
 				if (user.getAuthStatus() == 9) {
-					ws.sendMessage(new TextMessage("ANSWER/ADMIN/" + json + "/" + msg));
+					Chat chat = new Chat().setSendUser(ChatHandler.getSessionUser(session)).setRecvUser(user)
+							.setContents(msg);
+					chatDao.insertChat(chat);
+					System.out.println(chat);
+					ws.sendMessage(new TextMessage("ANSWER/ADMIN/" + sendUser + "/" + msg));
 				}
 			}
+		} 
+		// 유저 채팅
+		else if ("USER".equals(protocol)) {
+			String recvUserId = payLoadItem[1];
+			System.out.println(recvUserId);
+			String msg = payLoadItem[2];
+			String sendUser = new ObjectMapper().writeValueAsString(ChatHandler.getSessionUser(session));
+			WebSocketSession ws = sessionMap.get(recvUserId);
+			chatDao.insertChat(new Chat().setRecvUser(new User().setId(recvUserId)).setSendUser(ChatHandler.getSessionUser(session)).setContents(msg));
+			ws.sendMessage(new TextMessage("ANSWER/USER/" + sendUser + "/" + msg));
 		}
 
 	}
@@ -40,7 +62,7 @@ public class ChatHandler extends TextWebSocketHandler {
 	// 연결시
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		User user = this.getSessionUser(session);
+		User user = ChatHandler.getSessionUser(session);
 		System.out.println("[서버 연결됨]" + user.getId() + ": " + session.getRemoteAddress().getAddress().getHostAddress());
 		sessionMap.put(user.getId(), session);
 		System.out.println(this.getAllOnUserId());
@@ -49,8 +71,8 @@ public class ChatHandler extends TextWebSocketHandler {
 	// 해제시
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		sessionMap.remove(this.getSessionUser(session).getId());
-		System.out.println("[서버 연결 끊김]" + this.getSessionUser(session).getId() + ": "
+		sessionMap.remove(ChatHandler.getSessionUser(session).getId());
+		System.out.println("[서버 연결 끊김]" + ChatHandler.getSessionUser(session).getId() + ": "
 				+ session.getRemoteAddress().getAddress().getHostAddress());
 	}
 
@@ -59,7 +81,7 @@ public class ChatHandler extends TextWebSocketHandler {
 	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
 	}
 
-	private User getSessionUser(WebSocketSession session) {
+	private static User getSessionUser(WebSocketSession session) {
 		Map<String, Object> attr = session.getAttributes();
 		return (User) attr.get("LOGIN_USER");
 	}
@@ -67,4 +89,15 @@ public class ChatHandler extends TextWebSocketHandler {
 	private String getAllOnUserId() {
 		return StringUtils.collectionToDelimitedString(sessionMap.keySet(), ",");
 	}
+
+	public static List<User> getAllOnUsers() {
+		List<User> users = new ArrayList<>();
+		for (String key : sessionMap.keySet()) {
+			WebSocketSession ws = sessionMap.get(key);
+			User user = ChatHandler.getSessionUser(ws);
+			users.add(user);
+		}
+		return users;
+	}
+
 }

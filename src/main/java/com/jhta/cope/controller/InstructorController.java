@@ -7,16 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.jhta.cope.service.InstructorNoticeService;
+import com.jhta.cope.service.InstructorService;
 import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.InstructorNotice;
+import com.jhta.cope.vo.PaidLecture;
 import com.jhta.cope.vo.User;
 
 @Controller
 @RequestMapping("/instructor/*")
 public class InstructorController {
-
-/*	@Autowired
-	InstructorNoticeService instructorNoticeService;*/
+	
+	@Autowired
+	InstructorService instructorService;
 	
 	@RequestMapping("/userinfoNben")
 	public String userinfoNben() {
@@ -71,10 +73,25 @@ public class InstructorController {
 		return "instructor/notice";
 	}
 	
-	@RequestMapping("/creatingtitle")
-	public String creatingtitle() {
-		return "instructor/creatingtitle";
+	@RequestMapping(value = "create", method = RequestMethod.GET)
+	public String createLecture() {
+		return "instructor/createLecture";
 	}
+
+	@RequestMapping(value = "create", method = RequestMethod.POST)
+	public String create(PaidLecture paidLecture) {
+		
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		System.out.println(user + "세션 작동 확인");
+		
+		instructorService.createNewLecture(paidLecture);
+		
+		
+		return "redirect:submit.do";
+	}
+	
+	
+	
 
 	@RequestMapping("/creatinginfo")
 	public String creatinginfo() {

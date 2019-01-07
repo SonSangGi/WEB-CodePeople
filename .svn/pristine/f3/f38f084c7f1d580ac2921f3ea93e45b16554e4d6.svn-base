@@ -1,0 +1,13 @@
+package com.jhta.cope.service;
+
+import org.springframework.stereotype.Service;
+
+import com.jhta.cope.vo.InstructorNotice;
+
+
+public interface InstructorNoticeService {
+
+	public void insertNotice(InstructorNotice instructorNotice);
+	
+	
+}

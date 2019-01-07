@@ -6,8 +6,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp"%>
-<link rel="stylesheet" href="/resources/css/paid/home.css?ver=0">
-<script src="/resources/js/paid/home.js?ver=1"></script>
+<link rel="stylesheet" href="/resources/css/paid/home.css?ver=1">
+<script src="/resources/js/paid/home.js?ver=0"></script>
 
 </head>
 <body>
@@ -120,10 +120,8 @@
 									</a>
 									</c:when>
 									<c:otherwise>
-										<form action="/paid/cart.do" method="post">
-												<input type="hidden" id="lectureNo" name="lectureNo" value="${result.no }">
-												<button type="submit" class="sg-btn-primary" id="home-cart-btn">카트에 담기</button>
-										</form>
+												<button class="sg-btn-primary home-cart-btn">카트에 담기</button>
+												<input type="hidden" class="lectureNo" name="lectureNo" value="${result.no }">
 									</c:otherwise>
 																
 								</c:choose>

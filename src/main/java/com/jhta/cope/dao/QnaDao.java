@@ -8,6 +8,7 @@ import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.QnaComment;
 
 public interface QnaDao {
+	
 	public List<Qna> getAllQnas();
 	public List<QnaAnswer> getAllAnswers();
 	public List<Qna> getAllQnasByCriteria(Criteria criteria);

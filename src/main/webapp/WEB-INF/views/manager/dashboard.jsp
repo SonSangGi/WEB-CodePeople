@@ -38,16 +38,16 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-7">
-                                        <div class="numbers">
-                                            <p>방문자 수</p>
-                                            105명
+                                        <div id="reload-p" class="numbers">
+                                            <p id="today-visitor-count">오늘의 방문자 수</p>
+                                            ${countTodayVisitors } 명
                                         </div>
                                     </div>
                                 </div>
                                 <div class="footer">
                                     <hr />
                                     <div class="stats">
-                                        <i class="ti-reload"></i> Updated now
+                                        <i class="ti-reload vistor-reload"></i> <a class="vistor-reload">Updated now</a>
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +226,25 @@
                type: 'success',
                timer: 4000
            });
-
+   	});
+   	
+   	$(document).on('click', '.vistor-reload', function() {
+   		
+   		$.ajax({
+   			url:'dashboard/ajax.do',
+   			method:'POST',
+   			data:{
+   				'functionName':'todayVisitorsCount'
+   			},
+   			dataType:'json',
+   			success:function(count) {   				
+   				$(this).remove();
+   				$('#reload-p').html('<p id="today-visitor-count">오늘의 방문자 수</p>' + count + ' 명');
+   			},
+   			error:function(request, status, error) {
+				alert('방문자 수 정보를 불러오는데 실패했습니다.');
+			}
+   		});
    	});
 </script>
 

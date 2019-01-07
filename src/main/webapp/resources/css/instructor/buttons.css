@@ -10,6 +10,19 @@
 	color: white;
 }
 
+
+.btn-submit-lecture {
+	width: 150px;
+	height: 30px;
+	border-radius: 10px;
+	border: #40e0d0;
+	background-color: #40e0d0;
+	font-size: 20px;
+	color: white;
+	float:right;
+}
+
+
 .btn-1st-change {
 	border-radius: 5px;
 	border: 2px solid lightgray;

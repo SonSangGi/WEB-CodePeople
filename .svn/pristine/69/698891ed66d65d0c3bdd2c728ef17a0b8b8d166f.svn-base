@@ -1,0 +1,123 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<%@include file="/WEB-INF/views/include/style.jsp" %>
+<link rel="stylesheet" href="/resources/css/paid/detail.css?ver=11">
+<link rel="stylesheet" href="/resources/css/paid/contents.css?ver=10">
+<link rel="stylesheet" href="/resources/css/paid/note.css?ver=1">
+<!-- 아임포트 결제모듈 -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+<script src="/resources/js/paid/detail.js?ver=1"></script>
+<script src="/resources/js/paid/contents.js?ver=1"></script>
+<script src="/resources/js/paid/note.js?ver=1"></script>
+
+</head>
+<body>
+<%@include file="/WEB-INF/views/include/header.jsp"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<div class="container">
+
+            <div class="paid-top-default">
+                <div class='col-xs-12 paid-top-menu'>
+                    <div class='col-xs-10' id='paid-info-topleft'>
+                    
+                   		<c:forEach var="result" items="${title }">
+	                        <h1 class='paid-title'>
+	                            ${result }
+	                        </h1>
+                   		</c:forEach>
+                   		
+                        <h3 id='paid-level'>
+                            <span>For </span> ${lectureDetails[0].paidLecture.level }
+                        </h3>
+                        <div>
+                        
+                        
+                        <c:choose>
+                        	<c:when test="${LOGIN_USER eq null}">
+	                        	<div>
+		                            <button class="sg-btn-primary nonlogin">지금 구매하기</button>
+	                        	</div>
+	                        	<div>
+	    	                        <button class="sg-btn-primary nonlogin">카트에 담기</button>
+	                        	</div>
+                        	</c:when>
+                        	<c:when test="${paymentFlag == 'N'}">
+	                        	<div>
+	                        		<input type="hidden" class="lecturePrice" value=" ${lectureDetails[0].paidLecture.price }">
+		                            <button class="sg-btn-primary" id="paid-purchase-btn">지금 구매하기</button>
+	                        	</div>
+	                        	<div>
+									<input type="hidden" class="lectureNo" name="lectureNo" value="${lectureDetails[0].paidLecture.no}">
+	    	                        <button class="sg-btn-primary" id="paid-cart-btn">카트에 담기</button>
+	                        	</div>
+                        	</c:when>
+                        	<c:otherwise>
+ 	                           <button class="sg-btn-primary" id="paid-continue-btn">continue to LECTURE 24</button>
+                        	</c:otherwise>
+                        </c:choose>
+                        
+                        </div>
+
+                    </div>
+                    <div class='col-xs-2' id='paid-info-topright'>
+                        <p style='font-weight: bold;'>언어</p>
+                        <p id='paid-language-top'>
+                            ${lectureDetails[0].paidLecture.lang }
+                        </p>
+                        <hr />
+                        <p style='font-weight: bold;'>개강일</p>
+                        <p id='paid-date-top'>
+                        
+                        <fmt:formatDate pattern = "yyyy-MM-dd" value = "${lectureDetails[0].paidLecture.createDate }" />
+
+                        </p>
+                        <hr />
+                        <p style='font-weight: bold;'>담당 마스터</p>
+                        <p id='paid-instructor-top'>
+                            ${lectureDetails[0].paidLecture.instructor.user.name}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-xs-12 paid-progress">
+                    <div class='top-icon'>
+                        <span class="paid-top-icon left"><img src="/resources/img/paid/paid-start.png" class='paid-top-icon'></img></span>
+                        <span class="paid-top-icon right"><img src="/resources/img/paid/flag.png" class='paid-top-icon'></img></span>
+                    </div>
+
+                    <div id='paid-bar-total'>
+                        <div id="paid-bar-progress">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 paid-default-menu">
+                <ul>
+                    <li><a href=# id="detail-overview">OVERVIEW</a></li>
+                    <li><a href=# id="detail-contents">COURSE CONTENTS</a></li>
+                    <li><a href=# id="detail-note">MY NOTE</a></li>
+                    <li><a href=# id="detail-bookmark">BOOKMARK</a></li>
+                    <li><a href=# id="detail-question">Q&A</a></li>
+                    <li><a href=# id="detail-announce">공지사항</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-12">
+                <hr />
+            </div>
+           
+
+				<div class="paid-contents">
+					<!-- ajax 페이지 html 갱신 -->
+				</div>
+
+</div>       
+
+
+<%@include file="/WEB-INF/views/include/footer.jsp"%></body>
+</html>

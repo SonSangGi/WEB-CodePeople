@@ -64,4 +64,15 @@ public class CartServiceImpl implements CartService{
 		return total;
 	}
 
+	@Override
+	public void deleteCartByUserNo(int userNo) {
+		cartDao.deleteCartByUserNo(userNo);
+	}
+
+	@Override
+	public void deleteCartByCartNo(int cartNo) {
+		cartDao.deleteCartByCartNo(cartNo);
+		
+	}
+
 }

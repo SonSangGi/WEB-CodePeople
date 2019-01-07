@@ -67,6 +67,10 @@ hr.cart {
     font-size: 15px;
 }
 
+#paid-cart-btn:hover {
+	background-color: #ff7373;
+}
+
 #paid-cart-content-description {
     font-weight: 300;
 }

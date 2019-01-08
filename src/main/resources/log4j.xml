@@ -16,16 +16,16 @@
 	</logger>
 	
 	<logger name="com.jhta.cope.dao.UserDao">
-		<level value="trace" />
+		<level value="DEBUG" />
 	</logger>
 	<logger name="com.jhta.cope.dao.InstructorDao">
-		<level value="trace" />
+		<level value="DEBUG" />
 	</logger>
 	<logger name="com.jhta.cope.dao.ManagerDao">
-		<level value="trace" />
+		<level value="DEBUG" />
 	</logger>
 	<logger name="com.jhta.cope.dao.PaidLectureDao">
-		<level value="trace" />
+		<level value="DEBUG" />
 	</logger>
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">

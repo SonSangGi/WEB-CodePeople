@@ -29,7 +29,7 @@
         <p style="font-size:16px;">${qna.contents}</p>
         <hr>
         <div class="">
-          <img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 50px;height: 50px;border-radius: 100px;">
+          <img class="f-i" alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 50px;height: 50px;border-radius: 100px;">
           <span style="font-weight:bold;font-size:17px;margin-left:10px;">${qna.writer.name }</span> <small><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${qna.createDate }"/></small><i class="far fa-comment-dots" style="float:right;font-size:20px;"></i>
         </div>
       </div>
@@ -48,7 +48,7 @@
 		    <c:forEach items="${qna.answers }" var="answer">
 		      <div class="" style="max-width:70%;background-color:white;padding:30px;border-radius:10px;margin-top:15px;margin-bottom:15px;">
 		        <h3>
-				<img alt="${answer.writer.name }님의 프로필사진" src="/resources/img/user/icon/${answer.writer.avatar.image eq 'Default' ? 'icon.png' : answer.writer.avatar.image}" style="width: 50px;height: 50px;border-radius: 100px;">
+				<img class="f-i" alt="${answer.writer.name }님의 프로필사진" src="/resources/img/user/icon/${answer.writer.avatar.image eq 'Default' ? 'icon.png' : answer.writer.avatar.image}" style="width: 50px;height: 50px;border-radius: 100px;">
 		        ${answer.writer.name } 님의 답변입니다.</h3>
 		        <hr>
 		

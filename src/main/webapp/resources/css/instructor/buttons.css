@@ -90,11 +90,17 @@
 	border: #ff7373;
 	border-radius: 50px;
 	background-color: #ff7373;
-	color: white;
+	color: white;	
 	font-size: 15px;
 	margin: 0px 0px 0px 35px;
 }
 
+    .btn-link-sort {
+      border:none;
+      background-color:white;	
+      display:inline;
+      color:gray;
+    }
 
 	.moment {
 		float: right;

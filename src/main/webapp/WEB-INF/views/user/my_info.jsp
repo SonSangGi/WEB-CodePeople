@@ -54,33 +54,9 @@
                   <h3>결제 내역 <small>4개의 결제내역</small></h3><br>
                   <ul>
                      <li>
-                        <img src="img/java.jpg" alt="" style="width:100px;height: 100px;border-radius:100px;float:left;border:1px solid lightgray;padding:5px;"/>
+                        <img src="https://t1.daumcdn.net/cfile/tistory/265B7137535BA3AE30" alt="" style="width:100px;height: 100px;border-radius:100px;float:left;border:1px solid lightgray;padding:5px;"/>
                         <div class="pay-info" style="margin-left:150px;">
                            <span style="font-size:17px;">자바를 자바</span><br>
-                           <span>결제금액: 15,000원</span><br>
-                           <span>결제방식: 카드결제<small>(삼성카드)</small></span>
-                        </div>
-                     </li>
-                     <li>
-                        <img src="img/spring.png" alt="" style="width:100px;border-radius:100px;float:left;border:1px solid lightgray;padding:5px;"/>
-                        <div class="pay-info" style="margin-left:150px;">
-                           <span style="font-size:17px;">스프링으로 부트!</span><br>
-                           <span>결제금액: 15,000원</span><br>
-                           <span>결제방식: 카드결제<small>(삼성카드)</small></span>
-                        </div>
-                     </li>
-                     <li>
-                        <img src="img/spring.png" alt="" style="width:100px;border-radius:100px;float:left;border:1px solid lightgray;padding:5px;"/>
-                        <div class="pay-info" style="margin-left:150px;">
-                           <span style="font-size:17px;">스프링으로 부트!</span><br>
-                           <span>결제금액: 15,000원</span><br>
-                           <span>결제방식: 카드결제<small>(삼성카드)</small></span>
-                        </div>
-                     </li>
-                     <li>
-                        <img src="img/spring.png" alt="" style="width:100px;border-radius:100px;float:left;border:1px solid lightgray;padding:5px;"/>
-                        <div class="pay-info" style="margin-left:150px;">
-                           <span style="font-size:17px;">스프링으로 부트!</span><br>
                            <span>결제금액: 15,000원</span><br>
                            <span>결제방식: 카드결제<small>(삼성카드)</small></span>
                         </div>

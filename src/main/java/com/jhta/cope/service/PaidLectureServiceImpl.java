@@ -29,7 +29,13 @@ public class PaidLectureServiceImpl implements PaidLectureService{
 	
 	@Override
 	public PaidLectureDetail getPaidLectureDetailByNo(int no) {
-		return paidLectureDao.getPaidLectureDetailByNo(no);
+		PaidLectureDetail paidLectureDetail = paidLectureDao.getPaidLectureDetailByDetailNo(no);
+		PaidLecture paidLecture = paidLectureDao.getPaidLectureByNo(paidLectureDetail.getPaidLecture().getNo());
+		paidLectureDetail.setPaidLecture(paidLecture);
+		
+		System.out.println("=========paiddao=====================" + paidLectureDetail);
+		
+		return paidLectureDetail;
 	}
 	
 	@Override

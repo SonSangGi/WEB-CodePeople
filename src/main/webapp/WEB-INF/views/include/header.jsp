@@ -48,7 +48,7 @@
 				<c:otherwise>
 					<a style="margin:0px;padding:0px;"><img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
 					<span style="font-size:15px;display: inline-block;padding-top: 16px;">${LOGIN_USER.name}</span></a>
-					<a style="margin-left:20px;" href="/paid/cart.do"><img src="/resources/img/paid/cart.png" width=25px;></a>
+					<a style="margin-left:20px;" href="/paid/cart.do"><img src="/resources/img/paid/cart-white.png" width=25px; id="cart-menu"></a>
 					<div class="sg-menu-info">
 						<div class="sg-info-menu-box">
 							<div class="sg-info-header">

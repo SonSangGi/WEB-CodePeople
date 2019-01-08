@@ -1,3 +1,4 @@
+<%@page import="java.util.Date"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
@@ -7,14 +8,16 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp" %>
-<link rel="stylesheet" href="/resources/css/paid/detail.css?ver=11">
-<link rel="stylesheet" href="/resources/css/paid/contents.css?ver=10">
-<link rel="stylesheet" href="/resources/css/paid/note.css?ver=1">
+<link rel="stylesheet" href="/resources/css/paid/detail.css?ver=<%= new Date()%>">
+<link rel="stylesheet" href="/resources/css/paid/contents.css?ver=<%= new Date()%>">
+<link rel="stylesheet" href="/resources/css/paid/note.css?ver=<%= new Date()%>">
+<link rel="stylesheet" href="/resources/css/paid/question.css?ver=<%= new Date()%>">
 <!-- 아임포트 결제모듈 -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-<script src="/resources/js/paid/detail.js?ver=1"></script>
-<script src="/resources/js/paid/contents.js?ver=1"></script>
-<script src="/resources/js/paid/note.js?ver=1"></script>
+<script src="/resources/js/paid/detail.js?ver=<%= new Date()%>"></script>
+<script src="/resources/js/paid/contents.js?ver=<%= new Date()%>"></script>
+<script src="/resources/js/paid/note.js?ver=<%= new Date()%>"></script>
+<script src="/resources/js/paid/question.js?ver=<%= new Date()%>"></script>
 
 </head>
 <body>
@@ -42,10 +45,10 @@
                         <c:choose>
                         	<c:when test="${LOGIN_USER eq null}">
 	                        	<div>
-		                            <button class="sg-btn-primary nonlogin">지금 구매하기</button>
+		                            <button class="sg-btn-primary nonlogin-paid-purchase-btn">지금 구매하기</button>
 	                        	</div>
 	                        	<div>
-	    	                        <button class="sg-btn-primary nonlogin">카트에 담기</button>
+	    	                        <button class="sg-btn-primary nonlogin-paid-cart-btn">카트에 담기</button>
 	                        	</div>
                         	</c:when>
                         	<c:when test="${paymentFlag == 'N'}">

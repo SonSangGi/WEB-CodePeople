@@ -15,4 +15,8 @@ public interface FreeLectureDao {
 	List<FreeLectureSection> getFreeLectureSectionByLectureNo(int freeLectureNo);
 	FreeLectureSection getFreeLectureSectionByCount(int count);
 	List<FreeLectureComent> getFreeLectureComentesBySno(int sno);
+	void insertFreeLectureComent(FreeLectureComent freeLectureComent);
+	FreeLectureComent getFreeLectureComent(int cno);
+	void updateFreeLectureComent(FreeLectureComent freeLectureComent);
+	void deleteFreeLectureComent(int cno);
 }

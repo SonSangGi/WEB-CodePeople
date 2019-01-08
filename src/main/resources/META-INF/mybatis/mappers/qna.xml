@@ -98,6 +98,7 @@
 	    	QNA
 	    where
 	    	QNA_WRITER = #{value}
+	    order by QNA_CREATE_DATE desc
 	</select>
 	
 	<select id="getAllQnas" resultMap="getQnaByNoResultMap">

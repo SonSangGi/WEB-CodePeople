@@ -1,10 +1,18 @@
 package com.jhta.cope.controller;
 
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jhta.cope.service.InstructorNoticeService;
 import com.jhta.cope.service.InstructorService;
@@ -17,6 +25,9 @@ import com.jhta.cope.vo.User;
 @RequestMapping("/instructor/*")
 public class InstructorController {
 	
+//	@Value("${instructor.image.directory}")
+//	private String instructorImageDirectory;
+//	
 	@Autowired
 	InstructorService instructorService;
 	
@@ -68,10 +79,28 @@ public class InstructorController {
 	
 	
 
-	@RequestMapping("/notice")
+	@RequestMapping("/noticeform")
 	public String notice() {
-		return "instructor/notice";
+		return "instructor/noticeform";
 	}
+	
+//	@RequestMapping(value="/submit", method=RequestMethod.POST)
+//	public String submit(HttpServletRequest request, MultipartFile instructorNoticeImgFile, InstructorNotice instructorNotice,
+//			String[] sectionTitles, String[] sectionContents) throws Exception {
+//		
+//		if (!instructorNoticeImgFile.isEmpty()) {
+//			
+//			String filename = instructorNoticeImgFile.getOriginalFilename();
+//			instructorNotice.setNoticeImg(filename);
+//					
+//			FileCopyUtils.copy(instructorImageDirectory.getBytes(), new File(instructorImageDirectory, filename));
+//			
+//		}
+//		
+//		ArrayList<Fr>
+//	}
+//	
+	
 	
 	@RequestMapping(value = "create", method = RequestMethod.GET)
 	public String createLecture() {

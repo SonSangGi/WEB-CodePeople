@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.jhta.cope.handler.ChatHandler;
 import com.jhta.cope.service.ChatService;
+import com.jhta.cope.service.PaidLectureService;
 import com.jhta.cope.service.QnaService;
 import com.jhta.cope.service.UserService;
 import com.jhta.cope.util.EtcUtils;
@@ -43,6 +44,8 @@ public class UserController {
 	QnaService qnaService;
 	@Autowired
 	ChatService chatService;
+	@Autowired
+	PaidLectureService paidLectureService;
 
 	@Resource(name = "iconPath")
 	String iconPath;
@@ -70,15 +73,15 @@ public class UserController {
 
 	@RequestMapping("/chat/getAll")
 	@ResponseBody
-	public List<Chat> getAllChat(String recvUserId){
+	public List<Chat> getAllChat(String recvUserId) {
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 		Chat chat = new Chat().setRecvUser(new User().setId(recvUserId)).setSendUser(user);
-		
+
 		chat.setRecvUser(new User().setId(recvUserId));
-		List<Chat> chats =  chatService.getChats(chat);
+		List<Chat> chats = chatService.getChats(chat);
 		return chats;
 	}
-	
+
 	// 스탯
 	@RequestMapping("/stat")
 	public String stat(Model model) {
@@ -112,7 +115,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/info")
-	public String info() {
+	public String info(Model model) {
 		return "user/my_info";
 	}
 

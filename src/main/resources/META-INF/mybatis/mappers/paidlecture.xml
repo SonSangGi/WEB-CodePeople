@@ -4,17 +4,6 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.jhta.cope.dao.PaidLectureDao">
-	
-	<resultMap type="PaidLectureDetail" id="PaidLectureDetailByDetailNoResultMap">
-		<id property="no" column="DETAIL_NO"/>
-		<result property="filePath" column="filePath"/>
-		<result property="sectionNo" column="sectionNo"/>
-		<result property="sectionName" column="sectionName"/>
-		<result property="lessonNo" column="lessonNo"/>
-		<result property="lessonName" column="lessonName"/>
-		<result property="lessonLength" column="lessonLength"/>
-		<association property="paidLecture" column="PAID_LECTURE_NO" javaType="PaidLecture" select="getPaidLectureByNo"/>
-	</resultMap>
 
 	<resultMap type="PaidLectureDetail" id="PaidLectureDetailByLectureNoResultMap">
 		<id property="paidLecture.no" column="PAID_LECTURE_NO"/>
@@ -43,16 +32,16 @@
 			PAID_LECTURE_NO = #{value}
 	</select>
 	
-	<select id="getPaidLectureDetailByDetailNo" resultMap="PaidLectureDetailByDetailNoResultMap" parameterType="int">
+	<select id="getPaidLectureDetailByDetailNo" parameterType="int" resultType="PaidLectureDetail">
 		select
-			DETAIL_NO,
-			PAID_LECTURE_NO,
-			FILEPATH,
-			SECTION_NO,
-			SECTION_NAME,
-			LESSON_NO,
-			LESSON_NAME,
-			LESSON_LENGTH
+			DETAIL_NO as no,
+			PAID_LECTURE_NO as "paidLecture.no",
+			FILEPATH as "filePath",
+			SECTION_NO as "sectionNo",
+			SECTION_NAME as "sectionName",
+			LESSON_NO as "lessonNo",
+			LESSON_NAME as "lessonName",
+			LESSON_LENGTH as "lessonLength"
 		from
 			PAID_LECTURE_DETAIL
 		where

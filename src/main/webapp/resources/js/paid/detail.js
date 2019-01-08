@@ -42,7 +42,7 @@ $(function() {
 		});
 	  
 		
-	  function ajaxContents(){
+	  function ajaxContents() {
 	      $.ajax({
 	        type : "GET",
 	        url : "detail/contents.do",
@@ -56,7 +56,7 @@ $(function() {
 	      });
 	    }
 	  
-	  function ajaxNote(){
+	  function ajaxNote() {
 	      $.ajax({
 	        type : "GET",
 	        url : "detail/note.do",
@@ -69,6 +69,20 @@ $(function() {
 	        }
 	      });
 	    }
+
+	  function ajaxQuestion() {
+		  $.ajax({
+			  type : "GET",
+			  url : "detail/question.do",
+			  dataType : "html",
+			  error : function() {
+				  alert('error!');
+			  },
+			  success : function(data) {
+				  $('.paid-contents').html(data);
+			  }
+		  });
+	  }
 	  
 	
 	$("#detail-overview").on("click", function(event) {
@@ -85,13 +99,22 @@ $(function() {
 		event.preventDefault();
 		ajaxNote();
 	});
+
+	$("#detail-question").on("click", function(event) {
+		event.preventDefault();
+		ajaxQuestion();
+	});
 	
 	
-	
-	
-	$(".nonLogin").on("click", function(event) {
+	$(".nonlogin-paid-purchase-btn").on("click", function(event) {
 		alert("로그인이 필요한 서비스입니다");
 	});
+
+	
+	$(".nonlogin-paid-cart-btn").on("click", function(event) {
+		alert("로그인이 필요한 서비스입니다");
+	});
+
 	
 	$("#paid-cart-btn").on("click", function(event) {
 		var lectureNo = $(this).siblings(".lectureNo").val();

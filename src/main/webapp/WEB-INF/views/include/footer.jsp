@@ -22,6 +22,10 @@
          </div>
       </div>
    </div>
+   
+   
+   <!-- 알림창 -->
+	<div class="sg-alert"></div>
 
 <c:if test="${LOGIN_USER != null }">
    <chat>
@@ -40,9 +44,14 @@
      </div>
    </div>
   </chat>
+  
+  <div style="width:100px;height:100px;border:1px solid black;position:absolute;display:none;" id="fllowAlert"></div>
+   
+   
 <script type="text/javascript">
 $(function(){
-
+	var domain = window.location.pathname.split('/');
+	domain = domain[domain.length - 1];
 	var ws = new WebSocket("ws://127.0.0.1/chat.do");
 	ws.onmessage = function(event) {
 		console.log(event);
@@ -58,13 +67,27 @@ $(function(){
 			$(".chat-body").append(text);
 		//유저
 			}else if(target == "USER"){
-				var user = JSON.parse(items[2]);
-				var text = '<div class=""><img src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/300.png" class="chat-icon">'+user.name+'<div>';
-				text += '<div class="chat-box t-d"><div class="chat-you"><span>' + items[3] + '</span></div></div>';
-				$(".my-chat-body").append(text);
+					var user = JSON.parse(items[2]);
+					var msg = items[3];
+				if(domain != 'chat.do'){
+					var temp = new Date().getMilliseconds();
+					var text = "<div class='sg-alert-box "+temp+"'><p>"+user.name+"님에게 메세지가 왔습니다.</p>";
+					text += "<p>"+msg+"</p>"
+					text += "<p><a href='/user/my/chat.do'>답장하러가기</a></p></div>";
+					$(".sg-alert").append(text);
+					setTimeout(function(){
+						$('.'+temp).animate({'opacity':'0'},500,function(){$(this).remove()})
+					},3000);
+				}else {
+					var text = '<div class=""><img src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/300.png" class="chat-icon">'+user.name+'<div>';
+					text += '<div class="chat-box t-d"><div class="chat-you"><span>' + msg + '</span></div></div>';
+					$(".my-chat-body").append(text);
+					$(".my-chat-body").scrollTop(1000000);
+				}
 			}
 	    $(".chat-body").scrollTop(100000)
 		}
+		// 친구추가
 	}
 		
 	///관리자용 채팅~!@!~@~!

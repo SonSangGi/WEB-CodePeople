@@ -22,10 +22,22 @@
 			BUY_LECTURE_NO as no,
 			PAID_LECTURE_NO as "paidLecture.no",
 			USER_NO "user.no",
-			CREATE_DATE
+			CREATE_DATE as createDate
 		from
 			BUY_LECTURE
 		where
 			USER_NO = #{value}
+	</select>
+	
+	<select id="getBuyLectureByBuyLectureNo" parameterType="int" resultType="BuyLecture">
+		select
+			BUY_LECTURE_NO as no,
+			PAID_LECTURE_NO as "paidLecture.no",
+			USER_NO "user.no",
+			CREATE_DATE as createDate
+		from
+			BUY_LECTURE
+		where
+			BUY_LECTURE_NO = #{value}
 	</select>
 </mapper>

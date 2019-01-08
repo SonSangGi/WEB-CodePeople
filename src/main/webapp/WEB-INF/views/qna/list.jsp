@@ -117,7 +117,7 @@
 		          <td>${qna.no }</td>
 		          <td style="text-align:left;"><a href="detail.do?qnaNo=${qna.no}">${qna.title }</a></td>
 		          <td>${fn:length(qna.answers)}</td>
-		          <td><img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }</td>
+		          <td><img class="f-i" alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }</td>
 		          <td>${qna.views }</td>
 		          <td><small><fmt:formatDate value="${qna.createDate }" pattern="yyyy-MM-dd"/></small></td>
 	        	</tr>

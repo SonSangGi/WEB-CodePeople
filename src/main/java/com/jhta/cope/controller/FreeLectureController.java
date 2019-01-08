@@ -5,23 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import com.jhta.cope.service.FreeLectureService;
+import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.FreeLecture;
 import com.jhta.cope.vo.FreeLectureComent;
 import com.jhta.cope.vo.FreeLectureSection;
 import com.jhta.cope.vo.Photo;
+import com.jhta.cope.vo.User;
 
 @Controller
 @RequestMapping("/free/*")
@@ -125,15 +130,39 @@ public class FreeLectureController {
 		}
 		for (FreeLectureSection freeLectureSection : freeLectureSections) {
 			if(count == freeLectureSection.getCount()) {
-				List<FreeLectureComent> coments = freeLectureSection.getComments();
-				for (FreeLectureComent freelectureCommet : coments) {
-					System.out.println(freelectureCommet);
-				}
+
 				model.addAttribute("freeSection", freeLectureSection);
 			}
 		}
 		
 		model.addAttribute("freeLectureSections", freeLectureSections);
 		return "freelecture/section";
+	}
+	
+	@RequestMapping(value="/comment-submit", method=RequestMethod.POST)
+	public String commentSubmit(FreeLectureComent freeLectureComent, @RequestParam("sno") int sno, 
+			@RequestParam("lno") int lno, @RequestParam("count") int count) {
+			freeLectureComent.setWriter((User) SessionUtils.getAttribute("LOGIN_USER"));
+			freeLectureComent.setSno(sno);
+		freeLectureService.insertFreeLectureComent(freeLectureComent);
+		return "redirect:/free/section.do?freeLectureNo="+lno+"&count="+count;
+	} 
+	@RequestMapping(value="/comment-delete", method=RequestMethod.GET)
+	public String commentDelete(@RequestParam("cno") int cno, @RequestParam("lno") int lno, @RequestParam("count") int count ) {
+		freeLectureService.deleteFreeLectureComent(cno);
+		
+		return "redirect:/free/section.do?freeLectureNo="+lno+"&count="+count;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/comment-update", method=RequestMethod.GET)
+	public FreeLectureComent updateComment(FreeLectureComent freeLectureComent) {
+		
+		FreeLectureComent lectureComent = freeLectureService.getFreeLectureComent(freeLectureComent.getCno());
+		lectureComent.setContents(freeLectureComent.getContents());
+		
+		freeLectureService.updateFreeLectureComent(lectureComent);
+		
+		return lectureComent;
 	}
 }

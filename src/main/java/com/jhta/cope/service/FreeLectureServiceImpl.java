@@ -55,4 +55,21 @@ public class FreeLectureServiceImpl implements FreeLectureService {
 		List<FreeLectureComent> freeLectureComents = freeLectureDao.getFreeLectureComentesBySno(sno);
 		return freeLectureComents;
 	}
+	@Override
+	public void insertFreeLectureComent(FreeLectureComent freeLectureComent) {
+		freeLectureDao.insertFreeLectureComent(freeLectureComent);		
+	}
+	@Override
+	public FreeLectureComent getFreeLectureComent(int cno) {
+		FreeLectureComent freeLectureComent = freeLectureDao.getFreeLectureComent(cno);
+		return freeLectureComent;
+	}
+	@Override
+	public void deleteFreeLectureComent(int cno) {
+		freeLectureDao.deleteFreeLectureComent(cno);
+	}
+	@Override
+	public void updateFreeLectureComent(FreeLectureComent freeLectureComent) {
+		freeLectureDao.updateFreeLectureComent(freeLectureComent);	
+	}
 }

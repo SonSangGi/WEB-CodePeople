@@ -63,11 +63,12 @@ article {
 
 .yb_user_image img {
 	margin-top: 15px;
-	width: 50px;
-	height: 50px;
+	width: 60px;
+	height: 60px;
 	margin-bottom: 10px;
 	border: 1px soild black;
-	border-radius: 50px;
+	border-radius: 60px;
+	margin-left: 20px;
 }
 
 .yb_form textarea {
@@ -93,8 +94,7 @@ article {
 }
 
 #yb_coment_list li {
-	width: 700px;
-	height: 100px;
+	width: 100%;
 }
 
 ol, ul {
@@ -191,63 +191,121 @@ hr {
 					style="height: 41px; background-color: lightgray;">
 					<ul class="yb_social_group_bar">
 						<li><a href="#"><i class="far fa-eye"></i>봤어요(${freeSection.views })</a></li>
-						<li><a href=""><i class="fas fa-angle-left"></i> 이전</a></li>
-						<li><a href="">다음 <i class="fas fa-angle-right"></i></a></li>
+						<li><a href="section.do?freeLectureNo=${param.freeLectureNo}&count=${freeSection.count - 1 }"><i class="fas fa-angle-left"></i> 이전</a></li>
+						<li><a href="section.do?freeLectureNo=${param.freeLectureNo}&count=${freeSection.count + 1 }">다음 <i class="fas fa-angle-right"></i></a></li>
 					</ul>
 				</div>
-				<div class="yb_section_coment" data-role="collapsible">
+				<div class="yb_section_coment">
 					<h3 style="display: none;">댓글</h3>
-					<form id="yb_coment_new_form" method="post" action="#"
-						data-ajax="true">
+					<form id="yb_coment_new_form" method="post" action="/free/comment-submit.do"
+						data-ajax="true" autocomplete="off">
+						<input type="hidden" id="sno" name="sno" value="${freeSection.lectureNo}">
+						<input type="hidden" id="lno" name="lno" value="${param.freeLectureNo}">
+						<input type="hidden" name="count" value="${freeSection.count}">						
+						
 						<div class="yb_user_image col-xs-2">
 							<img
 								src="/resources/img/user/icon/icon.png">
 						</div>
 						<div class="yb_form_wrap">
 							<div class="yb_form col-xs-10">
-								<textarea name="yb_cmt_coment"
+								<textarea name="contents"
 									style="height: 60px; width: 100%;" id="input-comment"></textarea>
 							</div>
-							<script>
-                                    $("#input-comment").focus(function(){
-                                        $(this).animate({height:70});
-                                        $("#yb_coment_new_form").animate({height: 148})
-                                        $("#comment-submit").show();
-                                    })
-                                    $("#input-comment").focusout(function(){
-                                        $(this).animate({height:40});
-                                        $("#yb_coment_new_form").animate({height: 130})
-                                        
-                                    })
-                                </script>
+							
 							<div class="yb_buttons">
-								<button type="submit" id="comment-submit" style="display: none;">댓글
+								<button type="submit" class="comment-submit" style="display: none;">댓글
 									올리기</button>
 							</div>
 						</div>
 					</form>
-					<ol style="list-style: none" ; id="yb_coment_list">
+					<ol style="list-style: none" id="yb_coment_list">
 					<c:forEach items="${freeSection.comments }" var="comment">
-						<li>
-							<div class="yb_user_image col-xs-2">
-								<img src="/resources/img/user/icon/${comment.writer.avatar.image != 'Default' ?  comment.writer.avatar.image : 'icon.png'}">
+						<li class="row">
+							<div>
+								<div class="yb_user_image col-xs-2">
+									<img src="/resources/img/user/icon/${comment.writer.avatar.image != 'Default' ?  comment.writer.avatar.image : 'icon.png'}">
+								</div>
+								<div class="yb_name_time col-xs-10">
+									<strong>${comment.writer.name}</strong> <a href="#"><time>${comment.createDate }</time></a>								
+								</div>
+								<div class="yb_comment_contents col-xs-10" id="comment-list-${comment.cno }">${comment.contents }</div>
 							</div>
-							<div class="yb_name_time col-xs-10">
-								<strong>${comment.writer.name}</strong> <a href="#"><time>${comment.createDate }</time></a>
+							<div class="update-contents col-xs-10" style="display: none">
+								<div class="yb_form col-xs-10">
+									<textarea id="comment-contents-${comment.cno }" name="contents"
+									style="height: 60px; width: 100%;">${comment.contents }</textarea>
+									<div class="yb_buttons">
+										<button id="comment-update-${comment.cno }" style="float: right;">수정하기</button>
+									</div>
+								</div>
 							</div>
-							<div class="yb_coment_content col-xs-10">${comment.contents }</div>
+							<c:choose>
+								<c:when test="${LOGIN_USER.no == comment.writer.no }">
+								<div class="coment_buttons" style="display: inline-block; float: right">
+									<button class="sg-btn sg-btn-primary"><i class="fas fa-reply"></i> 답글</button>
+									<button class="comment-update-btn sg-btn sg-btn-primary"><i class="fas fa-pen"></i> 수정</button>
+									<a class="sg-btn sg-btn-primary" href="/free/comment-delete.do?cno=${comment.cno }&lno=${param.freeLectureNo}&count=${freeSection.count}"><i class="fas fa-times"></i> 삭제</a>
+								</div>
+								</c:when>
+								<c:otherwise>
+								<div class="coment_buttons" style="display: inline-block; float: right">
+									<button class="sg-btn sg-btn-primary"><i class="fas fa-reply"></i> 답글</button>
+								</div>
+								</c:otherwise>
+							</c:choose>
 						</li>
 					</c:forEach>
 					</ol>
 					<div id="cnt_more">
-						<a href="#">
-							<button>더 보기</button>
-						</a>
+						<button class="sg-btn sg-btn-primary">더 보기</button>
+
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(function() {
+			$(".comment-update-btn").on('click', function(event) {
+				$(this).parent().siblings(".update-contents").slideToggle();
+			});
+			
+			$('#yb_coment_list').on('click','[id^=comment-update]',function(event) {
+				var commentCno = $(this).attr('id').replace('comment-update-', '');
+				var commentContents = $('#comment-contents-'+commentCno);
+			
+				$.ajax({
+				      type: 'get',
+				      url: '/free/comment-update.do',
+				      data: {cno:commentCno, contents:commentContents.val()},  //가져온 번호{cno:commentCno,contents,cccda}
+				      dataType: 'Json',
+				      success: function(data){
+				    	$("#comment-list-" + data.cno).text(data.contents);
+				    	$("#comment-list-" + data.cno).parent().siblings(".update-contents").hide(); 
+					}
+				});
+			}); 
+		});
+
+		$("#input-comment").focus(function() {
+			$(this).animate({
+				height : 70
+			});
+			$("#yb_coment_new_form").animate({
+				height : 148
+			})
+			$(".comment-submit").show();
+		})
+		$("#input-comment").focusout(function() {
+			$(this).animate({
+				height : 40
+			});
+			$("#yb_coment_new_form").animate({
+				height : 130
+			})
+		})
+	</script>
 	<%@include file="/WEB-INF/views/include/footer.jsp"%>
 </body>
 </html>

@@ -14,6 +14,7 @@ public class InstructorNotice {
 	@DateTimeFormat(pattern="yy-MM-dd")
 	private int views;
 	private Date createDate;
+	private String noticeImg;
 	
 	public InstructorNotice() {}
 
@@ -64,10 +65,22 @@ public class InstructorNotice {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+	
+	public String getNoticeImg() {
+		return noticeImg;
+	}
+
+	public void setNoticeImg(String noticeImg) {
+		this.noticeImg = noticeImg;
+	}
 
 	@Override
 	public String toString() {
 		return "InstructorNotice [no=" + no + ", title=" + title + ", writer=" + writer + ", contents=" + contents
-				+ ", views=" + views + ", createDate=" + createDate + "]";
+				+ ", views=" + views + ", createDate=" + createDate + ", noticeImg=" + noticeImg + ", getNo()="
+				+ getNo() + ", getTitle()=" + getTitle() + ", getWriter()=" + getWriter() + ", getContents()="
+				+ getContents() + ", getViews()=" + getViews() + ", getCreateDate()=" + getCreateDate()
+				+ ", getNoticeImg()=" + getNoticeImg() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
 	}
 }

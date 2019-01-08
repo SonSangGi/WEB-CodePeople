@@ -353,6 +353,25 @@ a:hover {
 .sg-btn-none:active {
 	border: none;
 }
+
+/*알림~@!@!~*/
+.sg-alert {
+	position: fixed;
+	top: 11%;
+	right: 0px;
+	width: 15%;
+}
+
+.sg-alert-box {
+	height: 100px;
+	background-color: white;
+	color: black;
+	position: relative;
+	border: 2px solid #ff6b6b;
+	font-size: 16px;
+	padding: 10px;
+	margin-bottom: 20px;
+}
 /*동적 쿼리*/
 @media screen and (max-width: 880px) {
 	.sg-menu>ul {

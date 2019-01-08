@@ -55,4 +55,16 @@ public class BuyLectureServiceImpl implements BuyLectureService {
 		return buyLectures;
 	}
 
+	@Override
+	public BuyLecture getBuyLectureByBuyLectureNo(int buyLectureNo) {
+		BuyLecture buyLecture = buyLectureDao.getBuyLectureByBuyLectureNo(buyLectureNo);
+		User user = userDao.getUserByNo(buyLecture.getUser().getNo());
+		PaidLecture paidLecture = paidLectureDao.getPaidLectureByNo(buyLecture.getPaidLecture().getNo());
+		
+		buyLecture.setUser(user);
+		buyLecture.setPaidLecture(paidLecture);
+		
+		return buyLecture;
+	}
+
 }

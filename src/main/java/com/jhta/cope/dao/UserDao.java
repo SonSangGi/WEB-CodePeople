@@ -5,19 +5,28 @@ import java.util.Map;
 
 import com.jhta.cope.vo.Avatar;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.Follow;
 import com.jhta.cope.vo.User;
 
 public interface UserDao {
-	public void insertUser(User user);
-	public void insertAvatar(Avatar avatar);
 	public User getUserByNo(int userNo);
 	public User getUserById(String userId);
 	public User getUserByEmail(String userEmail);
+	public List<Follow> getMyFollowingById(String userId);
+	public List<Follow> getFriends(String userId);
+	public List<Follow> getFriendRequest(String userId);
+	public List<Follow> getFollowMe(String userId);
+	public Follow myFollowChecking(Follow follow);
 	public List<Badge> notHaveBadge(int userNo);
 	public List<Badge> haveBadge(int userNo);
+	public Badge getBadgeByNo(int badgeNo);
+	public void insertUser(User user);
+	public void insertAvatar(Avatar avatar);
 	public void insertUserAuth(Map<String, Object> map);
 	public void insertUserBadge(Map<String, Object> map);
+	public void insertFollow(Follow follow);
 	public void userAuth(Map<String, Object> map);
 	public void updateUser(User user);
 	public void updateAvatar(Avatar avatar);
+	public void deleteFollow(Follow follow);
 }

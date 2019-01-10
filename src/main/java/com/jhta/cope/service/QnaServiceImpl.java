@@ -1,6 +1,8 @@
 package com.jhta.cope.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,8 @@ public class QnaServiceImpl implements QnaService{
 	QnaDao qnaDao;
 	
 	@Override
-	public List<Qna> getAllQnas() {
-		return qnaDao.getAllQnas();
+	public List<Qna> getAllQnas(Criteria criteria) {
+		return qnaDao.getAllQnas(criteria);
 	}
 
 	@Override
@@ -33,8 +35,11 @@ public class QnaServiceImpl implements QnaService{
 	}
 
 	@Override
-	public int getQnaCount() {
-		return qnaDao.getQnaCount();
+	public int getQnaCount(String keyword,String searchType) {
+		Map<String, String> map = new HashMap<>();
+		map.put("keyword", keyword);
+		map.put("searchType", searchType);
+		return qnaDao.getQnaCount(map);
 	}
 
 	@Override
@@ -58,8 +63,8 @@ public class QnaServiceImpl implements QnaService{
 	}
 
 	@Override
-	public List<QnaAnswer> getAllAnswers() {
-		return qnaDao.getAllAnswers();
+	public List<QnaAnswer> getAllAnswers(Criteria criteria) {
+		return qnaDao.getAllAnswers(criteria);
 	}
 
 	@Override
@@ -75,6 +80,16 @@ public class QnaServiceImpl implements QnaService{
 	@Override
 	public List<QnaAnswer> getAnswerByUserNo(int userNo) {
 		return qnaDao.getAnswerByUserNo(userNo);
+	}
+
+	@Override
+	public int getQnaAnswersCount() {
+		return qnaDao.getQnaAnswersCount();
+	}
+
+	@Override
+	public void updateQna(Qna qna) {
+		qnaDao.updateQna(qna);
 	}
 
 

@@ -57,7 +57,7 @@ public class LoginController {
 
 	// 구글 로그인&회원가입
 	@RequestMapping(value = "googlelogin", method = RequestMethod.GET)
-	public String googleLogin(@RequestParam("code") String code) throws Exception {
+	public String googleLogin(@RequestParam("code") String code, HttpServletRequest request) throws Exception {
 
 		OAuth2Operations oauthOperations = googleConnectionFactory.getOAuthOperations();
 		AccessGrant accessGrant = oauthOperations.exchangeForAccess(code, googleOAuth2Parameters.getRedirectUri(),
@@ -74,13 +74,12 @@ public class LoginController {
 		PlusOperations plusOperations = google.plusOperations();
 		Person profile = plusOperations.getGoogleProfile();
 		User user = new User();
-		user.setId(profile.getId())
-			.setEmail("g_" + profile.getAccountEmail())
-			.setName(profile.getDisplayName())
-			.setPassword(DigestUtils.sha256Hex(profile.getId()));
+		user.setId(profile.getId()).setEmail("g_" + profile.getAccountEmail()).setName(profile.getDisplayName())
+				.setPassword(DigestUtils.sha256Hex(profile.getId()));
 		userService.insertUser(user, "google");
 		user = userService.getUserById(user.getId());
 		SessionUtils.addAttribute("LOGIN_USER", user);
+		SessionUtils.addAttribute("SEND_LOGIN_MSG", true);
 		return "redirect:/home.do";
 	}
 
@@ -99,6 +98,7 @@ public class LoginController {
 		return "redirect:" + url;
 	}
 
+	//네이버 로그인&회원가입
 	@RequestMapping("/naverlogin")
 	@SuppressWarnings("unchecked")
 	public String naverlogin(HttpSession session, String code, String state) throws Exception {
@@ -112,11 +112,14 @@ public class LoginController {
 		if (map.get("message").equals("success")) {
 			Map<String, Object> responseMap = (Map<String, Object>) map.get("response");
 			User user = new User();
-			user.setId((String) responseMap.get("id")).setPassword(DigestUtils.sha256Hex((String) responseMap.get("id")))
+			user.setId((String) responseMap.get("id"))
+					.setPassword(DigestUtils.sha256Hex((String) responseMap.get("id")))
 					.setEmail("n_" + (String) responseMap.get("email")).setName((String) responseMap.get("name"));
 			userService.insertUser(user, "naver");
 			User loginUser = userService.getUserById(user.getId());
-			SessionUtils.addAttribute("LOGIN_USER", loginUser);
+			session.setAttribute("LOGIN_USER", loginUser);
+			SessionUtils.addAttribute("SEND_LOGIN_MSG", true);
+			session.setMaxInactiveInterval(60*24);
 		} else {
 		}
 		return "redirect:/home.do";
@@ -127,7 +130,7 @@ public class LoginController {
 	public String login(@RequestParam("id") String id, @RequestParam("password") String password,
 			HttpServletRequest request) {
 		User user = userService.getUserById(id);
-
+		System.out.println(user);
 		if (user == null) {
 			return "redirect:/home.do?fail=login";
 		}
@@ -138,6 +141,7 @@ public class LoginController {
 			return "redirect:/home.do?fail=login";
 		}
 		SessionUtils.addAttribute("LOGIN_USER", user);
+		SessionUtils.addAttribute("SEND_LOGIN_MSG", true);
 		return "redirect:/home.do";
 	}
 
@@ -174,6 +178,7 @@ public class LoginController {
 		return "user/registercomplete";
 	}
 
+	
 	@RequestMapping(value = "/joinValueCheck", produces = MediaType.TEXT_PLAIN_VALUE)
 	public @ResponseBody String joinValueCheck(String id, String email) {
 		String result = "";
@@ -198,7 +203,6 @@ public class LoginController {
 	@RequestMapping(value = "/emailConfirm")
 	public String emailConfirm(@RequestParam("userEmail") String userEmail, @RequestParam("key") String key,
 			Model model) {
-		System.out.println("[이메일 인증]" + userEmail);
 		Map<String, Object> map = new HashMap<>();
 		map.put("email", userEmail);
 		map.put("key", key);

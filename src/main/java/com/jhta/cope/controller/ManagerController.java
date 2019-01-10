@@ -1,7 +1,9 @@
 package com.jhta.cope.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jhta.cope.service.ManagerService;
 import com.jhta.cope.service.QnaService;
 import com.jhta.cope.service.UserLogService;
+import com.jhta.cope.vo.Criteria;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.User;
@@ -43,6 +46,9 @@ public class ManagerController {
 		int countTodayVisitors = userLogService.countTodayVisitors();
 		model.addAttribute("countTodayVisitors", countTodayVisitors);
 		
+		int countQnaPosts = qnaService.getQnaCount(null,null);
+		model.addAttribute("countQnaPosts", countQnaPosts);
+		
 		return "manager/dashboard";
 	}
 
@@ -62,30 +68,88 @@ public class ManagerController {
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public String post(Model model) throws Exception {
 		
-		List<Qna> qnaPosts = qnaService.getAllQnas();
-		List<QnaAnswer> qnaAnswers = qnaService.getAllAnswers();
+		Criteria criteria = new Criteria();
+
+		Map<String, Integer> qnaMap = pagingProcessing("QNA", 1);
+		criteria.setBeginIndex(qnaMap.get("beginIndex"));
+		criteria.setEndIndex(qnaMap.get("endIndex"));
+		List<Qna> qnaPosts = qnaService.getAllQnas(criteria);
+		
+		Map<String, Integer> qnaAnswerMap = pagingProcessing("QNA Answer", 1);
+		criteria.setBeginIndex(qnaAnswerMap.get("beginIndex"));
+		criteria.setEndIndex(qnaAnswerMap.get("endIndex"));
+		List<QnaAnswer> qnaAnswers = qnaService.getAllAnswers(criteria);
+		
 		model.addAttribute("qnaPosts", qnaPosts);
+		model.addAttribute("qnaPageInfo", qnaMap);
 		model.addAttribute("qnaAnswers", qnaAnswers);
+		model.addAttribute("qnaAnswerPageInfo", qnaAnswerMap);
 
 		return "manager/post";
 	}
 
-	@RequestMapping(value = "/post", method = RequestMethod.POST)
-	public String qnaAnswer(Model model) throws Exception {
-		
-		List<QnaAnswer> qnaAnswers = qnaService.getAllAnswers();
-		model.addAttribute("qnaAnswers", qnaAnswers);
-		
-		return "manager/post";
-	}
+//	@RequestMapping(value = "/post", method = RequestMethod.POST)
+//	public String qnaAnswer(Model model) throws Exception {
+//		
+//		List<QnaAnswer> qnaAnswers = qnaService.getAllAnswers();
+//		model.addAttribute("qnaAnswers", qnaAnswers);
+//		
+//		return "manager/post";
+//	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/post/ajax", method = RequestMethod.POST)
-	public Qna getQnaAnswerAjax(@RequestParam("functionName") String functionName, @RequestParam("postNo") int postNo, Model model) throws Exception {
+	public Map<String, Object> getQnaAnswerAjax(
+								@RequestParam(value="boardName", required=false) String boardName,
+								@RequestParam(value="qnaPage", required=false) Integer qnaPage,
+								@RequestParam(value="qnaAnswerPage", required=false) Integer qnaAnswerPage,
+								@RequestParam(value="functionName", required=false) String functionName,
+								@RequestParam(value="postNo", required=false) Integer postNo
+								) throws Exception {
 		
-		Qna qna = qnaService.getQnaByNo(postNo);
+		System.out.println(boardName);
 		
-		return qna;
+		if ("QNA".equals(boardName)) {
+			
+			Map<String, Integer> qnaMap = pagingProcessing(boardName, qnaPage);
+			Criteria criteria = new Criteria();
+			criteria.setBeginIndex(qnaMap.get("beginIndex"));
+			criteria.setEndIndex(qnaMap.get("endIndex"));
+			List<Qna> qnaPosts = qnaService.getAllQnas(criteria);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("qnaPosts", qnaPosts);
+			map.put("qnaPageInfo", qnaMap);
+			
+			return map;
+			
+		} else if ("QNA Answer".equals(boardName)) {
+			
+			Map<String, Integer> qnaAnswerMap = pagingProcessing(boardName, qnaAnswerPage);
+			Criteria criteria = new Criteria();
+			criteria.setBeginIndex(qnaAnswerMap.get("beginIndex"));
+			criteria.setEndIndex(qnaAnswerMap.get("endIndex"));
+			List<QnaAnswer> qnaAnswers = qnaService.getAllAnswers(criteria);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("qnaAnswers", qnaAnswers);
+			map.put("qnaAnswerPageInfo", qnaAnswerMap);
+			
+			return map;
+			
+		}
+		
+		if ("findQnaAnswerInfoByNo".equals(functionName)) {
+			
+			Qna qna = qnaService.getQnaByNo(postNo);
+
+			Map<String, Object> map = new HashMap<>();
+			map.put("qna", qna);
+			
+			return map;
+		}
+		
+		return null;
 	}
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -130,4 +194,65 @@ public class ManagerController {
 		return "manager/rtchat";
 	}
 	
+	//페이징 처리
+	public Map<String, Integer> pagingProcessing(String boardName, int page) {
+				
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		//페이징처리 시작
+		int totalCount = 0;
+		int listCount = 5;
+		int pageCount = 5;
+		
+		if ("QNA".equals(boardName)) {
+			totalCount = qnaService.getQnaCount(null,null);
+		} else if ("QNA Answer".equals(boardName)) {
+			totalCount = qnaService.getQnaAnswersCount();
+		}
+		
+		int totalPages = totalCount / listCount;
+		
+		//총 페이지수 계산
+		if ((totalCount % listCount) != 0) {
+			totalPages++;
+		}
+		
+		//요청 페이지가 총 페이지보다 클때
+		if (totalPages < page) {
+			page = totalPages;
+		}
+		
+		//처음, 끝 페이지
+		int startPage = (int) (((double)(page - 3) / pageCount) * pageCount) + 1;
+		if (startPage < 1) {
+			startPage = 1;
+		}
+		int endPage = (startPage + pageCount) - 1;
+		
+		//마지막 페이지가 총 페이지 수보다 커지지 않게 막음
+		if (endPage > totalPages) {
+			endPage = totalPages;
+		}
+		
+		//시작 페이지가 총 표시되는 페이지 리스트보다 작아지지 않게 막음
+		if (totalPages > (pageCount - 1)) {
+			if ((endPage - startPage) < (pageCount - 1)) {
+				startPage = (totalPages - pageCount) + 1;
+			}
+		}
+		
+		int beginIndex = ((page-1) * listCount) + 1;
+		int endIndex = beginIndex + (listCount - 1);
+		
+		map.put("beginIndex", beginIndex);
+		map.put("endIndex", endIndex);
+		map.put("listCount", listCount);
+		map.put("pageCount", pageCount);
+		map.put("startPage", startPage);
+		map.put("endPage", endPage);
+		map.put("totalPages", totalPages);
+		map.put("curPage", page);
+		
+		return map;
+	}
 }

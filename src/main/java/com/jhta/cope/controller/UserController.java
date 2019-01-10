@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Resource;
 
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.jhta.cope.handler.ChatHandler;
+import com.jhta.cope.service.BuyLectureService;
 import com.jhta.cope.service.ChatService;
 import com.jhta.cope.service.PaidLectureService;
 import com.jhta.cope.service.QnaService;
@@ -28,7 +29,9 @@ import com.jhta.cope.service.UserService;
 import com.jhta.cope.util.EtcUtils;
 import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.BuyLecture;
 import com.jhta.cope.vo.Chat;
+import com.jhta.cope.vo.Follow;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.QnaComment;
@@ -46,6 +49,8 @@ public class UserController {
 	ChatService chatService;
 	@Autowired
 	PaidLectureService paidLectureService;
+	@Autowired
+	BuyLectureService buyLectureService;
 
 	@Resource(name = "iconPath")
 	String iconPath;
@@ -67,22 +72,13 @@ public class UserController {
 
 	@RequestMapping("/chat")
 	public String chat(Model model) {
-		model.addAttribute("friends", ChatHandler.getAllOnUsers());
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		List<Follow> friends = userService.getFriends(user.getId());
+		model.addAttribute("friends", friends);
 		return "user/my_chat";
 	}
 
-	@RequestMapping("/chat/getAll")
-	@ResponseBody
-	public List<Chat> getAllChat(String recvUserId) {
-		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
-		Chat chat = new Chat().setRecvUser(new User().setId(recvUserId)).setSendUser(user);
-
-		chat.setRecvUser(new User().setId(recvUserId));
-		List<Chat> chats = chatService.getChats(chat);
-		return chats;
-	}
-
-	// 스탯
+	// 내 경험
 	@RequestMapping("/stat")
 	public String stat(Model model) {
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
@@ -116,15 +112,19 @@ public class UserController {
 
 	@RequestMapping("/info")
 	public String info(Model model) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		List<BuyLecture> buyLectures = buyLectureService.getBuyLectureByUserNoResultMap(user.getNo());
+		model.addAttribute("buyLectures",buyLectures);
 		return "user/my_info";
 	}
 
+	// JSON 아이콘 변경
 	@RequestMapping(value = "/iconmodify", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public String iconModify(MultipartHttpServletRequest mr) throws UnsupportedEncodingException {
 		MultipartFile mf = mr.getFile("file");
 		String today = new SimpleDateFormat("ddhhmmss").format(new Date());
-		String fileName = today + mf.getOriginalFilename();
+		String fileName = today + new Random().nextInt(100);
 		String path = "/resources/img/user/icon/";
 		try {
 			mf.transferTo(new File(iconPath, fileName));
@@ -138,6 +138,7 @@ public class UserController {
 		return URLEncoder.encode(fileName, "UTF-8");
 	}
 
+	// JSON 배경 변경
 	@RequestMapping(value = "/bgmodify", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseBody
 	public String backgroundModify(MultipartHttpServletRequest mr) throws UnsupportedEncodingException {
@@ -158,6 +159,7 @@ public class UserController {
 		return URLEncoder.encode(fileName, "UTF-8");
 	}
 
+	// JSON 아이콘 삭제
 	@RequestMapping(value = "/icondel")
 	@ResponseBody
 	public void iconDel() {
@@ -165,4 +167,43 @@ public class UserController {
 		user.getAvatar().setImage("Default");
 		userService.updateAvatar(user.getAvatar());
 	}
+
+	// JSON 친구 추가
+	@RequestMapping(value = "/following")
+	@ResponseBody
+	public Follow following(String followerId) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		Follow follow = new Follow();
+		follow.setFollower(new User().setId(followerId));
+		follow.setFollowing(user);
+		Follow checkingFollow = userService.myFollowChecking(follow);
+		if (checkingFollow == null) {
+			userService.insertFollow(follow);
+			return follow;
+		} else {
+			return checkingFollow;
+		}
+	}
+
+	// JSON 전체 채팅 불러오기
+	@RequestMapping("/chat/getAll")
+	@ResponseBody
+	public List<Chat> getAllChat(String recvUserId) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		Chat chat = new Chat().setRecvUser(new User().setId(recvUserId)).setSendUser(user).setViewAvailable("Y");
+		chatService.updateChat(chat);
+		List<Chat> chats = chatService.getChats(chat);
+		return chats;
+	}
+
+	// JSON 친구 거절 요청
+	@RequestMapping("/delFollow")
+	@ResponseBody
+	public void deleteFollow(String followingId) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		Follow follow = new Follow();
+		follow.setFollower(user).setFollowing(new User().setId(followingId));
+		userService.deleteFollow(follow);
+	}
+
 }

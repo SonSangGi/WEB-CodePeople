@@ -1,22 +1,20 @@
 package com.jhta.cope.service;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.ibatis.javassist.bytecode.stackmap.MapMaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.jhta.cope.dao.UserDao;
 import com.jhta.cope.handler.MailHandler;
 import com.jhta.cope.vo.Avatar;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.Follow;
 import com.jhta.cope.vo.TempKey;
 import com.jhta.cope.vo.User;
 
@@ -114,7 +112,11 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("userNo", userNo);
 		map.put("badgeNo", badgeNo);
-		
+		User user = userDao.getUserByNo(userNo);
+		Badge badge = userDao.getBadgeByNo(badgeNo);
+		Avatar avatar = user.getAvatar();
+		avatar.setExp(badge.getExp());
+		this.updateAvatar(avatar);
 		userDao.insertUserBadge(map);
 	}
 
@@ -122,5 +124,42 @@ public class UserServiceImpl implements UserService {
 	public void updateAvatar(Avatar avatar) {
 		userDao.updateAvatar(avatar);
 	}
+
+	@Override
+	public List<Follow> getMyFollowingById(String userId) {
+		return userDao.getMyFollowingById(userId);
+	}
+	
+
+	@Override
+	public List<Follow> getFriends(String userId) {
+		return userDao.getFriends(userId);
+	}
+	
+	@Override
+	public Follow myFollowChecking(Follow follow) {
+		return userDao.myFollowChecking(follow);
+	}
+
+	@Override
+	public void insertFollow(Follow follow) {
+		userDao.insertFollow(follow);
+	}
+
+	@Override
+	public List<Follow> getFriendRequest(String userId) {
+		return userDao.getFriendRequest(userId);
+	}
+
+	@Override
+	public List<Follow> getFollowMe(String userId) {
+		return userDao.getFollowMe(userId);
+	}
+
+	@Override
+	public void deleteFollow(Follow follow) {
+		userDao.deleteFollow(follow);
+	}
+
 	
 }

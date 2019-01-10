@@ -1,10 +1,13 @@
 package com.jhta.cope.vo;
 
+import java.util.Date;
+
 public class BuyLecture {
 
 	private int no;
 	private PaidLecture paidLecture;
 	private User user;
+	private Date createDate;
 	
 	public int getNo() {
 		return no;
@@ -25,6 +28,12 @@ public class BuyLecture {
 		this.user = user;
 	}
 	
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 	@Override
 	public String toString() {
 		return "BuyLecture [no=" + no + ", paidLecture=" + paidLecture + ", user=" + user + "]";

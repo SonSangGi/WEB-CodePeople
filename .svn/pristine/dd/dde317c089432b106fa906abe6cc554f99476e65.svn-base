@@ -1,0 +1,52 @@
+package com.jhta.cope.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.jhta.cope.service.InstructorNoticeService;
+import com.jhta.cope.vo.Criteria;
+import com.jhta.cope.vo.InstructorNotice;
+import com.jhta.cope.vo.Pagination;
+
+@Controller
+@RequestMapping("/instructornotice/*")
+public class InstructorNoticeController {
+
+	@Autowired
+	InstructorNoticeService instructorNoticeService;
+	
+	@RequestMapping(value = "noticelist")
+	public String list(Model model, Integer cp, @RequestParam(required = false, name = "keyword") String keyword,
+				@RequestParam(required = false, name= "searchType") String searchType,
+				@RequestParam(required = false, name = "sort") String sort) {
+		
+		if (cp == null) {
+			cp = 1;
+		}
+		int rows = 20;
+		Criteria criteria = new Criteria(cp, rows);
+		criteria.setSearchType(searchType);
+		criteria.setKeyword(keyword);
+		criteria.setSort(sort);
+		
+		Pagination pagination = new Pagination(cp, rows, instructorNoticeService.getNoticeCount());
+		List<InstructorNotice> instructorNotices = instructorNoticeService.getAllNoticesByCriteria(criteria);
+
+		// model.addAttribute
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("instructorNotices", instructorNotices);
+		
+		return "instructor/noticelist";
+	
+	}
+	
+
+	
+	
+	
+}

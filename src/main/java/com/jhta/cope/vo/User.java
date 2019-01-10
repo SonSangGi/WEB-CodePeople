@@ -10,7 +10,7 @@ public class User {
 
 	private int no;
 	@NotEmpty
-	@Size(min = 6, max = 15,message="6글자 이상 15글자 이하로 입력해주세요.")
+	@Size(min = 6, max = 15, message = "6글자 이상 15글자 이하로 입력해주세요.")
 	private String id;
 	@NotEmpty
 	private String password;
@@ -21,8 +21,9 @@ public class User {
 	private String name;
 	private Date createDate;
 	private int authStatus;
+	private String userOn;
 	private Avatar avatar;
-	
+
 	public int getNo() {
 		return no;
 	}
@@ -75,7 +76,6 @@ public class User {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	
 
 	public int getAuthStatus() {
 		return authStatus;
@@ -85,7 +85,7 @@ public class User {
 		this.authStatus = authStatus;
 		return this;
 	}
-	
+
 	public Avatar getAvatar() {
 		return avatar;
 	}
@@ -95,11 +95,19 @@ public class User {
 		return this;
 	}
 
+	public String getUserOn() {
+		return userOn;
+	}
+
+	public void setUserOn(String userOn) {
+		this.userOn = userOn;
+	}
+
 	@Override
 	public String toString() {
 		return "User [no=" + no + ", id=" + id + ", password=" + password + ", email=" + email + ", name=" + name
-				+ ", createDate=" + createDate + ", authStatus=" + authStatus + ", avatar=" + avatar + "]";
+				+ ", createDate=" + createDate + ", authStatus=" + authStatus + ", userOn=" + userOn + ", avatar="
+				+ avatar + "]";
 	}
-
 
 }

@@ -67,4 +67,9 @@ public class BuyLectureServiceImpl implements BuyLectureService {
 		return buyLecture;
 	}
 
+	@Override
+	public List<BuyLecture> getBuyLectureByUserNoResultMap(int userNo) {
+		return buyLectureDao.getBuyLectureByUserNoResultMap(userNo);
+	}
+
 }

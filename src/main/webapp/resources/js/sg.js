@@ -24,14 +24,20 @@ $(function() {
 		$(".sg-user-show").slideToggle();
   });
   
-  $(".f-i").hover(
-	  function(){
-		  var x = event.pageX;
-		  var y = event.pageY;
-		  $('#fllowAlert').show();
-		  $('#fllowAlert').css({'left':x-100,'top':y-100})
-	  },function(){
-		  $('#fllowAlert').hide();
+  $(".sg-alert").on('click','.follow-btn',function(){
+	  var followerId = $(this).val();
+		  if($(this).hasClass('add')){
+		  $.get("/user/my/following.do",{followerId:followerId});
+	  }else if($(this).hasClass('del')){
+		  $.get("/user/my/delFollow.do",{followingId:followerId});
 	  }
-  )
+	  $(this).parents('.sg-alert-box').remove();
+  })
+  
+  $('[data-toggle="tooltip"]').tooltip(); 
+
+  $('.sg-modal-box a').click(function(){
+	  $('.sg-loading-fade').fadeIn();
+  })
+  
 });

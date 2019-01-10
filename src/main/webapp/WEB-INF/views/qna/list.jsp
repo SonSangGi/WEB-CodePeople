@@ -90,7 +90,7 @@
         <col width="100px;">
         <col width="*">
         <col width="10%">
-        <col width="10%">
+        <col width="15%">
         <col width="10%">
         <col width="15%">
       </colgroup>
@@ -114,10 +114,18 @@
       	<c:otherwise>
 	      <c:forEach items="${qnas }" var="qna" varStatus="status">
 		        <tr>
-		          <td>${qna.no }</td>
+		          <td>${pagination.totalRows - qna.rn  + 1}</td>
 		          <td style="text-align:left;"><a href="detail.do?qnaNo=${qna.no}">${qna.title }</a></td>
 		          <td>${fn:length(qna.answers)}</td>
-		          <td><img class="f-i" alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }</td>
+		          
+		          <c:choose>
+			          <c:when test="${LOGIN_USER.id != qna.writer.id and LOGIN_USER != null}">
+			          	<td><button class="sg-none follow-me" data-toggle="tooltip" title="친구신청 보내기" value="${qna.writer.id }"><img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }<small>(${fn:substring(qna.writer.id,0,6) }***)</small></button></td>
+			          </c:when>
+			          <c:otherwise>
+			          	<td style="color:#337ab7"><img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }<small>${fn:substring(qna.writer.id,0,6) }***</small></td>
+			          </c:otherwise>
+		          </c:choose>
 		          <td>${qna.views }</td>
 		          <td><small><fmt:formatDate value="${qna.createDate }" pattern="yyyy-MM-dd"/></small></td>
 	        	</tr>
@@ -157,6 +165,12 @@
 		function searchQna(cp){
 			$("#cp-value").val(cp);
 			$('#qna-search-form').submit();
+		}
+		
+		var fail = '${param.fail}' || '';
+		if(fail != ''){
+			alert("잘못된 접근 방식입니다.\n안전을 위해 로그아웃 처리됩니다.");
+			location.href="/login/logout.do";
 		}
 	</script>
 	<%@include file="/WEB-INF/views/include/footer.jsp"%></body>

@@ -57,6 +57,7 @@
 		<result column="USER_NAME" property="name"/>
 		<result column="USER_CREATE_DATE" property="createDate"/>
 		<result column="USER_AUTH_STATUS" property="authStatus"/>
+		<result column="USER_ON" property="userOn"/>
 		<association column="USER_NO" property="avatar" javaType="Avatar" select="getAvatar"/>
 	</resultMap>
 	
@@ -68,7 +69,8 @@
 			USER_EMAIL,
 			USER_NAME,
 			USER_CREATE_DATE,
-			USER_AUTH_STATUS
+			USER_AUTH_STATUS,
+			USER_ON
 		from
 			USERS
 		where
@@ -83,7 +85,8 @@
 			USER_EMAIL,
 			USER_NAME,
 			USER_CREATE_DATE,
-			USER_AUTH_STATUS
+			USER_AUTH_STATUS,
+			USER_ON
 		from
 			USERS
 		where
@@ -110,12 +113,26 @@
 			USER_PASSWORD as password,
 			USER_EMAIL as email,
 			USER_NAME as name,
+			USER_ON as userOn,
 			USER_CREATE_DATE as createDate,
 			USER_AUTH_STATUS as authStatus
 		from 
 			USERS
 		where
 			USER_EMAIL = #{value}
+	</select>
+	
+	<select id="getBadgeByNo" resultType="Badge" parameterType="int">
+		select
+			BADGE_NO as no,
+			BADGE_NAME as name,
+			BADGE_ICON as icon,
+			BADGE_EXP as exp,
+			BADGE_CONDITION as condition
+		from
+			BADGE
+		where
+			BADGE_NO = #{value}
 	</select>
 	
 	<select id="haveBadge" parameterType="int" resultType="Badge">
@@ -135,7 +152,7 @@
 	</select>
 	
 	<select id="notHaveBadge" parameterType="int" resultType="Badge">
-		select 
+		select DISTINCT
 			A.BADGE_NO as no,
 			A.BADGE_NAME as name,
 			A.BADGE_ICON as icon,
@@ -150,6 +167,93 @@
 		order by A.BADGE_EXP
 	</select>
 	
+	<resultMap type="Follow" id="getFollowResultMap">
+		<result property="createDate" column="FOLLOW_CREATE_DATE"/>
+		<association property="follower" column="FOLLOWER" javaType="User" select="getUserById"/>
+		<association property="following" column="FOLLOWING" javaType="User" select="getUserById"/>
+	</resultMap>
+	
+	<select id="getMyFollowingById" parameterType="string" resultMap="getFollowResultMap">
+		select 
+			FOLLOWER,
+			FOLLOWING,
+			FOLLOW_CREATE_DATE
+		from 
+			USER_FOLLOW
+		where
+			FOLLOWING = #{value}
+	</select>
+	
+	<!-- 내 전체 친구들 -->
+	<select id="getFriends" parameterType="string" resultMap="getFollowResultMap">
+		select DISTINCT 
+			a.FOLLOWER,
+			a.FOLLOWING,
+			a.FOLLOW_CREATE_DATE
+		from
+			user_follow A,
+			user_follow B
+		where a.follower = b.following
+		and a.following = #{value}
+        and b.follower = #{value}
+	</select>
+	
+	<!-- 서로 팔로우한 친구들 -->
+	<select id="getFriendRequest" parameterType="string" resultMap="getFollowResultMap">
+		select 
+	        M.FOLLOWER,
+			M.FOLLOWING,
+			M.FOLLOW_CREATE_DATE
+		from
+			user_follow M,
+			user_follow U
+        
+        where M.FOLLOWER = #{value}
+        and U.FOLLOWING = #{value}
+        and M.FOLLOWING != u.follower
+	</select>
+	
+	<!-- 팔로워 체크 -->
+	<select id="myFollowChecking" parameterType="Follow" resultMap="getFollowResultMap">
+		select 
+			FOLLOWER,
+			FOLLOWING,
+			FOLLOW_CREATE_DATE
+		from 
+			USER_FOLLOW
+		where
+			FOLLOWING = #{following.id}
+		and FOLLOWER = #{follower.id}
+	</select>	
+	
+	<!-- 친구요청을 보낸 사람들 -->
+	<select id="getFollowMe" parameterType="string" resultMap="getFollowResultMap">
+		select 
+			FOLLOWER,
+			FOLLOWING,
+			FOLLOW_CREATE_DATE
+	    from 
+			USER_FOLLOW
+		where 
+		FOLLOWER = #{value}
+		and (FOLLOWING) 
+			not in
+			(select 
+		  	 	 A.FOLLOWING
+			from 
+				USER_FOLLOW A, USER_FOLLOW B
+			where A.FOLLOWER = #{value}
+			and A.FOLLOWER = B.FOLLOWING
+			and B.FOLLOWER = A.FOLLOWING)
+	</select>
+	
+	<delete id="deleteFollow" parameterType="Follow">
+		delete from USER_FOLLOW
+		where FOLLOWER = #{follower.id}
+		and FOLLOWING = #{following.id}
+	</delete>
+	
+	
 	<insert id="insertUserBadge" parameterType="map">
 		insert into USER_BADGE(
 				USER_NO,
@@ -158,14 +262,21 @@
 		values(#{userNo},#{badgeNo},sysdate)
 	</insert>
 	
-	<insert id="insertFollw"></insert>
+	<insert id="insertFollow" parameterType="Follow">
+		insert into USER_FOLLOW
+			(FOLLOWER,
+			FOLLOWING,
+			FOLLOW_CREATE_DATE)
+		values(#{follower.id},#{following.id},sysdate)
+	</insert>
 	
 	<update id="updateUser" parameterType="User">
 		update
 			USERS
 		set 
-		    USER_PASSWORD = #{password}
-		    USER_NAME = #{name}
+		    USER_PASSWORD = #{password},
+		    USER_NAME = #{name},
+		    USER_ON = #{userOn},
 		    USER_AUTH_STATUS = #{authStatus}
 		where 
 			USER_NO = #{no}

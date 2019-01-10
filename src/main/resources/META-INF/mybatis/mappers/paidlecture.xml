@@ -5,27 +5,57 @@
 
 <mapper namespace="com.jhta.cope.dao.PaidLectureDao">
 
-	<resultMap type="PaidLectureDetail" id="PaidLectureDetailByLectureNoResultMap">
-		<id property="paidLecture.no" column="PAID_LECTURE_NO"/>
-		<result property="filePath" column="filePath"/>
-		<result property="sectionNo" column="section_no"/>
-		<result property="sectionName" column="section_name"/>
-		<result property="lessonNo" column="lesson_no"/>
-		<result property="lessonName" column="lesson_name"/>
-		<result property="lessonLength" column="lesson_length"/>
-		<association property="paidLecture" column="PAID_LECTURE_NO" javaType="PaidLecture" select="getPaidLectureByNo"/>
+	<resultMap type="PaidLecture" id="paidLectureResultMap">
+		<id property="no" column="PAID_LECTURE_NO"/>
+		<result property="instructor.no" column="INSTRUCTOR_NO"/>
+		<result property="lang" column="LECTURE_LANG"/>
+		<result property="title" column="LECTURE_TITLE"/>
+		<result property="level" column="LECTURE_LEVEL"/>
+		<result property="specialized" column="LECTURE_SPECIALIZED"/>
+		<result property="summary" column="LECTURE_SUMMARY"/>
+		<result property="description" column="LECTURE_DESCRIPTION"/>
+		<result property="price" column="LECTURE_PRICE"/>
+		<result property="thumbnail" column="LECTURE_THUMNAIL_PATH"/>
+		<result property="createDate" column="LECTURE_CREATE_DATE"/>
+		<result property="like" column="LECTURE_LIKES"/>
+		<result property="viewCount" column="LECTURE_VIEW_COUNT"/>
+		<result property="exposureStatus" column="EXPOSURE_STATUS"/>
+		<result property="approveStatus" column="APPROVE_STATUS"/>
 	</resultMap>
 	
-	<select id="getPaidLectureDetailByLectureNo" resultMap="PaidLectureDetailByLectureNoResultMap" parameterType="int">
+	<select id="getPaidLectureByLectureNo" parameterType="int" resultMap="paidLectureResultMap">
 		select
-			DETAIL_NO,
 			PAID_LECTURE_NO,
-			FILEPATH,
-			SECTION_NO,
-			SECTION_NAME,
-			LESSON_NO,
-			LESSON_NAME,
-			LESSON_LENGTH
+			INSTRUCTOR_NO,
+			LECTURE_LANG,
+			LECTURE_TITLE,
+			LECTURE_LEVEL,
+			LECTURE_SPECIALIZED,
+			LECTURE_SUMMARY,
+			LECTURE_DESCRIPTION,
+			LECTURE_PRICE,
+			LECTURE_THUMNAIL_PATH,
+			LECTURE_CREATE_DATE,
+			LECTURE_LIKES,
+			LECTURE_VIEW_COUNT,
+			EXPOSURE_STATUS,
+			APPROVE_STATUS
+		from 
+			PAID_LECTURE
+		where
+			PAID_LECTURE_NO = #{value}
+	</select>
+
+	<select id="getPaidLectureDetailByLectureNo" parameterType="int" resultType="PaidLectureDetail">
+		select
+			DETAIL_NO as no,
+			PAID_LECTURE_NO as "paidLecture.no",
+			FILEPATH as "filePath",
+			SECTION_NO as "sectionNo",
+			SECTION_NAME as "sectionName",
+			LESSON_NO as "lessonNo",
+			LESSON_NAME as "lessonName",
+			LESSON_LENGTH as "lessonLength"
 		from
 			PAID_LECTURE_DETAIL
 		where

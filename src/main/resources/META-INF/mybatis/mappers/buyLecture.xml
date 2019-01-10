@@ -16,12 +16,31 @@
 			CREATE_DATE)
 		values (#{no}, #{paidLecture.no}, #{user.no}, sysdate)
 	</insert>
+
+	<resultMap type="BuyLecture" id="getBuyLectureResultMap">
+		<id property="no" column="BUY_LECTURE_NO"/>
+		<result property="createDate" column="CREATE_DATE"/>
+		<association property="paidLecture" column="PAID_LECTURE_NO" javaType="PaidLecture" select="com.jhta.cope.dao.PaidLectureDao.getPaidLectureByLectureNo"/>
+		<association property="user" column="USER_NO" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"/>
+	</resultMap>
+	
+	<select id="getBuyLectureByUserNoResultMap" parameterType="int" resultMap="getBuyLectureResultMap">
+		select
+			BUY_LECTURE_NO,
+			PAID_LECTURE_NO,
+			USER_NO as,
+			CREATE_DATE
+		from
+			BUY_LECTURE
+		where
+			USER_NO = #{value}
+	</select>
 	
 	<select id="getBuyLectureByUserNo" parameterType="int" resultType="BuyLecture">
 		select
 			BUY_LECTURE_NO as no,
 			PAID_LECTURE_NO as "paidLecture.no",
-			USER_NO "user.no",
+			USER_NO as "user.no",
 			CREATE_DATE as createDate
 		from
 			BUY_LECTURE
@@ -33,7 +52,7 @@
 		select
 			BUY_LECTURE_NO as no,
 			PAID_LECTURE_NO as "paidLecture.no",
-			USER_NO "user.no",
+			USER_NO as "user.no",
 			CREATE_DATE as createDate
 		from
 			BUY_LECTURE

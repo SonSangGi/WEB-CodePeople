@@ -25,7 +25,27 @@
    
    
    <!-- 알림창 -->
-	<div class="sg-alert"></div>
+	<div class="sg-alert">
+		<c:if test="${LOGIN_USER != null }">
+			<c:if test="${!empty followMe}">
+				<c:forEach items="${followMe }" var="follow">
+					<div class="sg-alert-box">
+						<p>${follow.following.name }님에게 친구요청이 왔습니다.</p>
+						<p>
+							<button class='sg-btn sg-btn-primary sg-btn-primary sg-btn-xs follow-btn add' value='${follow.following.id }'>수락</button>
+							<button class='sg-btn sg-btn-primary sg-btn-3rd sg-btn-xs sg-nb follow-btn del' value="${follow.following.id }">거절</button>
+						</p>
+					</div>
+				</c:forEach>
+			</c:if>
+			<c:if test="${chatCount > 0}">
+				<div class="sg-alert-box">
+					<p>읽지 않은 메세지가 ${chatCount }개 있습니다.</p>
+					<p class="text-center"><a href="/user/my/chat.do">확인하기</a></p>
+				</div>
+			</c:if>
+		</c:if>
+	</div>
 
 <c:if test="${LOGIN_USER != null }">
    <chat>
@@ -45,49 +65,91 @@
    </div>
   </chat>
   
-  <div style="width:100px;height:100px;border:1px solid black;position:absolute;display:none;" id="fllowAlert"></div>
-   
-   
 <script type="text/javascript">
+
+var onAudio = new Audio('/resources/sound/onAudio.mp3');
+
+function addAlert(contents,ms){
+	var temp = new Date().getMilliseconds();
+	var text = "<div class='sg-alert-box "+temp+"'>"+contents+"</div>";
+	$(".sg-alert").prepend(text);
+	if(ms){
+		setTimeout(function(){
+			$('.'+temp).animate({'opacity':'0'},500,function(){$(this).remove()})
+		},ms);
+	}
+   }
+   
 $(function(){
 	var domain = window.location.pathname.split('/');
 	domain = domain[domain.length - 1];
+	
 	var ws = new WebSocket("ws://127.0.0.1/chat.do");
 	ws.onmessage = function(event) {
-		console.log(event);
 		var items = event.data.split("/");
+		console.log(items);
 		var protocol = items[0];
 		var target = items[1];
+		// 관리자 문의 알림
 		if("ANSWER"==protocol){
-		//관리자
+			//관리자
 			if(target == "ADMIN"){
 			var user = JSON.parse(items[2]);
 			var text = '<div class=""><img src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/300.png" class="chat-icon">'+user.name+"("+user.id+')<div>'
 			text += '<div class="chat-box t-d"><div class="chat-you"><span>' + items[3] + '</span></div></div>';
 			$(".chat-body").append(text);
-		//유저
-			}else if(target == "USER"){
+			}
+			//유저
+			else if(target == "USER"){
+					var chatAudio = new Audio('/resources/sound/chatAudio.mp3');
 					var user = JSON.parse(items[2]);
 					var msg = items[3];
-				if(domain != 'chat.do'){
-					var temp = new Date().getMilliseconds();
-					var text = "<div class='sg-alert-box "+temp+"'><p>"+user.name+"님에게 메세지가 왔습니다.</p>";
+					var text = "<p>"+user.name+"님에게 메세지가 왔습니다.</p>";
 					text += "<p>"+msg+"</p>"
-					text += "<p><a href='/user/my/chat.do'>답장하러가기</a></p></div>";
-					$(".sg-alert").append(text);
-					setTimeout(function(){
-						$('.'+temp).animate({'opacity':'0'},500,function(){$(this).remove()})
-					},3000);
-				}else {
-					var text = '<div class=""><img src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/300.png" class="chat-icon">'+user.name+'<div>';
+					text += "<p><a href='/user/my/chat.do'>답장하러가기</a></p>";
+					chatAudio.play();
+					addAlert(text,3000);
+				    $(".chat-body").scrollTop(100000);
+				// 채팅일 경우 채팅창에 채팅 추가
+				if(domain == 'chat.do') {
+					var text = '<div class=""><img src="/resources/img/user/icon/'+user.avatar.image+'" class="chat-icon">'+user.name+'<div>';
 					text += '<div class="chat-box t-d"><div class="chat-you"><span>' + msg + '</span></div></div>';
 					$(".my-chat-body").append(text);
 					$(".my-chat-body").scrollTop(1000000);
 				}
 			}
-	    $(".chat-body").scrollTop(100000)
 		}
 		// 친구추가
+		else if("FOLLOWING" == protocol){
+			var sendUser =  JSON.parse(items[1]);
+			var text = "<p>"+sendUser.name+"님에게 친구요청이 왔습니다.</p>";
+			text += "<p><button class='sg-btn sg-btn-primary sg-btn-primary sg-btn-xs follow-btn add' value='"+sendUser.id+"'>수락</button><button class='sg-btn sg-btn-primary sg-btn-3rd sg-btn-xs sg-nb follow-btn del' value='"+sendUser.id+"'>거절</button></p>"
+			addAlert(text);
+			onAudio.play();
+		}
+		// 유저 접속 시 
+		else if ("ONUSER" == protocol){
+			var target = items[1];
+				var onUser = JSON.parse(items[2]);
+			if(target == "CHAT"){
+				if(domain == "chat.do"){
+					$("#on-user-"+onUser.id).addClass("label-success").removeClass("label-default").text("ON");
+				}	
+			}
+			else if(target == "ALERT"){
+				var text = '<p><img src="/resources/img/user/icon/';
+				text += (onUser.avatar.image != 'Default') ? onUser.avatar.image : 'icon.png';
+				text += '"class="chat-icon"/>'+onUser.name+"님이 접속했습니다.</p>";
+				addAlert(text,3000);
+				onAudio.play();
+			}
+		}
+		// 유저 로그아웃 시 
+		else if("OFFUSER" == protocol){
+				var offUser = JSON.parse(items[1]);
+				console.log(offUser)
+				$("#on-user-"+offUser.id).addClass("label-default").removeClass("label-success").text("OFF");
+		}
 	}
 		
 	///관리자용 채팅~!@!~@~!
@@ -130,14 +192,16 @@ $(function(){
 	  
 	  
        ///#@!#@! 유저용 채팅 #@!#@!#@!
-	
+		
        // 유저 클릭시 채팅 불러오기
        $(".user-info-body").on("click",".user-friends",function() {
           $(".user-friends").removeClass("active");
           $(this).addClass("active");
           $('.chat-friends-name').text($(this).find(".friends-name").text());
+          $('.chat-header-icon').attr('src',$(this).find('.user-chat-img').attr('src'));
           $(".my-chat-body").text("");
-	    	var userId = $(this).find("#friends-id").val();
+          $(".my-chat-contents").show();
+	    	var userId = $(this).find(".friends-id").val();
           $.ajax({
         	  type:"get",
         	  url:"chat/getAll.do",
@@ -149,12 +213,18 @@ $(function(){
         			  if(item.sendUser.id == '${LOGIN_USER.id}'){
         			  	text += '<div class="my-chat-box t-r"><div class="my-chat-my"><span>' + item.contents + '</span></div></div>';
         			  }else{
-        				  text += '<div class=""><img src="/resources/img/user/icon/'+item.sendUser.avatar.image+'" class="chat-icon">'+item.sendUser.name+'<div>';
+        				  text += '<div class=""><img src="/resources/img/user/icon/';
+        				  if(item.sendUser.avatar.image!='Default'){
+        					  text+= item.sendUser.avatar.image;
+        				  }else{
+        					  text+= 'icon.png';
+        				  }
+        				  text+='" class="chat-icon">'+item.sendUser.name+'<div>';
         				  text += firstDiv + item.contents + lastDiv;
         			  }
         			  
         	           $(".my-chat-body").append(text);
-        	           $(".my-chat-body").scrollTop(1000000)
+        	           $(".my-chat-body").scrollTop(1000000);
         		  })
         	  },
         	  beforeSend:function(){
@@ -181,7 +251,7 @@ $(function(){
          $("#my-chat-msg").focus(function() {
            $(document).keydown(function(event) {
              if (event.keyCode == 13 && $("#my-chat-msg").val()) {
-     	    	var userId = $(".user-friends.active").find("#friends-id").val();
+     	    	var userId = $(".user-friends.active").find(".friends-id").val();
      	    	console.log(userId);
                chatSubmit(userId);
              }
@@ -190,9 +260,28 @@ $(function(){
 
          // 클릭시 표시
          $(".my-chat-send").click(function() {
- 	    	var userId = $(".user-friends.active").find("#friends-id").val();
+ 	    	var userId = $(".user-friends.active").find(".friends-id").val();
            chatSubmit(userId);
          });
+         
+         $(".follow-me").click(function(){
+        	 var followerId =  $(this).val();
+        	 var followerName = $(this).text();
+        	 $.ajax({
+        		 url:"/user/my/following.do",
+        		 type:"get",
+        		 dataType:"Json",
+        		 data:{followerId:followerId},
+        		 success:function(data){
+        			 if(data.createDate == null){
+        				 addAlert("<p>"+followerName+"님에게 친구 신청을 보냈습니다.</p>",2000);
+        				 ws.send("FOLLOW:"+followerId+":${LOGIN_USER.name}");
+        			 }else{
+        				 addAlert("<p style='font-weight:bold;font-size:17px;'>"+followerName+"님과 이미 친구거나<br>친구 요청을 보낸상태입니다.</p>",2000);
+        			 }
+        		 }
+        	 })
+         })
 })
 </script>
 </c:if>

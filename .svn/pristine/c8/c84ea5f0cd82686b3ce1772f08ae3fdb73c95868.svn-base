@@ -1,0 +1,42 @@
+$(function () {
+
+	$("#search-box").on("click", function () {
+		$(this).css("border", "3px solid #ff7373");
+	});
+
+
+	$(".each-question-top-wrapper").on("click", function () {
+		const flag = $(this).siblings(".each-question-contentsWrapper").css("display");
+
+		console.log(flag);
+
+		if (flag === "none") {
+			$(this).siblings('.each-question-contentsWrapper').css('display', 'block');
+			$(this).parent().css("background-color", "#ffeaec")
+
+		} else {
+			$(this).siblings('.each-question-contentsWrapper').css('display', 'none');
+		}
+	});
+
+
+	$(".each-question-btn-modify").on("click", function () {
+
+		let replyForm = $(this).parent().parent().siblings('.each-question-replyform');
+		
+		replyForm.css('display', 'block');
+		
+		let preContents = $(this).parent().parent().siblings('#each-question-replyContents').text();
+
+		console.log(replyForm.children('.replyform').children('textarea').text(preContents));
+		
+	});
+	
+	$("#each-question-reply-modify-cancel").on("click", function () {
+
+		let replyForm = $(this).parent().parent();
+		
+		replyForm.css('display', 'none');
+	});
+
+})

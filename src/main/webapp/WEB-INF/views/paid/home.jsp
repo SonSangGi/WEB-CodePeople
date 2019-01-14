@@ -114,7 +114,7 @@
 							</div>
 							<div class="overlay-button">
 								<c:choose>
-									<c:when test="${LOGIN_USER eq null }">
+									<c:when test="${empty LOGIN_USER  }">
 									<a href="/user/signup.do">
 										<button class="sg-btn-primary" id="home-nonLogin-btn">카트에 담기</button>
 									</a>

@@ -61,4 +61,20 @@ public class Pagination {
 		return getEndPage() + 1;
 	}
 
+	public int getTotalRows() {
+		return totalRows;
+	}
+
+	@Override
+	public String toString() {
+		return "Pagination [cp=" + cp + ", rows=" + rows + ", pages=" + pages + ", totalRows=" + totalRows
+				+ ", getCp()=" + getCp() + ", getPages()=" + getPages() + ", getTotalPages()=" + getTotalPages()
+				+ ", getTotalBlocks()=" + getTotalBlocks() + ", getCurrentBlock()=" + getCurrentBlock()
+				+ ", getBeginPage()=" + getBeginPage() + ", getEndPage()=" + getEndPage() + ", getPrevBlock()="
+				+ getPrevBlock() + ", getNextBlock()=" + getNextBlock() + ", getTotalRows()=" + getTotalRows()
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
+	}
+	
+	
 }

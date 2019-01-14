@@ -14,7 +14,9 @@ import com.jhta.cope.dao.UserDao;
 import com.jhta.cope.handler.MailHandler;
 import com.jhta.cope.vo.Avatar;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.Criteria;
 import com.jhta.cope.vo.Follow;
+import com.jhta.cope.vo.LectureHistory;
 import com.jhta.cope.vo.TempKey;
 import com.jhta.cope.vo.User;
 
@@ -159,6 +161,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteFollow(Follow follow) {
 		userDao.deleteFollow(follow);
+	}
+
+	@Override
+	public List<LectureHistory> getLectureHistoryByCriteria(Criteria criteria) {
+		return userDao.getLectureHistoryByCriteria(criteria);
 	}
 
 	

@@ -127,7 +127,7 @@ h4 {
 
 .yb-contents-sidebar p:last-child {
 	text-align: center;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 .yb-contents-sidebar-contens p {
 	text-align: left;
@@ -143,98 +143,6 @@ h4 {
 			</div>
 			<div class="yb_course_contents">
 				${freeLecture.lectureContent }
-			</div>
-			<div class="yb_course_reviews" id="">
-				<h4>강좌 평가</h4>
-				<hr>
-				<div class="yb_review_breakup row">
-					<div class="col-md-6">
-						<div class="yb_reiview_score">
-							<p>4.8</p>
-							<div class="">
-								<i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-									class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-									class="fas fa-star-half-alt"></i>
-							</div>
-							<p>13개의 수강평</p>
-						</div>
-					</div>
-
-				</div>
-				<div class="yb_show_course_reviews">
-					<ol class="yb_reviewlist_commentlist">
-
-						<li class="">
-							<div id="" class="yb_comment-body">
-								<div class="yb_comment-body-inner">
-									<div class="yb_comment-avatar">
-										<img
-											src="/resources/img/user/icon/icon.png">
-									</div>
-									<div class="yb_comment-body">
-										<div>
-											<a>2018년 12월 26일</a>
-										</div>
-										<p>강의 잘 들었습니다</p>
-										<div class="yb_coment_score">
-											<i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-												class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-												class="fas fa-star-half-alt"></i>
-										</div>
-										<p>감사합니다</p>
-										<hr>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li class="">
-							<div id="" class="yb_comment-body">
-								<div class="yb_comment-body-inner">
-									<div class="yb_comment-avatar">
-										<img
-											src="/resources/img/user/icon/icon.png">
-									</div>
-									<div class="yb_comment-body">
-										<div>
-											<a>2018년 12월 26일</a>
-										</div>
-										<p>강의 잘 들었습니다</p>
-										<div class="yb_coment_score">
-											<i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-												class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-												class="fas fa-star-half-alt"></i>
-										</div>
-										<p>감사합니다</p>
-										<hr>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li class="">
-							<div id="" class="yb_comment-body">
-								<div class="yb_comment-body-inner">
-									<div class="yb_comment-avatar">
-										<img
-											src="/resources/img/user/icon/icon.png">
-									</div>
-									<div class="yb_comment-body">
-										<div>
-											<a>2018년 12월 26일</a>
-										</div>
-										<p>강의 잘 들었습니다</p>
-										<div class="yb_coment_score">
-											<i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-												class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-												class="fas fa-star-half-alt"></i>
-										</div>
-										<p>감사합니다</p>
-										<hr>
-									</div>
-								</div>
-							</div>
-						</li>
-					</ol>
-				</div>
 			</div>
 		</div>
 		<div class="yb-contents-sidebar col-md-3">
@@ -287,7 +195,7 @@ h4 {
 				<hr>
 			</div>
 			<p>
-				<a class="button" href="/free/section.do?freeLectureNo=${freeLecture.no }">배우러 가기</a>
+				<a class="button sg-btn-primary sg-btn-sm" href="/free/section.do?freeLectureNo=${freeLecture.no }&count=1">배우러 가기</a>
 			</p>
 		</div>
 	</div>

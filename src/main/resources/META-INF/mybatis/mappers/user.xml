@@ -148,7 +148,7 @@
 			B.USER_NO = #{value}
 		and 
 			A.BADGE_NO = B.BADGE_NO
-		order by A.BADGE_EXP
+		order by A.BADGE_EXP desc
 	</select>
 	
 	<select id="notHaveBadge" parameterType="int" resultType="Badge">
@@ -189,13 +189,17 @@
 		select DISTINCT 
 			a.FOLLOWER,
 			a.FOLLOWING,
-			a.FOLLOW_CREATE_DATE
+			a.FOLLOW_CREATE_DATE,
+            c.USER_ON
 		from
 			user_follow A,
-			user_follow B
+			user_follow B,
+            users C
 		where a.follower = b.following
+        and A.follower = c.user_id
 		and a.following = #{value}
         and b.follower = #{value}
+        order by c.user_on desc
 	</select>
 	
 	<!-- 서로 팔로우한 친구들 -->
@@ -294,4 +298,59 @@
 			USER_NO = #{userNo}
 	</update>
 	
+	
+		<!-- byLecture만 담김 -->
+	<resultMap type="LectureHistory" id="historyBuyLectureResultMap">
+		<id property="no" column="HISTORY_NO"/>
+		<result property="pass" column="PASS"/>
+		<result property="historyLength" column="HISTORY_LENGTH"/>
+		<result property="updateDate" column="UPDATE_DATE"/>
+		<association property="buyLecture" column="BUY_LECTURE_NO" javaType="BuyLecture" select="com.jhta.cope.dao.BuyLectureDao.getBuyLectureByNoResultMap"></association>
+	</resultMap>
+	
+	<!-- 결제 및 강의 정보 -->
+	<select id="getLectureHistoryByCriteria" parameterType="Criteria" resultMap="historyBuyLectureResultMap">
+		select *
+		from(select 
+			<choose>
+				<when test="sort == 'end'">
+					ROW_NUMBER() over (order by B.update_date desc nulls last) rn,
+				</when>
+				<when test="sort == 'lean'">
+					ROW_NUMBER() over (order by B.update_date desc nulls last) rn,
+				</when>
+				<otherwise>
+					ROW_NUMBER() over (order by B.update_date desc nulls last) rn,
+				</otherwise>
+			</choose>
+			A.BUY_LECTURE_NO,
+			A.PAID_LECTURE_NO,
+			A.USER_NO,
+			A.CREATE_DATE,
+			B.update_date
+			from BUY_LECTURE A,LECTURE_HISTORY B, PAID_LECTURE C
+			where 
+			    a.buy_lecture_no = b.buy_lecture_no(+)
+			and
+			    A.PAID_LECTURE_NO = C.PAID_LECTURE_NO
+			and
+			    a.user_no = #{userNo}
+			<if test="keyword != null">
+			and
+			    REPLACE(LOWER(C.LECTURE_TITLE), ' ','') like '%'||#{keyword}||'%'
+			</if>
+			<if test="sort == 'lean'">
+			and
+			    B.PASS = 'N'
+			</if>
+			<if test="keyword == 'end'">
+			and
+			    B.PASS = 'Y'
+			</if>
+			
+			)
+			
+		where rn &gt;= #{beginIndex}
+		and rn &lt;= #{endIndex}
+	</select>
 </mapper>

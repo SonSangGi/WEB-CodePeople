@@ -5,7 +5,9 @@ import java.util.Map;
 
 import com.jhta.cope.vo.Avatar;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.Criteria;
 import com.jhta.cope.vo.Follow;
+import com.jhta.cope.vo.LectureHistory;
 import com.jhta.cope.vo.User;
 
 public interface UserDao {
@@ -29,4 +31,5 @@ public interface UserDao {
 	public void updateUser(User user);
 	public void updateAvatar(Avatar avatar);
 	public void deleteFollow(Follow follow);
+	public List<LectureHistory> getLectureHistoryByCriteria(Criteria criteria);
 }

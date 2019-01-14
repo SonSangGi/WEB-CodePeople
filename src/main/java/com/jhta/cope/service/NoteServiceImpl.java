@@ -36,4 +36,21 @@ public class NoteServiceImpl implements NoteService {
 		noteDao.insertNote(note);
 	}
 
+
+	@Override
+	public void updateNote(Note note) {
+		noteDao.updateNote(note);
+	}
+
+
+	@Override
+	public Note getNoteByNoteNo(int noteNo) {
+		Note note = noteDao.getNoteByNoteNo(noteNo);
+		int buyLectureNo = note.getBuyLecture().getNo();
+		BuyLecture buyLecture = buyLectureService.getBuyLectureByBuyLectureNo(buyLectureNo);
+		
+		note.setBuyLecture(buyLecture);
+		return note;
+	}
+
 }

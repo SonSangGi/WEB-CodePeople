@@ -20,7 +20,7 @@
 	text-align: center;
 }
 
-::placeholder {
+#search-box::placeholder {
   text-align: center;
   color: white;
   opacity: 1; /* Firefox */
@@ -83,7 +83,6 @@
 .each-question-replyform {
 	margin-top: 40px;
 	margin-bottom: 30px;
-	display: none;
 }
 
 #each-question-reply-submit {
@@ -159,5 +158,9 @@
 }
 
 .each-question-contentsWrapper {
+	display: none;
+}
+
+.each-question-replyform-modify {
 	display: none;
 }

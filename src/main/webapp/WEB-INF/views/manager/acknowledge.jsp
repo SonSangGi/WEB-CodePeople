@@ -37,11 +37,13 @@
                             <div class="content table-responsive table-full-width">
                                 <table class="table table-hover">
                                     <thead>
-                                        <th>번호</th>
-                                    	<th>이름</th>
-                                    	<th>임시 강의 번호</th>
-                                    	<th>요청 날짜</th>
-                                    	<th>승인확인</th>
+                                        <tr>
+	                                        <th>요청 번호</th>
+	                                    	<th>이름</th>
+	                                    	<th>임시 강의 번호</th>
+	                                    	<th>요청 날짜</th>
+	                                    	<th>승인확인</th>
+                                    	</tr>
                                     </thead>
                                     <tbody>
                                         <tr>
@@ -51,46 +53,48 @@
                                         	<td>Niger</td>
                                         	<td>Oud-Turnhout</td>
                                         </tr>
-                                        <tr>
-                                        	<td>2</td>
-                                        	<td>Minerva Hooper</td>
-                                        	<td>2</td>
-                                        	<td>Curaçao</td>
-                                        	<td>Sinaai-Waas</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>3</td>
-                                        	<td>Sage Rodriguez</td>
-                                        	<td>3</td>
-                                        	<td>Netherlands</td>
-                                        	<td>Baileux</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>4</td>
-                                        	<td>Philip Chaney</td>
-                                        	<td>4</td>
-                                        	<td>Korea, South</td>
-                                        	<td>Overland Park</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>5</td>
-                                        	<td>Doris Greene</td>
-                                        	<td>5</td>
-                                        	<td>Malawi</td>
-                                        	<td>Feldkirchen in Kärnten</td>
-                                        </tr>
-                                        <tr>
-                                        	<td>6</td>
-                                        	<td>Mason Porter</td>
-                                        	<td>6</td>
-                                        	<td>Chile</td>
-                                        	<td>Gloucester</td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
+                    <!-- 무료강의 -->
+                    <div class="col-md-12">
+                        <div class="card card">
+                            <div class="header">
+                                <h4 class="title">등록된 무료 강의</h4>
+                                <p class="category">Here is a subtitle for this table</p>
+                            </div>
+                            <div style="text-align: center;">
+                            	<button class="btn btn-primary" type="button" onclick="window.open('/free/form.do')">무료강의 등록</button>
+                            </div>
+                            <div class="content table-responsive table-full-width">
+                                <table class="table table-hover">
+                                    <thead>
+                                    	<tr>
+	                                        <th>강의 번호</th>
+	                                    	<th>제목</th>
+	                                    	<th>재생시간</th>
+	                                    	<th>난이도</th>
+	                                    	<th>기능</th>
+                                    	</tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="freeLecture" items="${freeLectures }">
+                                        <tr>
+                                        	<td>${freeLecture.no }</td>
+                                        	<td>${freeLecture.lectureTitle }</td>
+                                        	<td>${freeLecture.lectureTime }</td>
+                                        	<td>${freeLecture.lectureLevel }</td>
+                                        	<td><button type="button" class="btn btn-danger btn-xs" onclick="location.href='/free/delete.do?freeLectureNo=${freeLecture.no }'">삭제</button></td>
+                                        </tr>
+									</c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 무료강의 -->
                 </div>
             </div>
         </div>

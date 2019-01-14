@@ -34,4 +34,5 @@
 			UPDATE_DATE)
 		values (#{no}, #{paidLectureDetail.no}, #{buyLecture.no}, #{pass}, #{historyLength}, sysdate)
 	</insert>
+	
 </mapper>

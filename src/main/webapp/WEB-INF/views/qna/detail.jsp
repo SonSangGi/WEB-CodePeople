@@ -30,14 +30,32 @@
         <hr>
         <div class="">
           <img class="f-i" alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 50px;height: 50px;border-radius: 100px;">
-          <span style="font-weight:bold;font-size:17px;margin-left:10px;">${qna.writer.name }</span> <small><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${qna.createDate }"/></small><i class="far fa-comment-dots" style="float:right;font-size:20px;"></i>
+				<c:choose>
+					<c:when test="${LOGIN_USER.id != qna.writer.id }">
+						<button class="sg-none follow-me" data-toggle="tooltip" title="" value="${qna.writer.id }" data-original-title="친구신청 보내기">
+							<span style="font-weight:bold;font-size:17px;margin-left:10px;">${qna.writer.name }</span>
+						</button>
+							<small><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${qna.createDate }"/></small>
+					</c:when>
+					<c:otherwise>
+				<span style="font-weight:bold;font-size:17px;margin-left:10px;">${qna.writer.name }</span><span style="color: #337ab7; font-size: 12px;">(나)</span> <small><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${qna.createDate }"/></small>
+					</c:otherwise>
+				</c:choose>
+				<button type="button" class="sg-btn sg-nb sg-btn-3rd sg-btn-sm history-back" style="float:right;">목록으로</button>
+
+          <c:if test="${LOGIN_USER != null and LOGIN_USER.no == qna.writer.no }">
+	          <div style="float:right;">
+	          	<button type="button" class="btn-modify-qna sg-btn sg-btn-3rd sg-nb sg-btn-xs" value="${qna.no}"><i class="fas fa-pencil-alt" style="color:#229085;"></i>수정</button>
+	          	<button type="button" class="btn-del-qna sg-btn sg-btn-primary sg-nb sg-btn-xs" value="${qna.no }"><i class="fas fa-times" style="color:red;"></i>삭제</button>
+	          </div>
+          </c:if>
         </div>
       </div>
     </div>
     
     <div class="" style="background-color:#f5f5f5;padding:20px 0px 50px 20%;">
 	<c:choose>
-		<c:when test="${empty qna.answers}">
+		<c:when test="${empty qna.answers and LOGIN_USER != null}">
 			<div style="max-width: 70%;text-align: center;" class="answer-box">
 				<h2>아직 답변이 없습니다! 답변을 등록해보세요!</h2>
 				<br>
@@ -49,7 +67,19 @@
 		      <div class="" style="max-width:70%;background-color:white;padding:30px;border-radius:10px;margin-top:15px;margin-bottom:15px;">
 		        <h3>
 				<img class="f-i" alt="${answer.writer.name }님의 프로필사진" src="/resources/img/user/icon/${answer.writer.avatar.image eq 'Default' ? 'icon.png' : answer.writer.avatar.image}" style="width: 50px;height: 50px;border-radius: 100px;">
-		        ${answer.writer.name } 님의 답변입니다.</h3>
+					<c:choose>
+						<c:when test="${LOGIN_USER.id != answer.writer.id }">
+							<button class="sg-none follow-me" data-toggle="tooltip"
+								title="" value="${answer.writer.id}"
+								data-original-title="친구신청 보내기">${answer.writer.name }
+							</button>
+						</c:when>
+						<c:otherwise>
+							${answer.writer.name } <span
+								style="color: #337ab7; font-size: 12px;">(나)</span>
+						</c:otherwise>
+					</c:choose>
+				님의 답변입니다.</h3>
 		        <hr>
 		
 		        <div class="answer-contents">
@@ -81,7 +111,17 @@
 					<div id="comment-box-${answer.no }">
 						<c:forEach items="${answer.comments }" var="comment">
 				            <div class="comment-contents" >
-				              <a href="#">${comment.writer.name }</a>
+				            <img class="f-i" alt="${answer.writer.name }님의 프로필사진" src="/resources/img/user/icon/${comment.writer.avatar.image eq 'Default' ? 'icon.png' : comment.writer.avatar.image}" style="width: 23px;height: 23px;border-radius: 100px;">
+				              <c:choose>
+				              	<c:when test="${LOGIN_USER.id != comment.writer.id }">
+				              	<button class="sg-none follow-me" data-toggle="tooltip" title="" value="${comment.writer.id }" data-original-title="친구신청 보내기">
+					              	 ${comment.writer.name }
+				              	 </button>
+				              	</c:when>
+				              	<c:otherwise>
+				           	   		<span style="color:gray">${comment.writer.name } <span style="color:#337ab7;font-size:12px;">(나)</span></span>
+				              	</c:otherwise>
+				              </c:choose>
 				              <p>${comment.contents }</p>
 				              <small><fmt:formatDate value="${comment.createDate }" pattern="yyyy-MM-dd HH:mm:ss"/></small>
 				            </div>
@@ -91,11 +131,13 @@
 		        </div>
 		      </div>
 			</c:forEach>
-			<div style="max-width: 70%;text-align: center;" class="answer-box">
-				<h2>답변이 부족하신가요? 직접 답변해보세요!</h2>
-				<br>
-				<button type="button" class="sg-btn sg-btn-3rd sg-nb btn-answer">답변하기</button>
-			</div>
+			<c:if test="${LOGIN_USER != null }">
+				<div style="max-width: 70%;text-align: center;" class="answer-box">
+					<h2>답변이 부족하신가요? 직접 답변해보세요!</h2>
+					<br>
+					<button type="button" class="sg-btn sg-btn-3rd sg-nb btn-answer">답변하기</button>
+				</div>
+			</c:if>
 		</c:otherwise>
 	</c:choose>
 	
@@ -104,7 +146,7 @@
 				<input type="hidden" value="${qna.no }" name="qnaNo">
 				<textarea id="summernote" name="contents"></textarea>
 				<div style="float:right">
-					<button class="sg-btn sg-btn-primary sg-nb btn-answer-close">취소</button>
+					<button type="button" class="sg-btn sg-btn-primary sg-nb btn-answer-close">취소</button>
 					<button class="sg-btn sg-btn-primary">등록</button>
 				</div>
 			</form>
@@ -192,7 +234,22 @@
 				}
 			})
 		});
+		
+
+	//QNA 삭제
+		$('.btn-del-qna').click(function() {
+			var qnaNo = $(this).val();
+			if (confirm("정말 삭제하시겠습니까?")) {
+				location.href="/qna/delQna.do?qnaNo="+qnaNo;
+			}
+		})
+		//QNA 수정
+		$('.btn-modify-qna').click(function(){
+			var qnaNo = $(this).val();
+			if(confirm("수정 페이지로 이동하시겠습니까?")){
+				location.href="/qna/modifyQna.do?qnaNo="+qnaNo;
+			}
+		})
 	})
-	
 </script>
 </html>

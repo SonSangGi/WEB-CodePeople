@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp" %>
-<link rel="stylesheet" href='<c:url value="/resources/css/user/my.css?ver=7"/>'>
+<link rel="stylesheet" href='/resources/css/user/my.css?ver=<%=new Date()%>'>
 </head>
 <body>
 <%@include file="/WEB-INF/views/include/header.jsp"%>
@@ -21,7 +21,7 @@
             <c:choose>
             	<c:when test="${LOGIN_USER.avatar.exp < 150 }">
             	씨앗 단계입니다.<br>
-            	
+            	<small class="">다음 단계까지 <span class="sg-count">${150 - LOGIN_USER.avatar.exp }</span> exp 남았습니다.</small>
             	</c:when>
             	<c:when test="${LOGIN_USER.avatar.exp >= 150 and LOGIN_USER.avatar.exp < 300 }">
             	떡잎 단계입니다.<br>
@@ -65,7 +65,7 @@
                </div>
                <div class="${LOGIN_USER.avatar.exp >= 500 and LOGIN_USER.avatar.exp < 700 ? 'sg-active':''}">
                   <img src="/resources/img/user/icon/lv_4.PNG" alt="">
-                  <span class="sg-badge-exp" style="${LOGIN_USER.avatar.exp >= 500 and LOGIN_USER.avatar.exp < 700 ? '':'display:none'}">줄기
+                  <span class="sg-badge-exp" style="${LOGIN_USER.avatar.exp >= 500 and LOGIN_USER.avatar.exp < 700 ? '':'display:none'}">묘목
                   <br>
 	              <small style="font-weight: 400;">500~700exp</small>
 	              </span>
@@ -116,26 +116,6 @@
 
          </div>
 	</div>
-	 <script>
-    $(function() {
-    	
-    	var timers = [];
-    	$('.sg-count').each(function(index, item) {
-    		var sgCount = $(item).text();
-    		var count = 0;
-    		var timer = setInterval(function() {
-    			
-    			if (timers[index].c == timers[index].s) {
-    				clearTimeout(timers[index].t);
-    			}
-    			$(timers[index].e).text(timers[index].c++);
-    		}, 30);
-    		
-    		timers.push({t:timer, s:sgCount, c:count, e:item});
-    	})
-    })
-    </script>
-
 
 <%@include file="/WEB-INF/views/include/footer.jsp"%></body>
 </html>

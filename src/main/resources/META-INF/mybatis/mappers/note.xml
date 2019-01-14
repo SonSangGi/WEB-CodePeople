@@ -16,7 +16,23 @@
 			PAID_LECTURE_NOTE
 		where
 			BUY_LECTURE_NO = #{value}
+		order by CREATE_DATE desc
 	</select>
+	
+	
+	<select id="getNoteByNoteNo" parameterType="int" resultType="Note">
+		select
+			NOTE_NO as no,
+			NOTE_CONTENT as "content",
+			NOTE_TITLE as "title",
+			BUY_LECTURE_NO as "buyLecture.no",
+			CREATE_DATE as createDate
+		from
+			PAID_LECTURE_NOTE
+		where
+			NOTE_NO = #{value}
+	</select>
+	
 	
 	<insert id="insertNote" parameterType="Note">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
@@ -30,4 +46,18 @@
 			BUY_LECTURE_NO)
 		values (#{no}, #{title}, #{content}, sysdate, #{buyLecture.no})
 	</insert>
+	
+	<update id="updateNote" parameterType="Note">
+			update
+				PAID_LECTURE_NOTE
+			set
+				NOTE_TITLE	= #{title},
+				NOTE_CONTENT = #{content},
+				CREATE_DATE = sysdate
+			where
+				NOTE_NO = #{no}
+	</update>
+	
+	
+	
 </mapper>

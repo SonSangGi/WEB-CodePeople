@@ -55,10 +55,13 @@ public class ChatHandler extends TextWebSocketHandler {
 			String recvUserId = payLoadItem[1];
 			String msg = payLoadItem[2];
 			String sendUser = new ObjectMapper().writeValueAsString(ChatHandler.getSessionUser(session));
+			System.out.println(recvUserId+","+msg);
 			WebSocketSession ws = sessionMap.get(recvUserId);
 			chatDao.insertChat(new Chat().setRecvUser(new User().setId(recvUserId))
 					.setSendUser(ChatHandler.getSessionUser(session)).setContents(msg));
-			ws.sendMessage(new TextMessage("ANSWER/USER/" + sendUser + "/" + msg));
+			if(ws!=null) {
+				ws.sendMessage(new TextMessage("ANSWER/USER/" + sendUser + "/" + msg));
+			}
 		}
 		// 친구 신청
 		else if ("FOLLOW".equals(protocol)) {
@@ -68,6 +71,18 @@ public class ChatHandler extends TextWebSocketHandler {
 			WebSocketSession targetSession = sessionMap.get(target);
 			if (targetSession != null) {
 				targetSession.sendMessage(new TextMessage("FOLLOWING/" + sendUser));
+			}
+		}
+		// 친구 신청 수락
+		else if ("FRIEND".equals(protocol)) {
+			String target = payLoadItem[1];
+			String recvUser = payLoadItem[2];
+			User sendUser = ChatHandler.getSessionUser(session);
+			WebSocketSession recvSession =  sessionMap.get(recvUser);
+			if(target.equals("ACCEPT")) {
+				recvSession.sendMessage(new TextMessage("FRIEND/ACCEPT/"+sendUser.getName()));
+			}else if(target.equals("REFUSE")){
+				recvSession.sendMessage(new TextMessage("FRIEND/REFUSE/"+sendUser.getName()));
 			}
 		}
 

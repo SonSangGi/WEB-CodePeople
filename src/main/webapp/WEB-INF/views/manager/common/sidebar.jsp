@@ -64,7 +64,7 @@
 	            </c:choose>
                     <a href="acknowledge.do">
                         <i class="ti-check"></i>
-                        <p>강의 승인</p>
+                        <p>강의 승인/강의 등록</p>
                     </a>
                 </li>
                 <c:choose>

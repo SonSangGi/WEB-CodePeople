@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp" %>
-<link rel="stylesheet" href='<c:url value="/resources/css/user/my.css"/>'>
+<link rel="stylesheet" href='/resources/css/user/my.css?ver=<%=new Date()%>'>
 </head>
 <body>
 <%@include file="/WEB-INF/views/include/header.jsp"%>
@@ -41,7 +41,10 @@
                <div class="col-xs-6 text-center">
                		<div style="">
                			<p style="position: relative;color: #ff7373;top: 20px;font-weight: 600;background-color: rgba(255, 255, 255, 0.90);">사진 크기는 1500x300으로 등록해주세요.</p>
-               			<button class="sg-btn sg-btn-primary" style="top: 35px;position: relative;" onclick="backgroundModify()">변경</button>
+               			<button class="sg-btn sg-btn-3rd sg-nb" style="top: 35px;position: relative;" onclick="backgroundModify()">변경</button>
+               			<c:if test="${LOGIN_USER.avatar.bgImg != 'Default' }">
+	               			<a href="bgdel.do" class="sg-btn sg-btn-primary sg-nb background-del" style="top: 35px;position: relative;">삭제</a>
+               			</c:if>
                		</div>
                		<form action="" id="form-background-modify">
                			<input type="file" accept=".gif, .jpg, .png" style="display:none" class="background-modify" name="file">
@@ -57,8 +60,9 @@
                      <li>
                         <img src="/resources/img/paid/lectureimg/${buyLecture.paidLecture.thumbnail}" alt="" style="width:100px;height: 100px;border-radius:100px;float:left;border:1px solid lightgray;padding:5px;"/>
                         <div class="pay-info" style="margin-left:150px;">
-                           <span style="font-size:17px;">${buyLecture.paidLecture.title }</span><br>
-                           <span>결제금액: <fmt:formatNumber value="${buyLecture.paidLecture.price }" type="number"/> 원</span><br>
+                           <p style="font-size:17px;">${buyLecture.paidLecture.title }</p>
+                           <p>결제금액: <fmt:formatNumber value="${buyLecture.paidLecture.price }" type="number"/> 원</p>
+                           <p>결제일: <fmt:formatDate value="${buyLecture.createDate}" pattern="yyyy-MM-dd"/></p>
                         </div>
                      </li>
                   </c:forEach>
@@ -126,11 +130,11 @@
     		  url:"/user/my/icondel.do",
     		  type:"get",
     		  success:function(){
-    			  console.log("업로드 되었습니다.");
     			  $(".sg-profile-img").attr("src","<c:url value='/resources/img/user/icon/icon.png'/>");
     		  }
     	  })
       })
+      
       </script>
 <%@include file="/WEB-INF/views/include/footer.jsp"%></body>
 </html>

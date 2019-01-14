@@ -27,6 +27,8 @@ public class FollowInterceptor extends HandlerInterceptorAdapter {
 			User user = (User) request.getSession().getAttribute("LOGIN_USER");
 			int chatCount = chatDao.unReadChatCount(user.getId());
 			List<Follow> followMe = userService.getFollowMe(user.getId());
+			List<Follow> friends = userService.getFriends(user.getId());
+			request.setAttribute("friends", friends);
 			request.setAttribute("chatCount", chatCount);
 			request.setAttribute("followMe", followMe);
 		}

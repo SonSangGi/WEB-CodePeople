@@ -5,6 +5,7 @@
 <%@include file="/WEB-INF/views/manager/common/head.jsp" %>
 
 <body>
+
 <div class="wrapper">
 
 	<%@include file="/WEB-INF/views/manager/common/sidebar.jsp" %>
@@ -41,8 +42,14 @@
 						          		<li><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>
 									</c:if>
 								 -->
+								 		<li class="page-item disabled"><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>
 									<c:forEach var="pageNum" begin="${qnaPageInfo.startPage }" end="${qnaPageInfo.endPage }">
+									<c:if test="${pageNum eq 1 }">
+										<li class="active"><a id="qna-page-${pageNum }">${pageNum }</a></li>
+									</c:if>
+									<c:if test="${pageNum ne 1 }">
 										<li><a id="qna-page-${pageNum }">${pageNum }</a></li>
+									</c:if>
 									</c:forEach>
 									<c:if test="${qnaPageInfo.curPage ne qnaPageInfo.totalPages && qnaPageInfo.totalPages > 0 }">
 										<li><a href="#"><span aria-hidden="true">»</span><span class="sr-only">마지막 페이지</span></a></li>
@@ -65,7 +72,7 @@
                                         	<td>${post.no }</td>
                                         	<td>${post.writer.name }</td>
                                         	<td><a id="post-info-${post.no }" href="/qna/detail.do?qnaNo=${post.no }">${post.title }</a></td>
-                                        	<td></td>
+                                        	<td><button type="button" id="btn-delete-post-${post.no }" class="btn btn-danger btn-xs">삭제</button></td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
@@ -83,6 +90,7 @@
                             </div>
                             <nav style="text-align: center;">
 					          	<ul id="qna-answer-pagination" class="pagination">
+					          			<li class="page-item disabled"><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>
 									<c:forEach var="pageNum" begin="${qnaAnswerPageInfo.startPage }" end="${qnaAnswerPageInfo.endPage }">
 										<li><a id="qna-answer-page-${pageNum }">${pageNum }</a></li>
 									</c:forEach>
@@ -95,7 +103,7 @@
                                 <table class="table table-hover">
                                     <thead>
                                     	<tr>
-	                                        <th style="width:10%">글 번호</th>
+	                                        <th style="width:10%">댓글 번호</th>
 	                                    	<th style="width:20%">작성자</th>
 	                                    	<th style="width:50%">내용</th>
 	                                    	<th style="width:20%">처리</th>
@@ -201,10 +209,10 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th style="width: 10%">번호</th>
-								<th style="width: 20%">작성자</th>
+								<th style="width: 15%">글 번호</th>
+								<th style="width: 18%">글 작성자</th>
 								<th style="width: 30%">내용</th>
-								<th style="width: 40%">답글이 달린 원글</th>
+								<th style="width: 37%">답글이 달린 원글</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -215,6 +223,9 @@
 					</table>
 				</div>
 			</div>
+			<div id="loading-img" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+				<img src="/resources/img/manager/loading.gif"/>
+			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary">Save changes</button>
@@ -224,138 +235,7 @@
 </div>
 <!--  -->
 
-</body>
-
 <%@include file="/WEB-INF/views/manager/common/commonjs.jsp" %>
-
-<script type="text/javascript">
-	
-	$(document).on('click', 'a[id*="post-info"]', function() {
-		$('a[href^="/qna/detail.do"]').attr({'target' : '_blank'});
-	});
-	
-	$(document).on('click', 'a[id*="qna-answer-modal"]', function() {
-		
-		answerNo = $(this).closest('tr').children('td').first().text();
-		postNo = $(this).closest('td').children('input').first().val();
-		
-		$.ajax({
-			url:'post/ajax.do',
-			method:'POST',
-			traditional:true,
-			data:{
-				'functionName':'findQnaAnswerInfoByNo',
-				'postNo':postNo
-			},
-			dataType:'json',
-			success:function(qna) {
-				// 해당 Qna 글에서 검색한 답글을 찾는 기능과, html 태그를 제거하는 기능
-				for (i=0; i<qna.qna.answers.length; i++) {
-					if (qna.qna.answers[i].no == answerNo) {
-						var htmlLessContents = (qna.qna.answers[i].contents).replace(/(<([^>]+)>)/ig,'');
-					}
-				}
-				
-				var html  = '<td>'+qna.qna.no+'</td>'
-               		html +=	'<td>'+qna.qna.writer.name+'</td>'
-               		html +=	'<td>'+htmlLessContents+'</td>'
-               		html +=	'<td><a id="post-info-'+postNo+'" href="/qna/detail.do?qnaNo='+postNo+'">'+qna.qna.title+'</a></td>'
-               		html +=	'<td></td>';
-               		
-				$('#qna-answer-info-ajax').html(html);
-			},
-			error:function(request, status, error) {
-				$('#qna-answer-info-ajax').html('데이터를 불러오는데 실패했습니다');
-			}
-		});
-	});
-		
-	$(document).on('click', 'a[id*="qna-page"]', function() {
-		$.ajax({
-			url:'post/ajax.do',
-			method:'POST',
-			traditional:true,
-			data:{
-				'boardName':'QNA',
-				'qnaPage':$(this).text()
-			},
-			dataType:'json',
-			success:function(qna) {
-			
-				var htmlTableString = '';
-				for (i=0; i<qna.qnaPosts.length; i++) {
-					htmlTableString += '<tr>' +
-								        	'<td>'+qna.qnaPosts[i].no+'</td>' + 
-		                			  		'<td>'+qna.qnaPosts[i].writer.name+'</td>' +
-		                			 		'<td><a id="post-info-'+qna.qnaPosts[i].no+'" href="/qna/detail.do?qnaNo='+qna.qnaPosts[i].no+'">'+qna.qnaPosts[i].title+'</a></td>' +
-		                			  		'<td></td>' +
-	                			  	   '</tr>';
-				}
-								
-				var htmlNavString = '';
-				console.log(qna.qnaPageInfo);
-				if (qna.qnaPageInfo.startPage != qna.qnaPageInfo.curPage) {
-					htmlNavString += '<li><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>'
-				}
-				for (i=qna.qnaPageInfo.startPage; i<=qna.qnaPageInfo.endPage; i++) {
-					htmlNavString += '<li><a id="qna-page-'+i+'">'+i+'</a></li>'
-				}				
-				if (qna.qnaPageInfo.endPage != qna.qnaPageInfo.curPage) {
-					htmlNavString += '<li><a href="#"><span aria-hidden="true">»</span><span class="sr-only">마지막 페이지</span></a></li>'
-				}
-				
-				$('#qna-tbody').html(htmlTableString);
-				$('#qna-pagination').html(htmlNavString);
-			},
-			error:function(request, status, error) {
-				console.log('오류');
-			}
-		});
-	});
-	
-	$(document).on('click', 'a[id*="qna-answer-page"]', function() {
-		$.ajax({
-			url:'post/ajax.do',
-			method:'POST',
-			traditional:true,
-			data:{
-					'boardName':'QNA Answer',
-					'qnaAnswerPage':$(this).text()
-				 },
-			dataType:'json',
-			success:function(qna) {
-			
-				console.log(qna.qnaAnswers);
-				var htmlTableString = '';
-				for (i=0; i<qna.qnaAnswers.length; i++) {
-					htmlTableString += '<tr>' +
-									        '<td>'+qna.qnaAnswers[i].no+'</td>' + 
-			                			    '<td>'+qna.qnaAnswers[i].writer.name+'</td>' +
-			                			    '<td><input type="hidden" id="qna-number-'+qna.qnaAnswers[i].no+'" value="'+qna.qnaAnswers[i].no+'"/><a id="qna-answer-modal-'+qna.qnaAnswers[i].no+'" data-toggle="modal" data-target="#qna-answer-info">'+qna.qnaAnswers[i].contents+'</a></td>' +
-			                			    '<td></td>' +
-		                			    '</tr>';
-				}
-								
-				var htmlNavString = '';
-				if (qna.qnaAnswerPageInfo.startPage != qna.qnaAnswerPageInfo.curPage) {
-					htmlNavString += '<li><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>'
-				}
-				for (i=qna.qnaAnswerPageInfo.startPage; i<=qna.qnaAnswerPageInfo.endPage; i++) {
-					htmlNavString += '<li><a id="qna-answer-page-'+i+'">'+i+'</a></li>'
-				}
-				if (qna.qnaAnswerPageInfo.endPage != qna.qnaAnswerPageInfo.curPage) {
-					htmlNavString += '<li><a href="#"><span aria-hidden="true">»</span><span class="sr-only">마지막 페이지</span></a></li>'
-				}
-				
-				$('#qna-answer-tbody').html(htmlTableString);
-				$('#qna-answer-pagination').html(htmlNavString);
-			},
-			error:function(request, status, error) {
-				console.log('오류');
-			}
-		});
-	});
-	
-</script>
-
+<script src="/resources/js/manager/post.js"></script>
+</body>
 </html>

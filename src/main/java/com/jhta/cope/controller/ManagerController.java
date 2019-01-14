@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jhta.cope.service.FreeLectureService;
 import com.jhta.cope.service.ManagerService;
 import com.jhta.cope.service.QnaService;
 import com.jhta.cope.service.UserLogService;
 import com.jhta.cope.vo.Criteria;
+import com.jhta.cope.vo.FreeLecture;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.User;
@@ -34,8 +36,14 @@ public class ManagerController {
 	@Autowired
 	UserLogService userLogService;
 	
-	@RequestMapping(value = "/acknowledge")
+	@Autowired
+	FreeLectureService freeLectureService;
+	
+	@RequestMapping(value = "/acknowledge", method = RequestMethod.GET)
 	public String acknowledge(Model model) {
+		
+		List<FreeLecture> freeLectures = freeLectureService.getAllFreeLecture();
+		model.addAttribute("freeLectures", freeLectures);
 		
 		return "manager/acknowledge";
 	}
@@ -54,7 +62,9 @@ public class ManagerController {
 
 	@ResponseBody
 	@RequestMapping(value = "/dashboard/ajax", method = RequestMethod.POST)
-	public Integer dashboardTodayVisitorCountAjax(@RequestParam("functionName") String functionName) throws Exception {
+	public Integer dashboardTodayVisitorCountAjax(
+												  @RequestParam("functionName") String functionName
+												 ) throws Exception {
 		
 		if ("todayVisitorsCount".equals(functionName)) {
 			int visitorCount = userLogService.countTodayVisitors();
@@ -73,7 +83,7 @@ public class ManagerController {
 		Map<String, Integer> qnaMap = pagingProcessing("QNA", 1);
 		criteria.setBeginIndex(qnaMap.get("beginIndex"));
 		criteria.setEndIndex(qnaMap.get("endIndex"));
-		List<Qna> qnaPosts = qnaService.getAllQnas(criteria);
+		List<Qna> qnaPosts = qnaService.getAllQnasByCriteria(criteria);
 		
 		Map<String, Integer> qnaAnswerMap = pagingProcessing("QNA Answer", 1);
 		criteria.setBeginIndex(qnaAnswerMap.get("beginIndex"));
@@ -87,35 +97,24 @@ public class ManagerController {
 
 		return "manager/post";
 	}
-
-//	@RequestMapping(value = "/post", method = RequestMethod.POST)
-//	public String qnaAnswer(Model model) throws Exception {
-//		
-//		List<QnaAnswer> qnaAnswers = qnaService.getAllAnswers();
-//		model.addAttribute("qnaAnswers", qnaAnswers);
-//		
-//		return "manager/post";
-//	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/post/ajax", method = RequestMethod.POST)
 	public Map<String, Object> getQnaAnswerAjax(
-								@RequestParam(value="boardName", required=false) String boardName,
-								@RequestParam(value="qnaPage", required=false) Integer qnaPage,
-								@RequestParam(value="qnaAnswerPage", required=false) Integer qnaAnswerPage,
-								@RequestParam(value="functionName", required=false) String functionName,
-								@RequestParam(value="postNo", required=false) Integer postNo
-								) throws Exception {
-		
-		System.out.println(boardName);
+//												@RequestParam Map<String, String> param,	//<- @RequestParam 값이 많을경우 Map<String, String>으로 받자.
+												@RequestParam(value="boardName", required=false) String boardName,
+												@RequestParam(value="qnaPage", required=false) Integer qnaPage,
+												@RequestParam(value="qnaAnswerPage", required=false) Integer qnaAnswerPage,
+												@RequestParam(value="functionName", required=false) String functionName,
+												@RequestParam(value="postNo", required=false) Integer postNo
+											   ) throws Exception {
 		
 		if ("QNA".equals(boardName)) {
-			
 			Map<String, Integer> qnaMap = pagingProcessing(boardName, qnaPage);
 			Criteria criteria = new Criteria();
 			criteria.setBeginIndex(qnaMap.get("beginIndex"));
 			criteria.setEndIndex(qnaMap.get("endIndex"));
-			List<Qna> qnaPosts = qnaService.getAllQnas(criteria);
+			List<Qna> qnaPosts = qnaService.getAllQnasByCriteria(criteria);
 			
 			Map<String, Object> map = new HashMap<>();
 			map.put("qnaPosts", qnaPosts);
@@ -149,6 +148,22 @@ public class ManagerController {
 			return map;
 		}
 		
+//		만약 param값이 너무 많으면 Map<String, String> param 으로 받아도 된다.		
+		
+//		if ("QNA".equals(boardName)) {
+//			Map<String, Integer> qnaMap = pagingProcessing(param.get("boardName"), Integer.parseInt(param.get("qnaPage")));
+//			Criteria criteria = new Criteria();
+//			criteria.setBeginIndex(qnaMap.get("beginIndex"));
+//			criteria.setEndIndex(qnaMap.get("endIndex"));
+//			List<Qna> qnaPosts = qnaService.getAllQnasByCriteria(criteria);
+//			
+//			Map<String, Object> map = new HashMap<>();
+//			map.put("qnaPosts", qnaPosts);
+//			map.put("qnaPageInfo", qnaMap);
+//			
+//			return map;
+//		}
+		
 		return null;
 	}
 	
@@ -172,7 +187,11 @@ public class ManagerController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/users/ajax", method = RequestMethod.POST)
-	public List<User> getUserAjax(@RequestParam("functionName") String functionName, @RequestParam(value = "userNo", required = false) String userNo, @RequestParam(value = "userId", required = false) String userId) throws Exception {
+	public List<User> getUserAjax(
+								  @RequestParam("functionName") String functionName,
+								  @RequestParam(value = "userNo", required = false) String userNo,
+								  @RequestParam(value = "userId", required = false) String userId
+								 ) throws Exception {
 				
 		List<User> users = new ArrayList<User>();
 		
@@ -199,7 +218,6 @@ public class ManagerController {
 				
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
-		//페이징처리 시작
 		int totalCount = 0;
 		int listCount = 5;
 		int pageCount = 5;
@@ -241,6 +259,7 @@ public class ManagerController {
 			}
 		}
 		
+		//시작 인덱스, 끝 인덱스를 구함
 		int beginIndex = ((page-1) * listCount) + 1;
 		int endIndex = beginIndex + (listCount - 1);
 		

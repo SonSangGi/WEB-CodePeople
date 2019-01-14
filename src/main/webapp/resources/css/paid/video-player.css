@@ -1,3 +1,9 @@
+body {
+	min-height: 100%;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -288,7 +294,7 @@ video::-webkit-media-controls {
 
 .video-section-lesson-list {
     display: none;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .video-lesson-per-one {
@@ -297,7 +303,7 @@ video::-webkit-media-controls {
 }
 
 #video-complete-symbol {
-	font-size: 30px;
+	font-size: 25px;
     color: green;
     text-align: right;
     margin-bottom: 10px;
@@ -308,9 +314,9 @@ video::-webkit-media-controls {
 }
 
 .video-identify-wrapper {
-	padding-top: 20px;
+	padding-top: 17px;
 	padding-left: 0px;
-	font-size: 15px;
+	font-size: 20px;
 }
 
 .video-top-section-wrapper {
@@ -380,7 +386,7 @@ video::-webkit-media-controls {
 	color: white;
 }
 
-#video-each-note-title {
+.video-each-note-title {
 	margin-top:20px;
 	margin-bottom: 30px;
 	margin-left: 30px;
@@ -409,13 +415,14 @@ video::-webkit-media-controls {
 	font-weight: 800
 }
 
-.exit-pip {
-	margin-left: 90%;
-	font-size: 16px;
+.video-note-hidden-content {
+	display: none;
 }
 
-.save-note {
-	margin-left: 89.5%;
-	font-size: 16px;
-}
 
+video {
+  background: url(/resources/img/paid/video/loading.gif) center center no-repeat;
+  background-size: 30px 30px;
+  background-position: center;
+  
+}

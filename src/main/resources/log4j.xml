@@ -14,9 +14,9 @@
 	<logger name="com.jhta.cope">
 		<level value="info" />
 	</logger>
-	<logger name="com.jhta.cope.dao">
+<!-- 	<logger name="com.jhta.cope.dao">
 		<level value="TRACE" />
-	</logger>
+	</logger> -->
 	<!--
 	<logger name="com.jhta.cope.dao.InstructorDao">
 		<level value="DEBUG" />

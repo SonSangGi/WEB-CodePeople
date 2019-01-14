@@ -1,6 +1,6 @@
 .my-graph {
 	border-radius: 10px;
-	width: 80%;
+	width:100%;
 	height: 8px;
 	background-color: lightgrey
 }
@@ -12,51 +12,7 @@
 }
 
 .my-graph-info {
-	width: 80%;
-	font-size: 11px;
-	color: grey;
-}
-
-.my-graph-info>span:last-child {
-	float: right;
-}
-
-.sg-li {
-	width: 10px;
-	height: 10px;
-	border: 1px solid lightgray;
-	border-radius: 10px;
-	display: inline-block;
-	position: absolute;
-	left: -5px;
-	background-color: white;
-	margin-top: 6px;
-}
-
-.sg-li:hover {
-	background-color: rgb(200, 255, 162)
-}
-
-.sg-text-sub {
-	color: grey;
-	font-size: 12px;
-}
-
-.my-graph {
-	border-radius: 10px;
-	width: 80%;
-	height: 8px;
-	background-color: lightgrey
-}
-
-.my-graph>div {
-	background-color: skyblue;
-	height: 100%;
-	border-radius: 10px;
-}
-
-.my-graph-info {
-	width: 80%;
+	width: 100%;
 	font-size: 11px;
 	color: grey;
 }
@@ -115,64 +71,6 @@ dd {
 	width: 200px;
 }
 
-.my-video-box {
-	float: left;
-	opacity: 0.7;
-	border: 1px solid lightgray;
-	padding: 2px;
-}
-
-.my-video {
-	
-}
-
-.my-video-box:hover {
-	opacity: 1;
-}
-
-.my-graph {
-	border-radius: 10px;
-	width: 80%;
-	height: 8px;
-	background-color: lightgrey
-}
-
-.my-graph>div {
-	background-color: skyblue;
-	height: 100%;
-	border-radius: 10px;
-}
-
-.my-graph-info {
-	width: 80%;
-	font-size: 11px;
-	color: grey;
-}
-
-.my-graph-info>span:last-child {
-	float: right;
-}
-
-.sg-li {
-	width: 10px;
-	height: 10px;
-	border: 1px solid lightgray;
-	border-radius: 10px;
-	display: inline-block;
-	position: absolute;
-	left: -5px;
-	background-color: white;
-	margin-top: 6px;
-}
-
-.sg-li:hover {
-	background-color: rgb(200, 255, 162)
-}
-
-.sg-text-sub {
-	color: grey;
-	font-size: 12px;
-}
 
 .badge-top {
 	margin-bottom: 30px;
@@ -195,8 +93,26 @@ dd {
 	opacity: 1;
 	border-bottom: 1px solid #ff7070;
 }
-.sg-active span{
-	font-size:16px;margin:3px;font-weight:bold
+
+.sg-my-menu {
+	margin-left: 10px;
+	padding: 10px 40px 10px 40px;
+	display: inline-block;
+	font-size: 17px;
+}
+
+.sg-my-menu a{
+	color:gray;
+}
+
+.sg-menu-select a{
+	color:black;
+	font-weight:bold;
+}
+.sg-active span {
+	font-size: 16px;
+	margin: 3px;
+	font-weight: bold;
 }
 
 .sg-badge-tier div>img {
@@ -219,12 +135,12 @@ dd {
 	display: inline-block;
 	border: 2px solid #ff5050;
 	border-radius: 100px;
-	text-align:center;
+	text-align: center;
 	padding: 2px;
-    background: #ff7878;
+	background: #ff7878;
 }
 
-.sg-badge-sub i {
+.sg-badge-box i {
 	padding: 6px;
 	width: 55px;
 	height: 55px;
@@ -250,14 +166,17 @@ dd {
 	font-size: 17px;
 }
 
-.label-primary{
+.label-primary {
 	background: #ff7373;
-	font-size:15px;
-	    position: absolute;
+	font-size: 15px;
+	position: absolute;
 }
 
-.sg-badge-exp{
-	 float:right;line-height: 30px;display: block;height: 30px;
+.sg-badge-exp {
+	float: right;
+	line-height: 30px;
+	display: block;
+	height: 30px;
 }
 
 .sg-badge-contents>p {

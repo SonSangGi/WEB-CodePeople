@@ -76,22 +76,27 @@ public class PaidLectureServiceImpl implements PaidLectureService{
 		
 		List<PaidLectureDetail> lectureDetails = paidLectureService.getPaidLectureDetailByLectureNo(no);
 		
-		lectureList.add(lectureDetails.get(0));
-		map.put(lectureDetails.get(0).getSectionNo(), lectureList);
-		
-		for (int i=1; i<lectureDetails.size(); i++) {
+		if (lectureDetails.get(0) == null) {
+			return map;
+		} else {
+			lectureList.add(lectureDetails.get(0));
+			map.put(lectureDetails.get(0).getSectionNo(), lectureList);
 			
-			int sectionNo = lectureDetails.get(i).getSectionNo();
-			
-			if (sectionNo == lectureDetails.get(i-1).getSectionNo()) {
-				map.get(sectionNo).add(lectureDetails.get(i));
-			} else {
-				List<PaidLectureDetail> list = new ArrayList<>();
-				list.add(lectureDetails.get(i));
-				map.put(sectionNo, list);
+			for (int i=1; i<lectureDetails.size(); i++) {
+				
+				int sectionNo = lectureDetails.get(i).getSectionNo();
+				
+				if (sectionNo == lectureDetails.get(i-1).getSectionNo()) {
+					map.get(sectionNo).add(lectureDetails.get(i));
+				} else {
+					List<PaidLectureDetail> list = new ArrayList<>();
+					list.add(lectureDetails.get(i));
+					map.put(sectionNo, list);
+				}
 			}
+			return map;
 		}
-		return map;
+		
 	}
 
 	@Override

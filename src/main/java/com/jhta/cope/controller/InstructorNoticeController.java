@@ -43,10 +43,5 @@ public class InstructorNoticeController {
 		
 		return "instructor/noticelist";
 	
-	}
-	
-
-	
-	
-	
+	}	
 }

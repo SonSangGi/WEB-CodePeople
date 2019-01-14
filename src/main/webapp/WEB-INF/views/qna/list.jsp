@@ -78,7 +78,6 @@
 		    	<select name="searchType" style="border:2px solid rgb(76, 254, 210);border-radius:3px;height:37px;position:absolute;right:196px;">
 		    		<option value="all" ${param.searchType eq 'all' ? 'selected' : ''}>전체</option>
 		    		<option value="title" ${param.searchType eq 'title' ? 'selected' : ''}>제목</option>
-		    		<option value="writer" ${param.searchType eq 'writer' ? 'selected' : ''}>작성자</option>
 		    		<option value="contents" ${param.searchType eq 'contents' ? 'selected' : ''}>내용</option>
 		    	</select>
 			    <input type="text" name="keyword" style="border:2px solid rgb(76, 254, 210);border-radius:3px;text-align:center;width:200px;height:37px;" placeholder="검색" value="${param.keyword }">
@@ -96,7 +95,7 @@
       </colgroup>
       <thead>
         <tr>
-          <th>No</th>
+          <th>번호</th>
           <th>제목</th>
           <th>답변</th>
           <th>작성자</th>
@@ -113,17 +112,17 @@
       	</c:when>
       	<c:otherwise>
 	      <c:forEach items="${qnas }" var="qna" varStatus="status">
-		        <tr>
+		        <tr id="${qna.no }">
 		          <td>${pagination.totalRows - qna.rn  + 1}</td>
 		          <td style="text-align:left;"><a href="detail.do?qnaNo=${qna.no}">${qna.title }</a></td>
 		          <td>${fn:length(qna.answers)}</td>
 		          
 		          <c:choose>
 			          <c:when test="${LOGIN_USER.id != qna.writer.id and LOGIN_USER != null}">
-			          	<td><button class="sg-none follow-me" data-toggle="tooltip" title="친구신청 보내기" value="${qna.writer.id }"><img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }<small>(${fn:substring(qna.writer.id,0,6) }***)</small></button></td>
+			          	<td style="text-align:left;"><button class="sg-none follow-me" data-toggle="tooltip" title="친구신청 보내기" value="${qna.writer.id }"><img alt="${qna.writer.name}님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${fn:substring(qna.writer.name,0,6)}<small>(${fn:substring(qna.writer.id,0,3) }***)</small></button></td>
 			          </c:when>
 			          <c:otherwise>
-			          	<td style="color:#337ab7"><img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${qna.writer.name }<small>${fn:substring(qna.writer.id,0,6) }***</small></td>
+			          	<td style="color:#337ab7;text-align:left;"><img alt="${qna.writer.name }님의 프로필사진" src="/resources/img/user/icon/${qna.writer.avatar.image eq 'Default' ? 'icon.png' : qna.writer.avatar.image}" style="width: 30px;height: 30px;border-radius: 100px;"> ${fn:substring(qna.writer.name,0,9)}<small>(${fn:substring(qna.writer.id,0,3) }***)</small></td>
 			          </c:otherwise>
 		          </c:choose>
 		          <td>${qna.views }</td>
@@ -171,6 +170,13 @@
 		if(fail != ''){
 			alert("잘못된 접근 방식입니다.\n안전을 위해 로그아웃 처리됩니다.");
 			location.href="/login/logout.do";
+		}
+		
+		//봤던 글 액티브
+		var qnaCookie = /qnaSeq=([^;]*)/.test(document.cookie) ? unescape(RegExp.$1) : '';
+		var qnaSeqArray = qnaCookie.split('|');
+		for(var i in qnaSeqArray){
+			$('#'+qnaSeqArray[i]).css('background','#f1f1f1');
 		}
 	</script>
 	<%@include file="/WEB-INF/views/include/footer.jsp"%></body>

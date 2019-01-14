@@ -11,7 +11,9 @@ import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,7 @@ import com.jhta.cope.service.CartService;
 import com.jhta.cope.service.LectureHistoryService;
 import com.jhta.cope.service.NoteService;
 import com.jhta.cope.service.PaidLectureService;
+import com.jhta.cope.service.PaidQnaService;
 import com.jhta.cope.util.EtcUtils;
 import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.BuyLecture;
@@ -34,6 +37,7 @@ import com.jhta.cope.vo.LectureHistory;
 import com.jhta.cope.vo.Note;
 import com.jhta.cope.vo.PaidLecture;
 import com.jhta.cope.vo.PaidLectureDetail;
+import com.jhta.cope.vo.PaidQna;
 import com.jhta.cope.vo.User;
 
 @Controller
@@ -54,6 +58,10 @@ public class PaidController {
 	
 	@Autowired
 	NoteService noteService;
+	
+	@Autowired
+	PaidQnaService paidQnaService;
+	
 	
 	// 전체 언어 강좌 페이지 이동
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
@@ -92,11 +100,14 @@ public class PaidController {
 			}
 		}
 
+		List<PaidQna> paidQnas = paidQnaService.getPaidQnaByPaidLectureNo(no);
 		List<PaidLectureDetail> paidLectureDetails = paidLectureService.getPaidLectureDetailByLectureNo(no);
 		HashMap<Integer, List<PaidLectureDetail>> lectureWrapper = paidLectureService.getLectureWrapper(no);
+		
 		String title = paidLectureDetails.get(0).getPaidLecture().getTitle();
 		String[] words = title.split(" ");
 		
+		SessionUtils.addAttribute("paidQnas", paidQnas);
 		SessionUtils.addAttribute("notes", notes);
 		SessionUtils.addAttribute("lectureHistories", LectureHistories);
 		SessionUtils.addAttribute("paymentFlag", paymentFlag);
@@ -114,7 +125,7 @@ public class PaidController {
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 		
 		if (user == null) {
-			return "redirect:/user/signup.do";
+			return "redirect:/home.do?fail=login";
 		}
 		
 		// 결제 및 카트에 담았는지 여부
@@ -158,7 +169,7 @@ public class PaidController {
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 		
 		if (user == null) {
-			return "redirect:/user/signup.do";
+			return "redirect:/home.do?fail=login";
 		}
 
 		List<Cart> carts = cartService.getCartByUserNo(user.getNo());
@@ -223,12 +234,25 @@ public class PaidController {
 	// 세부 강좌 마이노트 페이지
 	@RequestMapping(value = "/detail/note", method = RequestMethod.GET)
 	public String note() {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+
+		if (user == null) {
+			return "redirect:/home.do?fail=login";
+		}
+		
 		return "paid/detail-note";
 	}
 
 	// 세부 강좌 마이노트 만들기
 	@RequestMapping(value = "/detail/createNote", method = RequestMethod.GET)
 	public String createNote(@RequestParam("no") int no) {
+		
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+
+		if (user == null) {
+			return "redirect:/home.do?fail=login";
+		}
+
 		SessionUtils.addAttribute("no", no);
 		return "paid/detail-createNote";
 	}
@@ -274,6 +298,40 @@ public class PaidController {
 		return "redirect:/paid/detail.do?no=" + buyLecture.getPaidLecture().getNo();
 	}
 	
+	// video 내 note 삽입 및 업데이트
+	@RequestMapping(value = "/detail/addVideoNote", method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public String addVideoNote(@RequestParam("buyLectureNo") int buyLectureNo,
+						  @RequestParam("title") String title,
+						  @RequestParam("content") String content,
+						  @RequestParam(required = false, name="selectedNoteNo") Integer selectedNoteNo) {
+			
+			if (selectedNoteNo == null) {
+				BuyLecture buyLecture = buyLectureService.getBuyLectureByBuyLectureNo(buyLectureNo);
+				Note note = new Note();
+				
+				buyLecture.setNo(buyLectureNo);
+				note.setBuyLecture(buyLecture);
+				note.setTitle(title);
+				note.setContent(content);
+				
+				try {
+					noteService.insertNote(note);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			} else {
+				Note note = noteService.getNoteByNoteNo(selectedNoteNo);
+				note.setContent(content);
+				note.setTitle(title);
+				
+				noteService.updateNote(note);
+			}
+			
+			return "";
+	}
+	
 
 	// 세부 강좌 Q&A 게시판
 	@RequestMapping(value = "/detail/question", method = RequestMethod.GET)
@@ -294,4 +352,12 @@ public class PaidController {
 		model.addAttribute("fileName", fileName);
 		return "paid/video";
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

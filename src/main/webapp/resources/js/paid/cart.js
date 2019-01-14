@@ -118,28 +118,4 @@ $(function() {
 	});
 	
 	
-	
-	
-	
-	
-	
-	
-	$(".comment-update").on("click", function() {
-		
-		
-		
-		
-		
-		
-		
-	});
-	
-	
-	
-	
-	
-	
-	
-	
-	
 });

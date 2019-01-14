@@ -1,6 +1,7 @@
 $(function() {
 
         const video = document.getElementById('media-video');
+        
 
         // 플레이어 구성 콘텐츠 나타내기
 
@@ -91,12 +92,45 @@ $(function() {
             return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
         }
 
+       
+
        video.onloadedmetadata = function() {
-           const duration = Math.round(video.duration);
+    	   
+    	   // 영상 시간 가져오기
+    	   const duration = Math.round(video.duration);
            const minutes = pad(Math.floor(duration / 60), 2);
            const seconds = pad(duration % 60, 2);
            $("#duration").text(`${minutes}:${seconds}`);
+           
        };
+
+       
+       // canvas 획득
+       var canvas = document.getElementById("myCanvas");
+       var context = canvas.getContext("2d");
+       var width = 400;
+       var height = 240;
+       
+       
+       // canvas에 그리기 함수
+		function snap() {
+		    context.fillRect(20, 20, 150, 100);
+		    context.drawImage(video, 0, 0, width, height);
+		    console.log(context);
+		    
+		    canvas.crossOrigin="anonymous"
+			canvas.toDataURL("image/png");
+
+		}
+      
+		// button attach
+		$("#video-smart-copy").on("click", function() {
+			snap();
+		});
+		
+		
+      
+       
        
        function currenttime() {
            let currenttime = Math.round(video.currentTime);
@@ -136,8 +170,9 @@ $(function() {
         };
        
         updateBar();
-
-
+        
+        
+        
         function playOrPause() {
             if (!video.paused && !video.ended) {
                 video.pause();
@@ -226,7 +261,6 @@ $(function() {
 			updateBar();
 		});
 
-
 		$(".video-section-top-box").on('click', function(event) {
         
 			const flag = $(this).siblings('.video-section-lesson-list').css('display');
@@ -248,7 +282,7 @@ $(function() {
 			$("#pip").click();
 		});
 	
-		$(".exit-pip").on("click", function() {
+		$(".video-create-note-cancel").on("click", function() {
 			if (document.pictureInPictureElement) {
 				document.exitPictureInPicture()
 				  .then(() => {$(".video-note-page").css("display", "none")})
@@ -259,9 +293,6 @@ $(function() {
 				return;
 			}
 		});
-	
-	
 
 
-	
 });

@@ -7,7 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jhta.cope.vo.Avatar;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.Criteria;
 import com.jhta.cope.vo.Follow;
+import com.jhta.cope.vo.LectureHistory;
 import com.jhta.cope.vo.User;
 @Transactional
 public interface UserService {
@@ -29,4 +31,6 @@ public interface UserService {
 	public void insertFollow(Follow follow);
 	public void updateAvatar(Avatar avatar);
 	public void deleteFollow(Follow follow);
+	public List<LectureHistory> getLectureHistoryByCriteria(Criteria criteria);
+	
 }

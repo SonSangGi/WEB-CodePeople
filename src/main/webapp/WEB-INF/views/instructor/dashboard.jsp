@@ -33,7 +33,7 @@
 
 		<div class="naaaaame">
 			<div class="">
-				<span style="padding-right: 30px;">강사명 : 아이유</span> <input
+				<span style="padding-right: 30px;">강사명 : ${LOGIN_USER.name}</span> <input
 					class="sg-input-text" type="text" name="" value="" placeholder="검색"
 					name="keyword" style="width: 300px; height: 32px;">
 				<button class="sg-btn sg-btn-primary sg-btn-sm">
@@ -52,13 +52,14 @@
 
 		<div class="high1" style="padding-bottom: 75px;"></div>
 
-		<button class="btn-add-lecture" style="color: white;">신규 강좌
-			개설 +</button>
+		<a class="btn-add-lecture" style="color: white;" href="/instructor/create.do">신규 강좌
+			개설 +</a>
 
 		<div class="high2" style="padding-bottom: 90px;"></div>
 
 		<p class="create-info">강사님의 강좌 제작에 유익한 정보를 제공합니다.</p>
-
+		
+		<div style="padding-top:50px";></div>
 
 		<div>
 			<i class="fas fa-chalkboard-teacher"
@@ -70,8 +71,8 @@
 			</div>
 		</div>
 
-		<button style="margin: 0px 0px 0px 690px;" id="btn-start-one"
-			class="btn-start-link">START</button>
+		<a style="margin: 0px 0px 0px 690px;" id="btn-start-one"
+			class="btn-start-link" href="/instructor/creatinginfo.do">START</a>
 
 		<div class="middle1" style="padding-bottom: 150px;"></div>
 
@@ -84,9 +85,9 @@
 					고품질 동영상 강의로 강좌를 차별화할 수 있습니다. Code people 리소스를 활용하여<br>기초부터
 					배워보세요.
 				</p>
-				<button style="margin: 0px 0px 0px 0px;" id="btn-start-two"
-					class="btn-start-link">START</button>
 			</div>
+				<a style="margin: 0px 0px 0px 0px; float: left;" id="btn-start-two"
+					class="btn-start-link" href="/instructor/upload.do">START</a>
 		</div>
 
 		<div style="padding: 0px 0px 0px 175px;" class="watcha-box">

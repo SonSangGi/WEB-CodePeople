@@ -31,6 +31,10 @@ a:hover {
 	text-decoration: none;
 }
 
+a:active {
+	text-decoration: none;
+}
+
 .wrapper {
 	height: 100%;
 }
@@ -104,7 +108,22 @@ a:hover {
 	border: 1px solid lightblue;
 }
 
+.sg-banner-overlay{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background: white;
+	padding: 10px;
+	    box-shadow: 1px 0 12px 0 rgba(46, 61, 73, .15);
+}
+
 /*메뉴 유저 정보*/
+.sg-user-show {
+	margin-bottom: 10px;
+}
+
 .sg-menu-info {
 	top: 57px;
 	background-color: white;
@@ -119,6 +138,15 @@ a:hover {
 }*/
 .sg-menu-right {
 	float: right;
+}
+
+.sg-user-name {
+	font-size: 25px;
+	font-weight: bold;
+	color: black;
+	border-radius: 30px;
+	padding: 5px;
+	background-color: #ffffff7a;
 }
 
 .sg-menu-info a {
@@ -180,9 +208,7 @@ a:hover {
 }
 
 .sg-menu-select {
-	border: 2px solid lightgray;
-	border-top-left-radius: 10px;
-	border-bottom: none
+	border-top: 5px solid #ff7373;
 }
 /*푸웃터*/
 .sg-footer {
@@ -274,6 +300,12 @@ a:hover {
 	position: absolute;
 }
 
+.btn-close-header {
+	height: 22px;
+	background-color: #ffa7a752;
+	cursor: pointer;
+}
+
 .sg-btn {
 	border-radius: 5px;
 	border: 2px solid lightgray;
@@ -344,6 +376,10 @@ a:hover {
 	font-size: 17px;
 }
 
+.sg-input-text option {
+	border: 1px solid #ff7373;
+}
+
 .sg-btn-none {
 	border: none;
 	background: none;
@@ -352,6 +388,11 @@ a:hover {
 
 .sg-btn-none:active {
 	border: none;
+}
+
+.sg-heading{
+	border-bottom: 2px solid #ffb8b8;
+    padding-bottom: 9px;
 }
 
 /*알림~@!@!~*/
@@ -380,7 +421,6 @@ a:hover {
 }
 
 .sg-loading-fade {
-	display:none;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(255, 255, 255, 0.7);
@@ -390,20 +430,119 @@ a:hover {
 }
 
 .sg-loading-box {
-	background: rgba(255, 89, 89, 0.5);
-	top:15%;
+	top: 15%;
 	padding: 10px;
 	display: inline-block;
-	border: 1px solid;
 	border-radius: 10px;
 }
+
+/*채팅*/
+.user-friends.active {
+	background-color: #ffbaba;
+}
+
+.name-search {
+	background: transparent;
+	color: white;
+	position: absolute;
+	right: 20px;
+	top: 10px;
+	border: 1px solid #ffbaba;
+	border-radius: 3px;
+	padding: 5px;
+	font-weight: 500;
+}
+
+.my-chat-my {
+	border-radius: 15px;
+	border-top-right-radius: 3px;
+	display: inline-block;
+	margin: 5px 10px 0px 150px;
+	padding: 10px;
+	text-align: left;
+	background-color: lightgrey;
+}
+
+.my-chat-you {
+	font-size: 17px;
+	border-radius: 15px;
+	border-top-left-radius: 3px;
+	display: inline-block;
+	margin: 5px 0px 10px 30px;
+	padding: 10px;
+	background-color: #600074;
+	color: white;
+	font-weight: bold;
+	text-align: left;
+}
+
+.my-chat-box {
+	width: 100%;
+}
+
+
+/* 메인,마이페이지 비디오 박스*/
+.my-video-box {
+	float: left;
+	width: 228px;
+	margin: 15px;
+	height: 282px;
+}
+
+.my-video-contents {
+	height: 282px;
+	box-shadow: 1px 0 12px 0 rgba(46, 61, 73, .15);
+}
+
+.my-video {
+	width: 100%;
+	height: 150px;
+	margin-bottom: 10px;
+}
+
+.my-video-thumnail {
+	width: 100%;
+	height: 150px;
+}
+
+.my-video-title {
+	padding: 10px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.my-video-footer {
+	position: absolute;
+	bottom: 5px;
+	width: 100%;
+	padding: 10px;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.my-video-overlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background: white;
+	padding: 10px;
+	display: none;
+}
+
+.my-video-box:hover {
+	opacity: 1;
+}
+
+
 /*동적 쿼리*/
 @media screen and (max-width: 880px) {
 	.sg-menu>ul {
 		display: none
 	}
 	.sg-user-show {
-		display: none
+		display: none;
 	}
 	.sg-menu-right {
 		text-align: right

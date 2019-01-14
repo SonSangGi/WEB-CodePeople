@@ -147,7 +147,7 @@
 				$("#reg-email").focus();
 				return false;
 			}
-			
+			$(".sg-loading-fade").fadeIn();
 		})
 		
 		$("#reg-id").keyup(function(event){

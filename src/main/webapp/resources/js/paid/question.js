@@ -6,6 +6,22 @@ $(function () {
 
 
 	$(".each-question-top-wrapper").on("click", function () {
+		
+		
+			  $.ajax({
+			        type : "GET",
+			        url : "detail/overview.do",
+			        dataType : "html",
+			        error : function() {
+			          alert('error!');
+			        },
+			        success : function(data) {
+			          $('.paid-contents').html(data);
+			        }
+			      });
+		
+		
+		
 		const flag = $(this).siblings(".each-question-contentsWrapper").css("display");
 
 		console.log(flag);
@@ -17,26 +33,6 @@ $(function () {
 		} else {
 			$(this).siblings('.each-question-contentsWrapper').css('display', 'none');
 		}
-	});
-
-
-	$(".each-question-btn-modify").on("click", function () {
-
-		let replyForm = $(this).parent().parent().siblings('.each-question-replyform');
-		
-		replyForm.css('display', 'block');
-		
-		let preContents = $(this).parent().parent().siblings('#each-question-replyContents').text();
-
-		console.log(replyForm.children('.replyform').children('textarea').text(preContents));
-		
-	});
-	
-	$("#each-question-reply-modify-cancel").on("click", function () {
-
-		let replyForm = $(this).parent().parent();
-		
-		replyForm.css('display', 'none');
 	});
 
 })

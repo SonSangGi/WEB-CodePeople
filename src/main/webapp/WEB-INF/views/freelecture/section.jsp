@@ -7,10 +7,16 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp"%>
+<script src="https://momentjs.com/downloads/moment.js"></script>
 <style>
 .yb_entry_area, aside {
 	float: left;
 }
+
+.comment-change-btn {
+	margin-top: 10px;
+}
+
 #yb-section {
 	width: 100%;
 }
@@ -34,13 +40,10 @@ aside {
 	width: 300px;
 	text-align: left;
 	padding: 10px;
-	border: 1px solid;
-	border-right: none;
 }
 
 .yb_entry_area {
-	border: 1px solid;
-
+	
 }
 
 article {
@@ -50,7 +53,7 @@ article {
 
 .yb_social_group_bar li {
 	display: inline-block;
-	padding: 10px 25px 0px 20px;
+	padding: 7px 10px 0px 10px;
 }
 
 .yb_social_group_bar li:first-child {
@@ -114,10 +117,6 @@ ol, ul {
 	margin-left: 5px;
 }
 
-#cnt_more {
-	text-align: center;
-}
-
 hgroup {
 	text-align: center;
 }
@@ -132,23 +131,29 @@ hr {
 	margin-top: 50px;
 	text-align: left;
 	width: 750px;
-	
+}
+
+.yb_form_change {
+	margin-top: 10px;
 }
 
 #yb_topic_list_index {
 	margin-top: 20px;
 }
-.yb-title:hover{
+
+.yb-title:hover {
 	background-color: #ff7373;
-	color:white;
+	color: white;
 }
-.yb-title.active{
-    background-color: #40e0d0;
-    border-radius: 3px;
-    }
-.yb-title.active a{
-	color:white;
-    }
+
+.yb-title.active {
+	background-color: #40e0d0;
+	border-radius: 3px;
+}
+
+.yb-title.active a {
+	color: white;
+}
 </style>
 </head>
 <body>
@@ -158,14 +163,14 @@ hr {
 			<aside>
 				<div id="yb_topic_list_index" class="index">
 					<div>
-						<a href="section.do?freeLectureNo=${param.freeLectureNo}">커버 페이지</a>
+						<a href="section.do?freeLectureNo=${param.freeLectureNo}&count=1">커버 페이지</a>
 					</div>
 					<hr>
 					<h4>토픽 목록</h4>
 					<nav class="yb_sub_nav">
 						<ol id="yb_topic_list_tree" class="">
 						<c:forEach var="section" items="${freeLectureSections}">
-							<li>						
+							<li class =yb-section-list>						
 								<div class="yb-title ${section.count eq param.count ? 'active':'' }" style="padding: 5px;">
 									<a href="section.do?freeLectureNo=${param.freeLectureNo}&count=${section.count }" style="width: 100%;display: inline-block;"> <span class="title">${section.sectionTitles}</span>
 									</a>
@@ -188,13 +193,18 @@ hr {
 					</div>
 				</article>
 				<div class="yb_social_group"
-					style="height: 41px; background-color: lightgray;">
+					style="height: 41px; background-color: #ff7373;">
 					<ul class="yb_social_group_bar">
-						<li><a href="#"><i class="far fa-eye"></i>봤어요(${freeSection.views })</a></li>
-						<li><a href="section.do?freeLectureNo=${param.freeLectureNo}&count=${freeSection.count - 1 }"><i class="fas fa-angle-left"></i> 이전</a></li>
-						<li><a href="section.do?freeLectureNo=${param.freeLectureNo}&count=${freeSection.count + 1 }">다음 <i class="fas fa-angle-right"></i></a></li>
+						<li><button id="lecture-view" class="sg-btn sg-btn-primary sg-btn-xs sg-nb" value="${freeSection.lectureNo }"><i class="far fa-eye"></i> 봤어요(<span class="view-count">${freeSection.views }</span>)</button></li>
+						<c:if test="${param.count != 1 }">
+							<li class="li-prev"><a class="sg-btn sg-btn-primary sg-btn-xs" href="section.do?freeLectureNo=${param.freeLectureNo}&count=${freeSection.count - 1 }"><i class="fas fa-angle-left"></i> 이전</a></li>
+						</c:if>
+						<c:if test="${fn:length(freeLectureSections) > param.count }">
+							<li class="li-next"><a class="sg-btn sg-btn-primary sg-btn-xs" href="section.do?freeLectureNo=${param.freeLectureNo}&count=${freeSection.count + 1 }">다음 <i class="fas fa-angle-right"></i></a></li>
+						</c:if>
 					</ul>
 				</div>
+				
 				<div class="yb_section_coment">
 					<h3 style="display: none;">댓글</h3>
 					<form id="yb_coment_new_form" method="post" action="/free/comment-submit.do"
@@ -214,7 +224,7 @@ hr {
 							</div>
 							
 							<div class="yb_buttons">
-								<button type="submit" class="comment-submit" style="display: none;">댓글
+								<button type="submit" class="comment-submit sg-btn sg-btn-3rd sg-btn-xs sg-nb" style="display: none;">댓글
 									올리기</button>
 							</div>
 						</div>
@@ -227,48 +237,144 @@ hr {
 									<img src="/resources/img/user/icon/${comment.writer.avatar.image != 'Default' ?  comment.writer.avatar.image : 'icon.png'}">
 								</div>
 								<div class="yb_name_time col-xs-10">
-									<strong>${comment.writer.name}</strong> <a href="#"><time>${comment.createDate }</time></a>								
+									<strong>${comment.writer.name}</strong> <time><fmt:formatDate value="${comment.createDate }" pattern="yyyy-MM-dd"/></time>							
 								</div>
-								<div class="yb_comment_contents col-xs-10" id="comment-list-${comment.cno }">${comment.contents }</div>
+								<div class="yb_comment_contents col-xs-10" id="comment-list-${comment.cno }">${comment.contents }
+								</div>
+								<div class="col-xs-10">
+									<button class="comment-change-btn sg-btn sg-btn-3rd sg-btn-xs sg-nb" id="reply-list-${comment.cno }">답글 보기</button>
+								</div>
 							</div>
-							<div class="update-contents col-xs-10" style="display: none">
-								<div class="yb_form col-xs-10">
+							<div class="update-contents col-xs-offset-2 col-xs-10" style="display: none">
+								<div class="yb_form_change">
 									<textarea id="comment-contents-${comment.cno }" name="contents"
 									style="height: 60px; width: 100%;">${comment.contents }</textarea>
 									<div class="yb_buttons">
-										<button id="comment-update-${comment.cno }" style="float: right;">수정하기</button>
+										<button class="comment-change-btn sg-btn sg-btn-3rd sg-btn-xs sg-nb" id="comment-update-${comment.cno }" >수정하기</button>
+									</div>
+								</div>
+							</div>
+							<div class="reply-contents col-xs-offset-2 col-xs-10" style="display: none">
+								<div class="yb_form_change">
+									<input type="hidden" id="reply-user-${comment.cno }" value="${comment.writer.no }">
+									<textarea id="reply-contents-${comment.cno }" name="contents"
+									style="height: 60px; width: 100%;"></textarea>
+									<div class="yb_buttons">
+										<button class="comment-change-btn sg-btn sg-btn-3rd sg-btn-xs sg-nb" id="reply-insert-${comment.cno }" >답글 달기</button>
 									</div>
 								</div>
 							</div>
 							<c:choose>
 								<c:when test="${LOGIN_USER.no == comment.writer.no }">
 								<div class="coment_buttons" style="display: inline-block; float: right">
-									<button class="sg-btn sg-btn-primary"><i class="fas fa-reply"></i> 답글</button>
-									<button class="comment-update-btn sg-btn sg-btn-primary"><i class="fas fa-pen"></i> 수정</button>
-									<a class="sg-btn sg-btn-primary" href="/free/comment-delete.do?cno=${comment.cno }&lno=${param.freeLectureNo}&count=${freeSection.count}"><i class="fas fa-times"></i> 삭제</a>
+									<button class="comment-update-btn sg-btn sg-btn-3rd sg-btn-xs sg-nb"><i class="fas fa-pen"></i> 수정</button>
+									<a class="sg-btn sg-btn-3rd sg-btn-xs sg-nb" href="/free/comment-delete.do?cno=${comment.cno }&lno=${param.freeLectureNo}&count=${freeSection.count}"><i class="fas fa-times"></i> 삭제</a>
 								</div>
 								</c:when>
 								<c:otherwise>
 								<div class="coment_buttons" style="display: inline-block; float: right">
-									<button class="sg-btn sg-btn-primary"><i class="fas fa-reply"></i> 답글</button>
+									<button class="comment-Reply-btn sg-btn sg-btn-3rd sg-btn-xs sg-nb"><i class="fas fa-reply"></i> 답글</button>
 								</div>
 								</c:otherwise>
 							</c:choose>
+							
+							<!-- 답글 컨테이너 -->
+							<div class="row reply-${comment.cno }" style="background:width:88%;height:10px;">
+							</div>
+							<!-- 답글컨테이너 끝 -->
 						</li>
 					</c:forEach>
 					</ol>
-					<div id="cnt_more">
-						<button class="sg-btn sg-btn-primary">더 보기</button>
-
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script type="text/javascript">
+		
 		$(function() {
 			$(".comment-update-btn").on('click', function(event) {
 				$(this).parent().siblings(".update-contents").slideToggle();
+			});
+			
+			$(".comment-Reply-btn").on('click', function(event) {
+				$(this).parent().siblings(".reply-contents").slideToggle();
+			})
+			
+			$('#lecture-view').on('click', function(event) {
+				var sectionNo = $(this).val();
+				var userNo = '${LOGIN_USER.no}'||'';
+				console.log(sectionNo);
+				if(userNo != ''){
+					$.ajax({
+						type:"post",
+						url:"sectionView.do",
+						data:{sectionNo:sectionNo,userNo:userNo},
+						success:function(result){
+							if(result == 'false'){
+								alert('이미 추천을 누르셨습니다.')
+							}else{
+								var count = new Number($('.view-count').text());
+								$('.view-count').text(count+1);
+							}
+						}
+					})
+				} else{
+					alert("로그인 해주시기 바랍니다.");
+				}
+			})
+			
+			$('#yb_coment_list').on('click', '[id^=reply-list]', function(event) {
+				var commentCno = $(this).attr('id').replace('reply-list-', '');
+				if($(".reply-comment-"+commentCno).size()){
+					$(".reply-comment-"+commentCno).remove();
+				}else{
+				$.ajax({
+				      type: 'get',
+				      url: '/free/reply-list.do',
+				      data: {lcno:commentCno},  //가져온 번호{cno:commentCno,contents,cccda}
+				      dataType: 'Json',
+				      success: function(data){
+				    	$.each(data, function(index, item) {
+				     	var html ='';
+				    	 	html += '<div class="col-xs-offset-2 col-xs-10 reply-comment-'+commentCno+'">';
+				    		html += '<div class="yb_user_image col-xs-2">';
+				    		html += '<img src="/resources/img/user/icon/';
+				    		if(item.writer.avatar.image != 'Default'){
+				    		 html += item.writer.avatar.image;
+				    		}else {
+				    			html +='icon.png';
+				    		}
+				    		html += '"/>';
+				    		html += '</div>';
+				    		html += '<div class="yb_name_time col-xs-10">';
+				    		html += '<strong>' + item.writer.name +'</strong> <a href="#"><time>' + moment().format('YYYY-MM-DD HH:mm:ss'); + '</time></a>';								
+				    		html += '</div>';
+				    		html += '<div class="yb_comment_contents col-xs-10" id=comment-list-' + item.crno + '>' + item.contents;
+				    		html += '</div>'; 
+				    		
+				    		$('.reply-' + item.lcno).append(html);
+				    	}) 
+				    		$()
+					}
+				});
+				}
+			});
+			
+			$('#yb_coment_list').on('click', '[id^=reply-insert]', function(event) {
+				var commentCno = $(this).attr('id').replace('reply-insert-', '');
+				var replyContents = $('#reply-contents-'+commentCno).val();
+				var userNo = $('#reply-user-'+commentCno).val();
+				
+				$.ajax({
+				      type: 'get',
+				      url: '/free/reply-insert.do',
+				      data: {lcno:commentCno, contents:replyContents, 'writer.no':userNo },  //가져온 번호{cno:commentCno,contents,cccda}
+				      dataType: 'Json',
+				      success: function(data){
+				    	
+				      	$("#comment-list-" + data.lcno).parent().siblings(".reply-contents").hide()
+					}
+				});
 			});
 			
 			$('#yb_coment_list').on('click','[id^=comment-update]',function(event) {
@@ -285,7 +391,7 @@ hr {
 				    	$("#comment-list-" + data.cno).parent().siblings(".update-contents").hide(); 
 					}
 				});
-			}); 
+			});
 		});
 
 		$("#input-comment").focus(function() {

@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp" %>
-<link rel="stylesheet" href='<c:url value="/resources/css/user/my.css?ver=0"/>'>
+<link rel="stylesheet" href='/resources/css/user/my.css?ver=<%=new Date()%>'>
 <style type="text/css">
 	.sg-table{
 	width:100%;
@@ -61,7 +61,10 @@
 	                  </table>
 	                  </c:otherwise>
                   </c:choose>
-                  <div>
+               </div>
+               <div class="col-xs-6">
+
+				<div>
                   <h3>나의 답변</h3>
                   
                   
@@ -91,22 +94,7 @@
 	                  </c:otherwise>
                   </c:choose>
                   </div>
-               </div>
-               <div class="col-xs-6">
-                  <div class="my-review-item">
-                     <h3>내 리뷰</h3>
-                     <ul>
-                        <li>
-                           <img src="img/java.jpg" alt="" style="width:30px;border-radius:100px;float:left;">
-                           <a style="font-size:17px;margin-right:10px;color:black;width:150px;display:inline-block" href="#">자바를 자바</a><a href="#">정말 쓰레기같은 강좌네요.</a>
-                        </li>
 
-                           <li>
-                              <img src="img/spring.png" alt="" style="width:30px;border-radius:100px;float:left;">
-                              <a style="font-size:17px;margin-right:10px;color:black;width:150px;display:inline-block" href="#">스프링으로 부트!</a><a href="#">들을만해요.</a>
-                           </li>
-                     </ul>
-                  </div>
                </div>
             </div>
          </div> 

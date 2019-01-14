@@ -11,20 +11,28 @@
 				</div>
 			</div>
 			<div class="paid-whole-questions">
+			
+			
+			
+			
+			
+			<c:forEach var="qnaContent" varStatus="status" items="${paidQnas }">
 					<div class="col-xs-12 each-question-wrapper">
 						<div class="each-question-top-wrapper">
 							<div class="col-xs-1" style="padding: 0px">
-								<img id="each-question-profphoto" src="resources/img/johndoe.jpg">
+								<img id="each-question-profphoto" src="/resources/img/user/icon/${qnaContent.user.avatar.image eq 'Default' ? 'icon.png' : qnaContent.user.avatar.image}">
 							</div>
 							<div class="col-xs-10" style="padding: 0px;">
 								<div>
-									<p id="each-question-profname">JOHN DOE</p>
+									<p id="each-question-profname">${qnaContent.user.name }</p>
 								</div>
 								<div>
-									<h3 id="each-question-title">Why doesn't this work with my computer?</h3>
+									<h3 id="each-question-title">${qnaContent.title }</h3>
 								</div>
 								<div class="each-question-dateform">
-									<span class="glyphicon glyphicon-time"> </span><span id="each-question-date"> 2017.09.12</span>
+									<span class="glyphicon glyphicon-time"> </span><span id="each-question-date">
+										${qnaContent.createDate }
+									</span>
 								</div>
 							</div>
 							<div class="col-xs-1 each-question-top-reply">
@@ -33,20 +41,7 @@
 						</div>
 						<div class="col-xs-12 each-question-contentsWrapper">
 							<p id="each-question-contents">
-								create an empty modal box on the current page and below is the ajax call you can see how to fetch the content in result from another html page.
-								$.ajax({url: "registration.html", success: function(result){
-								//alert("success"+result);
-								  $("#contentBody").html(result);
-									$("#myModal").modal('show'); 
-									}});
-
-								once the call is done you will get the content of the page by the result to then you can insert the code in you modal's content id using. 
-
-								You can call controller and get the page content and you can show that in your modal.
-
-								below is the example of Bootstrap 3 modal in that we are loading content from registration.html page...
-
-								index.html
+								${qnaContent.content }
 							</p>
 							<div class="each-question-replyform">
 								<form action="#" class="replyform">
@@ -55,6 +50,11 @@
 								</form>
 								<br>
 							</div>
+							
+							
+							
+							
+							
 							<div class="row each-question-list">
 								<div class="col-xs-1">
 									<img id="each-question-replyphoto" src="resources/img/johndoe.jpg">
@@ -65,7 +65,7 @@
 									<div class="each-question-manipulate">
 										<span><span class="each-question-btn-modify">수정</span><span class="each-question-btn-delete">삭제</span></span>
 									</div>
-									<div class="each-question-replyform">
+									<div class="each-question-replyform-modify">
 										<form action="#" class="replyform">
 											<textarea rows="4" cols="140" name="comment" form="replyform" style="resize:none;">hello</textarea>
 											<button id="each-question-reply-modify-submit" class="sg-btn-primary" type="submit">수정</button>
@@ -75,11 +75,19 @@
 									</div>
 								</div>
 							</div>
+							
+							
+							
+							
+							
 						</div>
 					</div>
+			</c:forEach>
+
+
+
+
 			</div>
-			
-			
 			<script>
 			$("#search-box").on("click", function () {
 				$(this).css("border", "3px solid #ff7373");
@@ -100,7 +108,7 @@
 
 			$(".each-question-btn-modify").on("click", function () {
 
-				let replyForm = $(this).parent().parent().siblings('.each-question-replyform');
+				let replyForm = $(this).parent().parent().siblings('.each-question-replyform-modify');
 				replyForm.css('display', 'block');
 				let preContents = $(this).parent().parent().siblings('#each-question-replyContents').text();
 				console.log(replyForm.children('.replyform').children('textarea').text(preContents));

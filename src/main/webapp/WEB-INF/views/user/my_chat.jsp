@@ -6,51 +6,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <%@include file="/WEB-INF/views/include/style.jsp" %>
-<link rel="stylesheet" href='<c:url value="/resources/css/user/my.css?ver=0"/>'>
+<link rel="stylesheet" href='/resources/css/user/my.css?ver=<%=new Date()%>'>
 </head>
-  <style media="screen">
-	.user-friends.active{
-	background-color: #ffbaba;
-	}
-	input::placeholder{
-	}
-	.name-search{
-	background: transparent;
-	color: white;
-	position: absolute;
-	right: 20px;
-	top: 10px;
-	border: 1px solid #ffbaba;
-	border-radius: 3px;
-	padding: 5px;
-	font-weight: 500;
-	}
-   .my-chat-my {
-     border-radius: 15px;
-     border-top-right-radius: 3px;
-     display: inline-block;
-     margin: 5px 10px 0px 150px;
-     padding: 10px;
-     text-align: left;
-     background-color: lightgrey;
-   }
-
-   .my-chat-you {
-     font-size: 17px;
-     border-radius: 15px;
-     border-top-left-radius: 3px;
-     display: inline-block;
-     margin: 5px 0px 10px 30px;
-     padding: 10px;
-     background-color: #600074;
-     color: white;
-     font-weight: bold;
-     text-align: left;
-   }
-   .my-chat-box{
-      width: 100%;
-	}
-  </style>
 <body>
 <%@include file="/WEB-INF/views/include/header.jsp"%>
 

@@ -140,6 +140,9 @@
 					</table>
 				</div>
 			</div>
+			<div id="teacher-loading-img" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+				<img src="../../../resources/img/manager/loading.gif"/>
+			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary">Save changes</button>
@@ -179,6 +182,9 @@
 					</table>
 				</div>
 			</div>
+			<div id="student-loading-img" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+				<img src="../../../resources/img/manager/loading.gif"/>
+			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				<button type="button" class="btn btn-primary">Save changes</button>
@@ -191,108 +197,6 @@
 </body>
 
 <%@include file="/WEB-INF/views/manager/common/commonjs.jsp" %>
+<script src="/resources/js/manager/users.js"></script>
 
-<script type="text/javascript">
-
-//강사 modal 창 ajax
-$(function() {
-	$('a[id*="teacher-modal"]').click(function() {
-		$.ajax({
-			url:'users/ajax.do',
-			method:'POST',
-			traditional:true,
-			data:{
-				functionName:'findUserInfoByNo',
-				userNo:$(this).closest('tr').children('td').first().text()
-			},
-			dataType:'json',
-			success:function(users) {
-				$.each(users, function(index, user) {
-					var html  = '<td>'+user.no+'</td>'
-                		html +=	'<td>'+user.id+'</td>'
-                		html +=	'<td>'+user.name+'</td>'
-                		html +=	'<td>'+user.email+'</td>'
-                		html +=	'<td></td>';
-                		
-					$('#teacher-info-ajax').html(html);						
-				});
-			},
-			error: function(request, status, error) {
-				$('#student-info-ajax').html('데이터를 불러오는데 실패했습니다');
-			}
-		});
-	});
-	
-	//학생 modal 창 ajax
-	$('a[id*="student-modal"]').click(function() {
-		
-		$.ajax({
-			url:'users/ajax.do',
-			method:'POST',
-			traditional:true,
-			data:{
-				functionName:'findUserInfoByNo',
-				userNo:$(this).closest('tr').children('td').first().text()
-			},
-			dataType:'json',
-			success:function(users) {
-				$.each(users, function(index, user) {
-					var html  = '<td>'+user.no+'</td>'
-                		html +=	'<td>'+user.id+'</td>'
-                		html +=	'<td>'+user.name+'</td>'
-                		html +=	'<td>'+user.email+'</td>'
-                		html +=	'<td></td>';
-                		
-					$('#student-info-ajax').html(html);						
-				});
-			},
-			error: function(request, status, error) {
-				$('#student-info-ajax').html('데이터를 불러오는데 실패했습니다');
-			}
-		});
-	});
-	
-	//아이디 검색 바 ajax
-	$('#search-bar').keyup(function() {
-		console.log($('#search-bar').val())
-		if($('#search-bar').val() == '') {
-			$('#preview-id').css('display', 'none')
-		} else {
-			$.ajax({
-				url:'users/ajax.do',
-				method:'POST',
-				traditional:true,
-				data:{
-					functionName:'findUserInfoById',
-					userId:$(this).val()
-				},
-				dataType:'json',
-				success:function(lists) {
-					var html = '';
-					$.each(lists, function(index, list) {
-						$('#preview-id').css('display', '');
-						html += '<p><a id="user-info-'+list.no+'">'+list.id+'</a></p>';
-						$('#preview-id .header').append().html(html);
-					});
-				},
-				error:function(request, status, error) {
-					$('#preview-id').css('display', 'none');
-					$('#preview-id .header p').empty();
-				}
-			});
-		}
-	});
-	
-	//동적으로 생성된 HTML을 제어하는 스크립트
-	$(document).on('click', 'a[id*="user-info"]', function() {
-		$('#search-bar').val($(this).text());
-	});
-	
-	$('#search-bar').blur(function() {
-		setTimeout(function() {
-			$('#preview-id').css('display', 'none')
-		}, 300);
-	});
-});
-</script>
 </html>

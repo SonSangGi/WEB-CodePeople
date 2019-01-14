@@ -8,12 +8,14 @@
 <html lang="ko">
 
 <head>
-	<title>video player</title>
+	<title>CODE PEOPLE :: video player</title>
+	
 	<meta charset="utf-8">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Noto+Sans+KR" rel="stylesheet">
 	
 	<link rel="stylesheet" href="/resources/css/paid/video-contents.css?ver=<%=new Date() %>">
 	<link rel="stylesheet" href="/resources/css/paid/video-player.css?ver=<%=new Date() %>">
@@ -22,6 +24,11 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="/resources/js/paid/video-player.js?ver=<%=new Date() %>"></script>
 	<script src="/resources/js/paid/video-contents.js?ver=<%=new Date() %>"></script>
+	
+	<!-- summernote 플러그인 모듈 -->
+	<link href="/resources/plugins/summernote/summernote.css" rel="stylesheet">
+	<script src="/resources/plugins/summernote/summernote.js"></script>
+	<script src="/resources/plugins/summernote/lang/summernote-ko-KR.js"></script>
 
 </head>
 
@@ -33,172 +40,70 @@
 			<div class="col-xs-3 video-in-notelist">
 				<p class="video-in-notelist-label">NOTE LIST</p>
 				<div class="col-xs-12 video-note-list-wrapper">
+			 <c:forEach var="note" varStatus="status" items="${notes }">
+					
 					<div class="video-each-note">
+						<input type="hidden" value="${note.no }" name="videoNoteNo" class="videoNoteNo"/>
+						<input type="hidden" value="${note.buyLecture.no }" name="buyLectureNo" class="buyLectureNo"/>
 						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
+							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span id="paid-each-section-name">${note.buyLecture.paidLecture.title }</span></span>
 
 							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
+								<span class="glyphicon glyphicon-time"></span><span>
+								    <fmt:formatDate pattern = "yyyy-MM-dd" value = "${note.createDate }" />
+								</span>
 							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
+							<h3 class="video-each-note-title">${note.title}</h3>
+						</div>
+						<div class="video-note-hidden-content">
+							${note.content }						
 						</div>
 					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
+					
+					
+			</c:forEach>
 
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
-					<div class="video-each-note">
-						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span> section</span><span id="paid-each-section-no"> 2 : </span><span id="paid-each-section-name">enum class</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>2017.09.12</span>
-							</div>
-							<h3 id="video-each-note-title">이넘 클래스 요약</h3>
-						</div>
-					</div>
 				</div>
 			</div>
 
 
 			<div class="col-xs-7 col-xs-offset-4 video-in-note">
 				<div class="video-note-section-wrapper">
-					<div>
-						<span>Section </span><span id="video-note-section-no">3</span>
-					</div>
-					<div>
-						<span>: </span><span class="video-note-section-name">Enum class</span>
-					</div>
-				</div>
-				<div class="video-note-lesson-wrapper">
-					<span>Lesson</span>
-					<span id="video-note-section-no">1. </span>
-					<span id="video-note-section-name">introduction</span>
-
 				</div>
 				<div class="video-note-contents">
-
-				</div>
-
-				<div class="video-note-controls-wrapper">
-					<div>
-						<span class="exit-pip">
-							<img src="/resources/img/paid/video/note-exit.png" width="30px">
-							돌아가기
-						</span>
-					</div>
-					<div>
-						<span class="save-note">
-							<img src="/resources/img/paid/video/note-save.png" width="35px">
-							저장하기
-						</span>
-					</div>
+				        <div class="col-xs-12" style="margin-bottom: 20px; padding-left: 0px;">
+				        	<div style="display:inline-block;">
+								<p style="color: lightgray; font-size: 10px;">SMART COPY</p>
+								<canvas id="myCanvas" width="400" height="240" style="border:1px solid #d3d3d3;">
+								</canvas>
+				        	</div>
+						        <input type="hidden" name="selectedNoteNo" id="selectedNoteNo"/>
+						        <input type="hidden" name="buyLectureNo" id="buyLectureNo"/>
+					        <div id="video-note-btn-wrapper" style="display:inline-block;">
+					          	<input type="button" class="btn sg-btn-primary video-create-note-save" value="노트 저장하기" style="float: right; margin-bottom: 100px;"/>       
+					          	<input type="button"class="btn video-create-note-cancel" value="동영상으로 돌아가기" style="float: right; margin-right: 10px; margin-left: 40px;"/>
+					        </div>
+				        </div>
+					      
+					      <div>
+						      <hr>
+					      </div>
+					      
+					      
+					      <div>
+							  <input type="text" placeholder="" name="title" id="title-box" >
+					          <input type="hidden" id="buyLectureNo" name="buyLectureNo" value="${no }">
+					      </div>
+					      
+					      
+					      <div style="margin-top: 10px;">
+					          <textarea name="content" id="content" class="summernote">
+					          </textarea>
+					      </div>
+					      
+					     
+			 
+					      					      
 				</div>
 			</div>
 		</div>
@@ -342,10 +247,14 @@
 
 			<c:choose>
 				<c:when test="${!empty LOGIN_USER}">
-			<video onchange='getBarSize()' id='media-video' autoplay onload="true">
-                <source src='http://localhost:3000/video?fileName=${fileName }' type='video/mp4'>
-                <source src='http://localhost:3000/video?fileName=${fileName }' type='video/webm'>
-			</video>
+				
+			<div>
+				<video onchange='getBarSize()' id='media-video' autoplay poster="data:/resources/img/paid/video/loading.gif" >
+	                <source src='http://localhost:3000/video?fileName=${fileName }' type='video/mp4'>
+	                <source src='http://localhost:3000/video?fileName=${fileName }' type='video/webm'>
+				</video>
+			</div>
+				
 				</c:when>			
 				<c:otherwise>
 				<p style="color: white;"> 로그인이 필요한 서비스입니다 </p>
@@ -357,6 +266,116 @@
 
 
 	</div>
+	
+	<script type="text/javascript">
+    
+    function sendFile(file, editor) {
+        // 파일 전송을 위한 폼생성
+ 		data = new FormData();
+ 	    data.append("uploadFile", file);
+ 	    $.ajax({ // ajax를 통해 파일 업로드 처리
+ 	        data : data,
+ 	        type : "POST",
+ 	        url : "detail/noteImage.do",
+ 	        cache : false,
+ 	        contentType : false,
+ 	        processData : false,
+ 	        success : function(data) { // 처리가 성공할 경우
+                // 에디터에 이미지 출력
+ 	        	$(editor).summernote('editor.insertImage', data);
+ 	        }
+ 	    });
+ 	}
+	
+	
+	$('.summernote').summernote({
+	 	      height: 500,          // 기본 높이값
+	 	      minHeight: null,      // 최소 높이값(null은 제한 없음)
+	 	      maxHeight: null,      // 최대 높이값(null은 제한 없음)
+	 	      focus: true,          // 페이지가 열릴때 포커스를 지정함
+	 	      lang: 'ko-KR',         // 한국어 지정(기본값은 en-US)
+	 	      backColor : 'pink',
+	 	      callbacks: {
+				    onImageUpload: function(files, editor, welEditable) {
+				    sendFile(files[0], this);
+	 	      		}
+	 	     }
+	});
+	
+	
+	$(".video-each-note").on('click', function(event) {
+    	
+        $(this).css("background-color", "#40e0d0");
+        $(this).siblings().css("background-color", "");
+    	
+    	let noteContent = $(this).children(".video-note-hidden-content").html();
+    	let noteTitle = $(this).children().children(".video-each-note-title").text();
+    	let noteNo = $(this).children(".videoNoteNo").val();
+    	
+    	console.log(noteContent);
+    	console.log(noteTitle);
+    	console.log("노트 넘버", noteNo);
+    	
+    	$("#selectedNoteNo").val(noteNo);
+    	$(".note-editable").html(noteContent);
+    	$("#title-box").val(noteTitle);
+    	
+    	console.log("마지막 노트 번호", $("#selectedNoteNo").val());
+    });
+
+	
+	function postNote() {
+		var title = $("#title-box").val();
+		var buyLectureNo = $(".buyLectureNo").val();
+		var content = $("#content").val();
+		var selectedNoteNo = $("#selectedNoteNo").val();
+		
+		console.log(title);
+		console.log(buyLectureNo);
+		console.log(content);
+		console.log(selectedNoteNo);
+		
+		
+		var updateComment = "노트 업데이트 완료!";
+		var appendComment = "새로운 노트 작성 완료!";
+
+		if (selectedNoteNo != null || selectedNoteNo == "") {
+	 	    
+			$.ajax({
+	 	        data : {"title" : title, "buyLectureNo" : buyLectureNo, "content" : content, "selectedNoteNo" : selectedNoteNo},
+	 	        type : "POST",
+	 	        url : "detail/addVideoNote.do",
+		    	error : function(error) {
+		    		alert("error");
+		    	},
+	 	        success : function(data) {
+		 	        	alert(updateComment);
+	 	        }
+	 	    });
+	 	    
+		} else {
+			$.ajax({
+	 	        data : {"title" : title, "buyLectureNo" : buyLectureNo, "content" : content},
+	 	        type : "POST",
+	 	        url : "detail/addVideoNote.do",
+		    	error : function(error) {
+		    		alert("error");
+		    	},
+	 	        success : function(data) {
+		 	        	alert(appendComment);
+
+	 	        }
+	 	    });
+		}
+	}
+	
+	$(".video-create-note-save").on("click", function() {
+		postNote();
+	})
+	
+	</script>
+
+
 </body>
 
 

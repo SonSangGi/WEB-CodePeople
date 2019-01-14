@@ -50,7 +50,7 @@
 		<div class="row">
 			<div class="col-xs-8">
 			    <textarea id="summernote" name="contents"></textarea>
-			    <input type="button"class="sg-btn sg-btn-primary" value="취소" />
+			    <input type="button"class="sg-btn sg-btn-primary history-back" value="취소" />
 			    <input type="submit" class="sg-btn sg-btn-primary sg-nb" value="등록" />
 			</div>
 		</div>
@@ -69,6 +69,7 @@ $(document).ready(function() {
 			}
 	    });
 	});
+
 </script>
     <!--컨테이너 끝-->
 <%@include file="/WEB-INF/views/include/footer.jsp"%></body>

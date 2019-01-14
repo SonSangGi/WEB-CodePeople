@@ -68,6 +68,7 @@
 		<result column="SECTION_TITLE" property="sectionTitles"/>
 		<result column="SECTION_CONTENTS" property="sectionContents"/>
 		<result column="SECTION_COUNT" property="count"/>
+		<result column="SECTION_VIEWS" property="views"/>
 		<result column="SECTION_CREATE_DATE" property="createDate"/>
 		<collection property="comments" column="LECTURE_SECTION_NO" javaType="java.util.ArrayList" ofType="FreeLectureComent" select="getFreeLectureComentesBySno"></collection>
 	</resultMap>
@@ -109,6 +110,8 @@
 			FREE_LECTURE_COMENT
 		where
 			LECTURE_SECTION_NO = #{value}
+		order by COMENT_CREATE_DATE DESC
+			
 	</select>
 	
 	<insert id="insertFreeLectureComent" parameterType="freeLectureComent">
@@ -144,11 +147,146 @@
 		where LECTURE_COMENT_NO = #{cno}
 	</delete>
 	
+	<delete id="deleteFreeLectureComentReply" parameterType="int">
+		delete from FREE_LECTURE_COMENT_REPLY
+		where LECTURE_COMENT_NO = ${value}
+	</delete>
 	<update id="updateFreeLectureComent" parameterType="FreeLectureComent">
 		update FREE_LECTURE_COMENT
 			set
 				COMENT_CONTENTS	= #{contents}
 			where
 				LECTURE_COMENT_NO = #{cno}			
-	</update>	
+	</update>
+	
+	<delete id="deleteFreeLecture" parameterType="int">
+		delete from FREE_LECTURE
+		where FREE_LECTURE_NO = ${value}
+	</delete>
+	
+	<delete id="deleteFreeLectureSection" parameterType="int">
+		delete from FREE_LECTURE_SECTION
+		where FREE_LECTURE_NO = ${value}
+	</delete>
+	
+	<insert id="insertFreeLectureComentReply" parameterType="FreeLectureComentReply">
+		<selectKey keyProperty="crno" resultType="int"  order="BEFORE">
+			select freeComent_seq.nextval from dual
+		</selectKey>
+			insert into FREE_LECTURE_COMENT_REPLY(
+				COMENT_REPLY_NO,
+				USER_NO,
+				LECTURE_COMENT_NO,
+				REPLY_CONTENTS,
+				REPLY_CREATE_DATE
+			)
+			values (#{crno}, #{writer.no}, #{lcno}, #{contents}, sysdate)
+	</insert>
+	
+	<resultMap type="FreeLectureComentReply" id="getFreeLectureComentReplysByLcnoResultMap">
+		<id column="COMENT_REPLY_NO" property="crno"/>
+		<result column="LECTURE_COMENT_NO" property="lcno"/>		
+		<result column="REPLY_CONTENTS" property="contents"/>
+		<result column="REPLY_CREATE_DATE" property="createDate"/>		
+		<association property="writer" column="USER_NO" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo"></association>
+	</resultMap>
+	
+	<select id="getFreeLectureComentReplysByLcno" parameterType="int" resultMap ="getFreeLectureComentReplysByLcnoResultMap">
+		select
+			COMENT_REPLY_NO,
+			USER_NO,
+			LECTURE_COMENT_NO,
+			REPLY_CONTENTS,
+			REPLY_CREATE_DATE
+		from
+			FREE_LECTURE_COMENT_REPLY
+		where
+			LECTURE_COMENT_NO = #{value}
+		order by REPLY_CREATE_DATE DESC
+	</select>
+	
+	<select id="getAllFreeLectures" parameterType="Criteria" resultType="FreeLecture">
+		select *
+			from
+				(SELECT 
+				ROWNUM as rn,
+					FREE_LECTURE_NO as no,
+					LECTURE_TITLE as lectureTitle,
+					LECTURE_IMAGE as lectureImg,
+					LECTURE_CONTENTS as lectureContent,
+					LECTURE_TIME as lectureTime,
+					LECTURE_LEVEL as lectureLevel,
+					LECTURE_LECTURE_SUMMARY as lectureSummary
+				FROM 
+					FREE_LECTURE
+				<where>
+					<if test="searchType == 'all' and keyword != null">
+						(LOWER(LECTURE_TITLE) like '%' || #{keyword} || '%' or
+		        		LOWER(LECTURE_CONTENTS) like '%' || #{keyword} || '%')
+					</if>
+					<if test="searchType == 'title' and keyword != null">
+						LOWER(Lecture_title) like '%' || #{keyword} ||'%'
+					</if>
+				</where> 
+				)
+			where rn &gt;= #{beginIndex}
+		    and rn &lt;= #{endIndex}
+	</select>
+	
+	<select id="getFreeLectureCount" parameterType="int" resultType="int">
+		select 
+			count(*)
+		from
+			FREE_LECTURE 
+	</select>
+	
+	<insert id="insertFreeLectureViews" parameterType="FreeLectureViews">
+		<selectKey keyProperty="lectureViewsNo" resultType="int"  order="BEFORE">
+			select lecture_views_seq.nextval from dual
+		</selectKey>		
+			insert into FREE_LECTURE_VIEWS(
+				LECTURE_VIEWS_NO,
+				USER_NO,
+				SECTION_No
+			)
+			values(#{lectureViewsNo}, #{userNo}, #{sectionNo})
+	</insert>
+	
+	<delete id="deleteFreeLectureViews" parameterType="map"> 
+		delete from FREE_LECTURE_VIEWS
+		where USER_NO = #{userNo} and SECTION_NO = #{sectionNo}
+	</delete>
+	
+	<select id="getFreeLectureViewsCount" parameterType="map" resultType="int">
+		select
+			count(LECTURE_VIEWS_NO)
+		from 
+			FREE_LECTURE_VIEWS
+		where 
+			USER_NO = #{userNo} and SECTION_NO = #{sectionNo} 
+	</select> 
+		
+	<update id="updateFreeLectureViews" parameterType="FreeLectureSection">
+		update 
+			FREE_LECTURE_SECTION
+		set
+			SECTION_VIEWS = #{views}
+		where 
+			LECTURE_SECTION_NO = #{lectureNo}
+	</update>
+	
+	<select id="getFreeSection" parameterType="int" resultType="FreeLectureSection">
+		select
+			FREE_LECTURE_NO				as no,
+			LECTURE_SECTION_NO			as lectureNo,
+			SECTION_TITLE				as sectionTitles,		
+			SECTION_CONTENTS			as sectionContents,
+			SECTION_COUNT				as count,
+			SECTION_VIEWS				as views,	
+			SECTION_CREATE_DATE			as createDate
+		from
+			FREE_LECTURE_SECTION
+		where
+			LECTURE_SECTION_NO = #{value} 
+	</select>	
 </mapper>

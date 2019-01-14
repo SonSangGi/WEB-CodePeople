@@ -20,11 +20,14 @@
 		<typeAlias alias="FreeLecture" type="com.jhta.cope.vo.FreeLecture"/>
 		<typeAlias alias="FreeLectureSection" type="com.jhta.cope.vo.FreeLectureSection"/>
 		<typeAlias alias="FreeLectureComent" type="com.jhta.cope.vo.FreeLectureComent"/>
+		<typeAlias alias="FreeLectureViews" type="com.jhta.cope.vo.FreeLectureViews"/>		
 		<typeAlias alias="Cart" type="com.jhta.cope.vo.Cart"/>
 		<typeAlias alias="UserLog" type="com.jhta.cope.vo.UserLog"/>
 		<typeAlias alias="BuyLecture" type="com.jhta.cope.vo.BuyLecture"/>
+		<typeAlias alias="FreeLectureComentReply" type="com.jhta.cope.vo.FreeLectureComentReply"/>
 		<typeAlias alias="LectureHistory" type="com.jhta.cope.vo.LectureHistory"/>
 		<typeAlias alias="Note" type="com.jhta.cope.vo.Note"/>
+		<typeAlias alias="PaidQna" type="com.jhta.cope.vo.PaidQna"/>
 	</typeAliases>
 
 	<mappers>
@@ -40,5 +43,6 @@
 		<mapper resource="META-INF/mybatis/mappers/buyLecture.xml" />
 		<mapper resource="META-INF/mybatis/mappers/lectureHistory.xml" />
 		<mapper resource="META-INF/mybatis/mappers/note.xml" />
+		<mapper resource="META-INF/mybatis/mappers/paidQna.xml" />
 	</mappers>
 </configuration>

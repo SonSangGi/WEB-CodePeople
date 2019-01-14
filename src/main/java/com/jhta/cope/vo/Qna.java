@@ -10,10 +10,12 @@ public class Qna {
 	private String title;
 	private User writer;
 	private String contents;
-	@DateTimeFormat(pattern="yy-MM-dd")
+	@DateTimeFormat(pattern = "yy-MM-dd")
 	private int views;
+	private int available;
 	private Date createDate;
 	private List<QnaAnswer> answers;
+	private int rn;
 
 	public int getNo() {
 		return no;
@@ -21,6 +23,14 @@ public class Qna {
 
 	public void setNo(int no) {
 		this.no = no;
+	}
+
+	public int getRn() {
+		return rn;
+	}
+
+	public void setRn(int rn) {
+		this.rn = rn;
 	}
 
 	public String getTitle() {
@@ -75,6 +85,14 @@ public class Qna {
 		this.title = title;
 	}
 
+	public int getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(int available) {
+		this.available = available;
+	}
+
 	@Override
 	public String toString() {
 		return "Qna [no=" + no + ", title=" + title + ", writer=" + writer + ", contents=" + contents + ", views="
@@ -84,6 +102,5 @@ public class Qna {
 				+ getViews() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
 				+ super.toString() + "]";
 	}
-
 
 }

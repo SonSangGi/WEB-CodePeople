@@ -17,8 +17,57 @@
 			INSTRUCTOR_NO = #{value}
 	</select>
 	
-	<select id="createNewLecture">
+	<select id="insertPaidLecture" parameterType="PaidLecture">
+		insert into PAID_LECTURE (
+			PAID_LECTURE_NO,
+			INSTRUCTOR_NO,
+			LECTURE_TITLE,
+			LECTURE_LANG,
+			LECTURE_LEVEL,
+			LECTURE_DESCRIPTION,
+			LECTURE_SUMMARY,
+			LECTURE_SPECIALIZED,
+			LECTURE_PRICE,
+			LECTURE_THUMNAIL_PATH,
+			LECTURE_CREATE_DATE,
+			LECTURE_LIKES,
+			LECTURE_VIEW_COUNT,
+			EXPOSURE_STATUS,
+			APPROVE_STATUS			
+		)
+		values (paid_lecture_seq.nextval, #{instructor.no }, #{title }, #{lang }, #{level }, #{description }, #{summary }, #{specialized }, #{price }, #{thumbnail }, sysdate, 0, 0, 'Y', 'N')	
+	</select>
 	
+	<select id="regInstructor" parameterType="Instructor">
+		insert into INSTRUCTOR (
+			INSTRUCTOR_NO,
+			USER_NO,
+			INSTRUCTOR_SUMMARY,
+			INSTRUCTOR_DESCRIPTION
+		)
+		values (#{user.no}, #{user.no}, #{summary}, #{description})	
+	</select>
+	
+	<select id="getAllPaidLectures" parameterType="String" resultType="PaidLecture">
+		SELECT 
+			PAID_LECTURE_NO  as lectureNo, 
+			INSTRUCTOR_NO		as insNo,
+			LECTURE_LANG		as lang,
+			LECTURE_TITLE		as title,
+			LECTURE_LEVEL		as level,
+			LECTURE_SPECIALIZED	as specialized,
+			LECTURE_SUMMARY	as summary,
+			LECTURE_DESCRIPTION	as description,
+			LECTURE_PRICE		as price,
+			LECTURE_THUMNAIL_PATH	as thumnail,
+			LECTURE_CREATE_DATE	as createDate,
+			LECTURE_LIKES	as likes,
+			LECTURE_VIEW_COUNT	as viewCount,
+			EXPOSURE_STATUS		as eStatus,
+			APPROVE_STATUS	as aStatus
+				
+		FROM 
+			PAID_LECTURE
 	</select>
 	
 	

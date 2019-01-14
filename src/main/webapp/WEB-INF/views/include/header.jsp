@@ -4,6 +4,11 @@
 	pageEncoding="UTF-8"%>
 <!--네비게이션 바~~-->
 <div class="wrapper">
+<div class="sg-loading-fade">
+	<div class="sg-loading-box">
+		<img alt="" src="/resources/img/user/loading.gif" style="width: 365px;height: 365px;border-radius: 500px;">
+	</div>
+</div>
 	<div class="sg-header">
 		<div class="col-sm-offset-2 col-sm-7 sg-menu-left" style="display: block">
 			<span>
@@ -19,20 +24,11 @@
 							<li><a href=#>로드 맵</a></li>
 						</ul></li>
 					<li><a href="/free/list.do">외부강의</a></li>
-					<li><a href="#">게시판</a>
-						<ul>
-							<li><a>공지사항</a></li>
-							<li><a>관리자문의</a></li>
-						</ul></li>
-					<li><a href="/qna/list.do">질의응답</a></li>
-					<li>
-						<form style="padding-left: 50px;" action="http:naver.com"
-							id="sg-form-search">
-							<input type="text" name="" value="" placeholder="검색"
-								style="text-align: center; border-radius: 10px; border: none; height: 30px;"
-								name="keyword">
-							<button class="fas fa-search"
-								style="border: none; background: none; color: white; font-size: 20px;"></button>
+					<li><a href="/qna/list.do">Q&A</a></li>
+					<li style="float: right;margin: 13px;">
+						<form style="padding-left: 50px;" method=get action="http://www.google.co.kr/search" target="_blank" id="sg-form-search" >
+							<input type="text" name="q" value="" placeholder="검색" style="text-align: center; border-radius: 10px; border: none; height: 30px;" name="q">
+							<button type="submit" style="border: none; background: none; color: white; font-size: 20px;position:absolute;top:-3px;right:0px;" name="btnG"> <img src="/resources/img/user/icon/google.png" width='20'></button>
 						</form>
 					</li>
 				</ul>
@@ -46,7 +42,7 @@
 					</nav>
 				</c:when>
 				<c:otherwise>
-					<a style="margin:0px;padding:0px;"><img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
+					<a style="margin:0px;padding:0px;" class="btn-sg-menu"><img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
 					<span style="font-size:15px;display: inline-block;padding-top: 16px;">${LOGIN_USER.name}</span></a>
 					<a style="margin-left:20px;" href="/paid/cart.do"><img src="/resources/img/paid/cart-white.png" width=25px; id="cart-menu"></a>
 					<div class="sg-menu-info">
@@ -59,9 +55,9 @@
 									</a>
 								</span>
 								<div class="sg-user-info">
-										<p><a href="/user/my/home.do">${LOGIN_USER.name }</a></p>
+										<p><a href="/user/my/info.do">${LOGIN_USER.name }</a></p>
 									
-										<p><a href="/user/my/home.do">${LOGIN_USER.avatar.exp }exp</a></p>
+										<p><a href="/user/my/stat.do">${LOGIN_USER.avatar.exp }exp</a></p>
 									<p>
 										<a href="/login/logout.do">로그아웃</a>
 									</p>
@@ -69,9 +65,8 @@
 							</div>
 							<div class="sg-info-body">
 								<ul>
-									<li><a href="/user/my/dashboard.do">대시보드</a><i class="fas fa-clipboard-list"></i></li>
-									<li><a href="/user/my/home.do">알림</a><i class="fas fa-bell"></i></li>
-									<li><a href="/user/my/video.do">내 강좌들</a><i class="glyphicon glyphicon-folder-open"></i></li>
+									<li><a href="/user/my/video.do">내 강좌</a><i class="glyphicon glyphicon-folder-open"></i></li>
+									<li><a href="/user/my/chat.do">친구 목록/채팅</a><i class="fas fa-bell"></i></li>
 									<li><a href="/user/my/info.do">결제 내역</a><i class="glyphicon glyphicon-credit-card"></i></li>
 									<li><a href="#">위시리스트</a><i class="fas fa-heart"></i></li>
 								</ul>
@@ -96,24 +91,23 @@
 							<img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>icon.png" width="165px" height="165px">
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">
-							<a style="font-size: 25px; font-weight: bold" href="#">비회원</a>
+							<a class="login-in sg-user-name">손님</a>
 							 <span style="position: absolute; margin-top: 10px;"></span>
 						</div>
 					</c:when>
 					<c:otherwise>
 						<div class="text-center" style="margin-top: 20px;">
-							<a href="/user/my/info.do"><img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" width="165px" height="165px"></a>
+							<a href="/user/my/home.do"><img class="sg-profile-img" src="<c:url value='/resources/img/user/icon/'/>${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" width="165px" height="165px"></a>
 						</div>
 						<div class="col-xs-12 text-center" style="margin-top: 20px;">
-							<a style="    font-size: 25px;font-weight: bold;color: black;border-radius: 30px;padding: 5px;background-color: #ffffff7a;" href="/user/my/home.do">${LOGIN_USER.name }</a>
+							<a class="sg-user-name" href="/user/my/info.do">${LOGIN_USER.name }</a>
 							<span></span>
 						</div>
 					</c:otherwise>
 				</c:choose>
 			</div>
 		</div>
-		<div class="text-center btn-close-header"
-			style="opacity: 0.3; background-color: grey; cursor: pointer;">
+		<div class="text-center btn-close-header">
 			<i class="fas fa-caret-up sg-size-lg sg-text-white"></i>
 		</div>
 	</div>
@@ -143,13 +137,14 @@
 			</div>
 		</div>
 	</div>
+	
+
 
 	<script>
-
 	$("input[id^='input-login']").focus(function(){$(this).animate({'padding-left':'13%'}).prev().animate({left:'0%','font-size':'12px'})});
 	$("input[id^='input-login']").focusout(function(){if($(this).val()==""){$(this).css('padding-left','20%').prev().animate({left:'10%','font-size':'15px'})}});
-	
-		function shake(){
+
+	function shake(){
 			 $(".sg-modal-box").animate({left:"24%"},70);
 			 $(".sg-modal-box").animate({left:"26%"},70);
 			 $(".sg-modal-box").animate({left:"24%"},70);

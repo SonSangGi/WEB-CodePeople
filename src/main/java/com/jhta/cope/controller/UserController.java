@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -31,7 +32,9 @@ import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.Badge;
 import com.jhta.cope.vo.BuyLecture;
 import com.jhta.cope.vo.Chat;
+import com.jhta.cope.vo.Criteria;
 import com.jhta.cope.vo.Follow;
+import com.jhta.cope.vo.LectureHistory;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.QnaComment;
@@ -56,25 +59,60 @@ public class UserController {
 	String iconPath;
 
 	@RequestMapping("/home")
-	public String home() {
+	public String home(Model model) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		Criteria criteria = new Criteria(1, 4);
+		criteria.setUserNo(user.getNo());
+		List<LectureHistory> historys = userService.getLectureHistoryByCriteria(criteria);
+		List<Badge> haveBadges = userService.haveBadge(user.getNo());
+		
+		model.addAttribute("myHistorys", historys);
+		model.addAttribute("have", haveBadges);
 		return "user/my_home";
 	}
 
 	@RequestMapping("/video")
-	public String video() {
+	public String video(Model model) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		Criteria criteria = new Criteria(1, 8);
+		criteria.setUserNo(user.getNo());
+		List<LectureHistory> historys = userService.getLectureHistoryByCriteria(criteria);
+		
+		model.addAttribute("myHistorys", historys);
 		return "user/my_video";
 	}
 
-	@RequestMapping("/dashboard")
-	public String dashboard() {
-		return "user/my_dashboard";
+	//JSON 내 강좌 검색, 페이징, 정렬
+	@RequestMapping(value = "/getHistory",method=RequestMethod.POST)
+	@ResponseBody
+	public List<LectureHistory> getHistory(@RequestParam(value = "cp", required = false) Integer cp,
+			@RequestParam(value = "sort", required = false) String sort,
+			@RequestParam(value = "keyword", required = false) String keyword) {
+
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+
+		if (cp == null) {
+			cp = 1;
+		}
+		if (keyword != null) {
+			keyword = keyword.replaceAll(" ", "");
+			keyword = keyword.toLowerCase();
+		}
+		int rows = 8;
+
+		Criteria criteria = new Criteria(cp, rows);
+		criteria.setKeyword(keyword);
+		criteria.setUserNo(user.getNo());
+		criteria.setSort(sort);
+		List<LectureHistory> historys = userService.getLectureHistoryByCriteria(criteria);
+
+		return historys;
 	}
 
 	@RequestMapping("/chat")
 	public String chat(Model model) {
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
-		List<Follow> friends = userService.getFriends(user.getId());
-		model.addAttribute("friends", friends);
 		return "user/my_chat";
 	}
 
@@ -114,7 +152,7 @@ public class UserController {
 	public String info(Model model) {
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 		List<BuyLecture> buyLectures = buyLectureService.getBuyLectureByUserNoResultMap(user.getNo());
-		model.addAttribute("buyLectures",buyLectures);
+		model.addAttribute("buyLectures", buyLectures);
 		return "user/my_info";
 	}
 
@@ -159,6 +197,15 @@ public class UserController {
 		return URLEncoder.encode(fileName, "UTF-8");
 	}
 
+	// 배경 삭제
+	@RequestMapping(value = "/bgdel")
+	public String bgDel() {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		user.getAvatar().setBgImg("Default");
+		userService.updateAvatar(user.getAvatar());
+		return "user/my_info";
+	}
+	
 	// JSON 아이콘 삭제
 	@RequestMapping(value = "/icondel")
 	@ResponseBody
@@ -196,6 +243,16 @@ public class UserController {
 		return chats;
 	}
 
+	@RequestMapping("/chat/viewChat")
+	@ResponseBody
+	public String viewChat(String recvUserId) {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		Chat chat = new Chat().setRecvUser(new User().setId(recvUserId)).setSendUser(user).setViewAvailable("Y");
+		chatService.updateChat(chat);
+		return "";
+	}
+
+	
 	// JSON 친구 거절 요청
 	@RequestMapping("/delFollow")
 	@ResponseBody

@@ -36,6 +36,18 @@
 			USER_NO = #{value}
 	</select>
 	
+		<select id="getBuyLectureByNoResultMap" parameterType="int" resultMap="getBuyLectureResultMap">
+		select
+			BUY_LECTURE_NO,
+			PAID_LECTURE_NO,
+			USER_NO as,
+			CREATE_DATE
+		from
+			BUY_LECTURE
+		where
+			BUY_LECTURE_NO = #{value}
+	</select>
+	
 	<select id="getBuyLectureByUserNo" parameterType="int" resultType="BuyLecture">
 		select
 			BUY_LECTURE_NO as no,

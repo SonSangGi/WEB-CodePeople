@@ -21,6 +21,8 @@
 .yb-course-container>p {
 	font-size: 17px;
 	line-height: 180%;
+	height: 200px;
+	width: 290px;
 }
 
 .yb-text-red {
@@ -62,11 +64,39 @@ h4 {
 	width: 100%;
 	height: 195px;
 }
+
+.yb-pn-block {
+	display: inline-block;
+}
+
+.yb-pn-block a {
+	padding: 0px 7px 0px 7px;
+    border: 2px solid #40e0d0;
+    border-radius: 3px;
+    font-weight: 600;
+    color: #289086;
+    font-size: 13px;
+}
+
+.yb-pn-block a.active{
+    background-color: #40e0d0;
+    color:white;
+    }
 </style>
 </head>
 <body>
 	<%@include file="/WEB-INF/views/include/header.jsp"%>
 	<div class="container">
+		<div style="text-align: center; display: inline-block; position: absolute; right:10%; top: 2%" >
+			<form action="list.do" id="free-lecture-search-form">
+				<select name="searchType">
+					<option value="all" ${param.searchType eq 'all' ? 'selected' : ''}>전체</option>
+					<option value="title" ${param.searchType eq 'title' ? 'selected' : ''}>제목</option>
+				</select>
+				<input type="text" name="keyword" placeholder="검색" value="${param.keyword }">
+				<input type="hidden" name="cp" id="cp-value" value="${param.cp }">
+			</form>
+		</div>
 		<c:forEach var="freeLecture" items="${freeLectures }">
 			<div class="yb-course-container">
 				<h3>${freeLecture.lectureTitle}</h3>
@@ -79,30 +109,34 @@ h4 {
 				<p>
 					${freeLecture.lectureSummary }
 				</p>
-				<p>
-					<a id="yb-course-button21" class="button" href="/free/detail.do?freeLectureNo=${freeLecture.no }">
+				<hr style="border-top: 1px solid #2e6da4;">
+				<div>
+					<a class="yb-course-button" class="button" href="/free/detail.do?freeLectureNo=${freeLecture.no }">
 						배우러 가기 </a>
-				</p>
+					<a class="yb-course-delete" href="/free/delete.do?freeLectureNo=${freeLecture.no }">삭제</a>
+				</div>
 			</div>
 		</c:forEach>
-		<div class="yb-course-container">
-			<h3>게임을 만들어 보자!</h3>
-			<div class="yb-course-img">
-				<img
-					src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/unitycourse-460x299.png"
-					alt="">
-			</div>
-			<h4>백지 상태에서 만들 수 있도록!!</h4>
-			<p>
-				등하교, 출퇴근 할때 폰으로 매일같이 즐기는 게임! <br> <span class="yb-text-red">아무것도
-					모르는 입문자</span>를 대상으로 알려주는 게임 개발 강좌들 입니다. <br> 직접 꿈꾸던 게임들을 만들어 보세요!
-			</p>
-			<p>
-				<a id="yb-course-button21" class="button" href="">
-					배우러 가기 </a>
-			</p>
-		</div>
 	</div>
-
+	<hr>
+	<div class="text-center">
+		<ul style="display: inline-block;">
+			<c:if test="${pagination.currentBlock gt 1}">
+				<li class="yb-pn-block"><a href="javascript:searchFreeLecture(${pagination.prevBlock })">&laquo;</a>
+			</c:if>
+			<c:forEach var="pnum" begin="${pagination.beginPage }" end="${pagination.endPage }">
+				<li class="yb-pn-block"><a class="${pnum eq param.cp ? 'active': '' }" href="javascript:searchFreeLecture(${pnum })">${pnum }</a></li>
+			</c:forEach>
+			<c:if test="${pagination.currentBlock lt pagination.totalBlocks }">
+				<li class="yb-pn-block"><a href="javascript:searchFreeLecture(${pagination.nextBlock })">&raquo;</a>
+			</c:if>
+		</ul>
+	</div>
+	<script type="text/javascript">
+		function searchFreeLecture(cp) {
+			$("#cp-value").val(cp);
+			$("#free-lecture-search-form").submit();
+		}
+	</script>
 	<%@include file="/WEB-INF/views/include/footer.jsp"%></body>
 </html>

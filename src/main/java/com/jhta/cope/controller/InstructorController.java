@@ -1,10 +1,13 @@
 package com.jhta.cope.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.functors.ExceptionPredicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,11 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jhta.cope.service.InstructorNoticeService;
 import com.jhta.cope.service.InstructorService;
 import com.jhta.cope.util.SessionUtils;
+import com.jhta.cope.vo.Instructor;
 import com.jhta.cope.vo.InstructorNotice;
 import com.jhta.cope.vo.PaidLecture;
 import com.jhta.cope.vo.User;
@@ -28,6 +33,9 @@ public class InstructorController {
 //	@Value("${instructor.image.directory}")
 //	private String instructorImageDirectory;
 //	
+	@Value("${paidlecture.photo.image.directory}")
+	String paidLectureThumbnailDirectory;
+	
 	@Autowired
 	InstructorService instructorService;
 	
@@ -40,7 +48,7 @@ public class InstructorController {
 	public String dashboard() {
 		return "instructor/dashboard";
 	}
-	
+
 	@RequestMapping("/lecture")
 	public String lecture() {
 		return "instructor/lecture";
@@ -101,23 +109,75 @@ public class InstructorController {
 //	}
 //	
 	
-	
-	@RequestMapping(value = "create", method = RequestMethod.GET)
-	public String createLecture() {
-		return "instructor/createLecture";
+	@RequestMapping(value = "reginstructor", method = RequestMethod.GET)
+	public String reginstructor() {
+		return "instructor/reginstructor";
 	}
-
-	@RequestMapping(value = "create", method = RequestMethod.POST)
-	public String create(PaidLecture paidLecture) {
+	
+	@RequestMapping(value = "reginstructor", method = RequestMethod.POST)
+	public String reginstructor(Instructor instructor) {
 		
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
-		System.out.println(user + "세션 작동 확인");
-		
-		instructorService.createNewLecture(paidLecture);
 		
 		
-		return "redirect:submit.do";
+		instructor.setUser(user);
+	
+		instructorService.regInstructor(instructor);
+		
+		return "redirect:reginstructor.do";
+	
 	}
+	
+	
+	@RequestMapping(value = "create", method = RequestMethod.GET)
+	public String createlectures() {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+
+		
+		return "instructor/createlectures";
+	}
+	
+	
+	@RequestMapping(value = "create", method = RequestMethod.POST)
+	public String create(PaidLecture paidLecture, @RequestParam("thumbnailfile") MultipartFile thumbnailfile) throws IOException  {
+		
+		if (!thumbnailfile.isEmpty()) {
+			String filename = thumbnailfile.getOriginalFilename();
+			FileCopyUtils.copy(thumbnailfile.getBytes(), new File(paidLectureThumbnailDirectory, filename));
+			paidLecture.setThumbnail(filename);
+		} else {
+			paidLecture.setThumbnail("noimage.jpg");
+		}
+		
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		Instructor instructor = new Instructor();
+		instructor.setNo(user.getNo());
+		paidLecture.setInstructor(instructor);		
+		
+		instructorService.insertPaidLecture(paidLecture);
+		
+		
+		return "redirect:dashboard.do";
+	}
+	
+	
+	
+/*	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	public String createdetail(Model model) throws Exception {
+
+		List<PaidLecture> paidLectures = instructorService.getAllPaidLectures();
+		model.addAttribute("paidLectures", paidLectures);
+		
+		return "paidLectures/detail";
+	}*/
+	
+	@RequestMapping("/createdetail")
+	public String createdetail() {
+		return "instructor/createdetail";
+	}
+	
+
 	
 	
 	

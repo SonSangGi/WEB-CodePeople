@@ -109,13 +109,13 @@
                                 <div class="row">
                                     <div class="col-xs-5">
                                         <div class="icon-big icon-info text-center">
-                                            <i class="ti-twitter-alt"></i>
+                                            <i class="ti-agenda"></i>
                                         </div>
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="numbers">
                                             <p>게시글</p>
-                                            104개
+                                            ${countQnaPosts } 개
                                         </div>
                                     </div>
                                 </div>

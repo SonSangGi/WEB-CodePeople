@@ -1,4 +1,5 @@
-# 동영상 강의 사이트 CodePeople
+
+![1](./README_imgs/1.PNG)
 
 ### 맡은 업무
 * 로그인 및 회원가입
@@ -8,6 +9,15 @@
 * 메인페이지
 * 프로젝트 설계 및 초기 설정
 * 페이지 디자인
+![2](./README_imgs/2.PNG)
+![3](./README_imgs/3.PNG)
+![4](./README_imgs/4.PNG)
+![5](./README_imgs/5.PNG)
+![6](./README_imgs/6.PNG)
+![7](./README_imgs/7.PNG)
+![8](./README_imgs/8.PNG)
+![9](./README_imgs/9.PNG)
+![10](./README_imgs/10.PNG)
 
 ### 맡은 부분 경로
 ##### Controller

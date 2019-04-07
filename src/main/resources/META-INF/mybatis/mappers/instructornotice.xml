@@ -1,278 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
  <mapper namespace="com.jhta.cope.dao.InstructorNoticeDao">
  
- 	<!--공지사항 게시판 resultmap-->
- 	<resultMap type="InstructorNotice" id="getInstructorNoticeByNoResultMap">
- 		<id column="NOTICE_NO" property="no" />
- 		<result column="NOTICE_TITLE" property="title" />
- 		<result column="NOTICE_WRITER" property="writer" />
- 		<result column="NOTICE_CONTENTS" property="contents" />
- 		<result column="NOTICE_CREATE_DATE" property="createDate" />
- 		<result column="NOTICE_VIEWS" property="views" />
- 		<association column="NOTICE_WRITER" property="writer" javaType="User" select="com.jhta.cope.dao.userDao.getUserByNo" />
- 		<collection property="answers" column="NOTICE_NO" javaType="java.util.ArrayList" ofType="InstructorNoticeAnswer" select="getAnswerByNo" />
- 	</resultMap>
- 	
- 	<!--answer resultmap-->
- 	<resultMap type="InstructorNoticeAnswer" id="getAnswerByNoResultMap">
- 		<id column="ANSWER_NO" property="no" />
- 		<result column="ANSWER_CONTENTS" property="contents" />
- 		<result column="ANSWER_CREATE_DATE" property="createDate" />
- 		<result column="NOTICE_NO" property="noticeNo" />
- 		<association column="ANSWER_WRITER" property="writer" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo" />
- 		<collection property="comments" column="ANSWER_NO" javaType="java.util.ArrayList" ofType="QnaComment" select="getQnaCommentByNo" />
- 	</resultMap>
- 	
- 	<resultMap type="InstructorNoticeComment" id="getInstructorNoticeCommentByNoResultMap">
- 		<id column="COMMENT_NO" property="no" />
- 		<result column="ANSWER_NO" property="answerNo"/>
- 		<result column="CO_CONTENTS" property="contents"/>
- 		<result column="CO_CREATE_DATE" property="cteateDate"/>
- 		<association column="CO_WRITER" property="writer" javaType="User" select="com.jhta.cope.dao.UserDao.getUserByNo" />	
- 	</resultMap>
- 	
- 	<select id="getAnswerByNo" parameterType="int" resultMap="getAnswerByNoResultMap">
-	select
-		ANSWER_NO,
-		ANSWER_WRITER,
-		ANSWER_CONTENTS,
-		ANSWER_CREATE_DATE,
-		NOTICE_NO
-	from
-		INSTRUCTOR_NOTICE_ANSWER
-	where
-		ANSWER_NO = #{value}
-	order by
-		ANSWER_CREATE_DATE
- 	</select>
- 	
- 	<select id="getAnswerByUserNo" parameterType="int" resultMap="getAnswerByNoResultMap">
-	select
-		ANSWER_NO,
-		ANSWER_WRITER,
-		ANSWER_CONTENTS,
-		ANSWER_CREATE_DATE,
-		NOTICE_NO
-	from
-		INSTRUCTOR_NOTICE_ANSWER
-	where
-		ANSWER_WRITER = #{value}
-	order by
-		ANSWER_CREATE_DATE
- 	</select>
- 	
- 	<select id="getAllAnswers" resultMap="getAnswerByNoResultMap">
- 		select
- 			ANSWER_NO,
-			ANSWER_WRITER,
-			<![CDATA[REGEXP_REPLACE](ANSWER_CONTENTS,'<[^>]*>','')] as ANSWER_CONTENTS]]>,
-			ANSWER_CREATE_DATE,
-			NOTICE_NO
+ 
+	<insert id="insertInstructorNotice" parameterType="InstructorNotice">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+				select notice_no_seq.nextval from dual
+		</selectKey>
+		insert into INSTRUCTOR_NOTICE(
+			NOTICE_NO,
+			NOTICE_TITLE,
+			NOTICE_CONTENTS,
+			NOTICE_CREATE_DATE,
+			PAID_LECTURE_NO,
+			INSTRUCTOR_NO)
+		
+		values (#{no}, #{title}, #{contents}, sysdate, #{paidLecture.no}, #{instructor.no})
+	</insert>	
+	
+	<select id="getInstructorNoticeByPaidLectureNo" parameterType="int" resultType="InstructorNotice">
+		select 
+			NOTICE_NO as "no",
+			NOTICE_TITLE as "title",
+			NOTICE_CONTENTS as "contents",
+			NOTICE_CREATE_DATE as "createDate",
+			PAID_LECTURE_NO as "paidLecture.no",
+			INSTRUCTOR_NO as "instructor.no"
 		from
-			INSTRUCTOR_NOTICE_ANSWER
-		order by
-			ANSWER_CREATE_DATE		
- 	</select>
+		    INSTRUCTOR_NOTICE
+		where
+			PAID_LECTURE_NO = #{value}
+	</select>
+	
+	
  
- 	<select id="getInstructorNoticeByNo" parameterType="int" resultMap="getInstructorNoticeByNoResultMap">
- 		select
- 			NOTICE_NO,
- 			NOTICE_TITLE,
- 			NOTICE_WRITER,
- 			NOTICE_CONTENTS,
- 			NOTICE_VIEWS,
- 			NOTICE_CREATE_DATE
- 		from
- 			INSTRUCTOR_NOTICE
- 		where
- 			NOTICE_NO = #{value}
- 	</select>
- 	
- 	
- 	<select id="getInstructorNoticeByUserNo" parameterType="int" resultMap="getInstructorNoticeByNoResultMap">
- 		select
- 			NOTICE_NO,
- 			NOTICE_TITLE,
- 			NOTICE_WRITER,
- 			NOTICE_CONTENTS,
- 			NOTICE_VIEWS,
- 			NOTICE_CREATE_DATE
- 		from
- 			INSTRUCTOR_NOTICE
- 		where
- 			NOTICE_WRITER = #{value}
- 	</select>
- 	
- 	<select id="getAllInstructorNotice" resultMap="getInstructorNoticeByNoResultMap">
- 		select
- 			NOTICE_NO,
- 			NOTICE_TITLE,
- 			NOTICE_WRITER,
- 			NOTICE_CONTENTS,
- 			NOTICE_VIEWS,
- 			NOTICE_CREATE_DATE
- 		from
- 			INSTRUCTOR_NOTICE
- 		order by
- 			NOTICE_CREATE_DATE
- 	</select>
- 
- 
- 	<select id="getAllNoticesByCriteria" parameterType="Criteria" resultMap="getInstructorNoticeByNoResultMap">
- 		select
- 			NOTICE_NO,
- 			NOTICE_TITLE,
- 			NOTICE_WRITER,
- 			NOTICE_CONTENTS,
- 			NOTICE_VIEWS,
- 			NOTICE_CREATE_DATE
- 		from (
- 			select
- 				<choose>
- 					<when test="sort == 'rep'">
- 						ROW_NUMBER() over (order by B.rep desc) rn,
- 					</when>
- 					<when test="sort == 'view'">
- 						ROW_NUMBER() over (order by A.notice_views desc) rn,
- 					</when>
- 					<otherwise>
- 						ROW_NUMBER() over (order by A.notice_create_date) rn,
- 					</otherwise>
- 				</choose>
-		 			A.NOTICE_NO,
-		 			A.NOTICE_TITLE,
-		 			A.NOTICE_WRITER,
-		 			A.NOTICE_CONTENTS,
-		 			A.NOTICE_CREATE_DATE,
-		 			A.NOTICE_VIEWS
-		 	from 
-		 		notice A<if test="sort='rep'">,
-		 				(select count(D.answer_contents)as rep, C.NOTICE_NO
-		 				from
-		 				 notice C, notice_answer D where C.notice_no = D.notice_no(+) group by C.notice_no) B
-		 			    </if>
-		 		<where>
-		 			<if test="searchType == 'all' and keyword != null">
-			        	(LOWER(A.NOTICE_TITLE) like '%' || #{keyword} || '%' or
-		        		LOWER(A.NOTICE_WRITER) like '%' || #{keyword} || '%' or
-		        		LOWER(A.NOTICE_CONTENTS) like '%' || #{keyword} || '%')	 			
-		 			</if>
-		 			<if test="searchType == 'title' and keyword != null">
-		 				LOWER(A.NOTICE_TITLE) like '%' || #{keyword} || '%'
-		 			</if>
-		 			<if test="searchType == 'writer' and keyword != null">
-		 				LOWER(A.NOTICE_WRITER) like '%' || #{keyword} || '%'
-		 			</if>
-		 			<if test="sort='rep'">AND A.NOTICE_NO = B.NOTICE_NO</if>
-		 		</where>
-		 			)
-		 		where rn &gt; = #{beginIndex}
-		 		and rn &lt; = #{endIndex}
-	 	</select>
 	 	
-	 	<select id="getInstructorNoticeCommentByNo" parameterType="int" resultMap="getInstructorNoticeCommentByNoResultMap">
-	 		select
-	 			COMMENT_NO,
-	 			ANSWER_NO,
-	 			CO_WRITER,
-	 			CO_CONTENTS,
-	 			CO_CREATE_DATE
-	 		from
-	 			INSTRUCTOR_NOTICE_COMMENT
-	 		where
-	 			ANSWER_NO = #{value}
-	 		order by
-	 			CO_CREATE_DATE
-	 	</select>
-
-	 	<select id="getInstructorNoticeCommentByUserNo" parameterType="int" resultMap="getInstructorNoticeCommentByNoResultMap">
-	 		select
-	 			COMMENT_NO,
-	 			ANSWER_NO,
-	 			CO_WRITER,
-	 			CO_CONTENTS,
-	 			CO_CREATE_DATE
-	 		from
-	 			INSTRUCTOR_NOTICE_COMMENT
-	 		where
-	 			CO_WRITER = #{value}
-	 		order by
-	 			CO_CREATE_DATE
-	 	</select>
-	 	
-	 	<select id="getInstructorNoticeCount" resultType="int">
-	 		select
-	 			count(*)
-	 		from
-	 			INSTRUCTOR_NOTICE
-	 	</select>
-	 	
-	 	<select id="getAnswerCount" parameterType="int" resultType="int">
-	 		select
-	 			count(*)
-	 		from
-	 			INSTRUCTOR_NOTICE_ANSWER
-	 		where
-	 			ANSWER_NO = #{value}
-	 	</select>
-	 	
-		<insert id="insertInstructorNotice" parameterType="INSTRUCTOR_NOTICE">
-			<selectKey keyProperty="no" resultType="int" order="BEFORE">
-			select
-				SEQ_qna_qna_no.nextval
-			from
-				dual
-			</selectKey>
-			insert into INSTRUCTOR_NOTICE {
-						NOTICE_NO,
-						NOTICE_TITLE,
-						NOTICE_WRITER,
-						NOTICE_CONTENTS,
-						NOTICE_CREATE_DATE,
-						NOTICE_VIEWS)
-			values (#{no}, #{title}, #{writer.no}, #{contents}, sysdate, 0)
-		</insert>
-		
-		<insert id="insertAnswer" parameterType="INSTRUCTOR_NOTICE_ANSWER">
-			<selectKey keyProperty="no" resultType="int" order="BEFORE">
-			select seq_qna_answer_answer_no.nextval from dual
-			</selectKey>
-			insert into
-				INSTRUCTOR_NOTICE_ANSWER(
-				ANSWER_NO,
-				ANSWER_WRITER,
-				ANSWER_CONTENTS,
-				ANSWER_CREATE_DATE,
-				NOTICE_NO)
-			values(#{no}, #{writer.no}, #{contents}, sysdate, #{qnaNo})
-		</insert>
-		
-		<insert id="insertAnswerComment" parameterType="INSTRUCTOR_NOTICE_COMMENT">
-			<selectKey keyProperty="no" resultType="int" order="BEFORE">
-				select
-					seq_qna_comment_comment_no.nextval
-				from
-					dual
-			</selectKey>
-		insert into
-			INSTRUCTOR_NOTICE_COMMENT(
-				COMMENT_NO,
-				ANSWER_NO,
-				CO_WRITER,
-				CO_CONTENTS,
-				CO_CREATE_DATE
-			values(#{no},#{answerNo},#{writer.no},#{contents},sysdate)
-		</insert>
-		
-		<update id="updateQna" parameterType="INSTRUCTOR_NOTICE">
-		
-		</update>
-		
-		<update id="updateAnswer" parameterType="INSTRUCTOR_NOTICE_ANSWER">
-		
-		</update>
  </mapper>

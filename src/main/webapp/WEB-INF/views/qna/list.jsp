@@ -14,8 +14,16 @@
       color:gray;
     }
     .table>tbody>tr>td{
+      padding:3px;
       border-top: 1px solid rgba(0, 150, 133, 0.16);
       font-size: 15px;
+    }
+    .table>tbody>tr>td a{
+    	color:#464646;
+    	font-weight:400;
+    }
+    .table>tbody>tr>td a:visited{
+    	color:#a1a1a1;
     }
     .table>tbody>tr:last-child{
       border-bottom: 1px solid rgba(0, 150, 133, 0.16);
@@ -73,8 +81,15 @@
     			<button class="sort-link ${param.sort eq 'view' ? 'active':''}" value="view">조회순</button>
 	    		<input type="hidden" name="sort" id="sort-value" value="${param.sort }">
 	    		<input type="hidden" name="cp" id="cp-value" value="${param.cp }">
+	    		<select name="rows" style="border:none;margin-left:20px;" id="rows-value">
+		    		<option value="10" ${param.rows == 10 ? 'selected':'' }>10개씩 보기</option>
+		    		<option value="20" ${param.rows == 20 ? 'selected':'' }>20개씩 보기</option>
+		    		<option value="30" ${param.rows == 30 ? 'selected':'' }>30개씩 보기</option>
+		    		<option value="50" ${param.rows == 50 ? 'selected':'' }>50개씩 보기</option>
+		    	</select>
 	    	</div>
 		    <div style="text-align: center;display: inline-block;float: right;">
+		    	
 		    	<select name="searchType" style="border:2px solid rgb(76, 254, 210);border-radius:3px;height:37px;position:absolute;right:196px;">
 		    		<option value="all" ${param.searchType eq 'all' ? 'selected' : ''}>전체</option>
 		    		<option value="title" ${param.searchType eq 'title' ? 'selected' : ''}>제목</option>
@@ -166,11 +181,9 @@
 			$('#qna-search-form').submit();
 		}
 		
-		var fail = '${param.fail}' || '';
-		if(fail != ''){
-			alert("잘못된 접근 방식입니다.\n안전을 위해 로그아웃 처리됩니다.");
-			location.href="/login/logout.do";
-		}
+		$('#rows-value').change(function(){
+			searchQna(1);
+		})
 		
 		//봤던 글 액티브
 		var qnaCookie = /qnaSeq=([^;]*)/.test(document.cookie) ? unescape(RegExp.$1) : '';

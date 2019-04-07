@@ -34,4 +34,5 @@ public interface FreeLectureService {
 	int getFreeLectureViewsCount(int sectionNo, int userNo);
 	void updateFreeLectureViews(FreeLectureSection freeLectureSection);
 	FreeLectureSection getFreeSection(int sectionNo);
+	void updateFreeLectureAvailable(FreeLecture freeLecture); 
 }

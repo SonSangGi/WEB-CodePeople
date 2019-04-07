@@ -86,7 +86,7 @@
                
             <c:forEach items="${have }" var="badge">
             <div class="sg-badge-sub">
-              <div class="sg-badge-box"><i class="fas ${badge.icon }"></i></div>
+              <div class="sg-badge-box"><i class="${badge.icon }"></i></div>
                <div class="sg-badge-contents" style="">
                   <h3>${badge.name }</h3>
                   <p>${badge.condition }</p>
@@ -104,7 +104,7 @@
          	<c:forEach items="${notHave }" var="badge">
          	
             <div class="sg-badge-sub">
-               <div class="sg-badge-box"><i class="fas ${badge.icon }"></i></div>
+               <div class="sg-badge-box"><i class="${badge.icon }"></i></div>
                <div class="sg-badge-contents" style="">
                   <h3>${badge.name }</h3>
                   <p>${badge.condition }</p>

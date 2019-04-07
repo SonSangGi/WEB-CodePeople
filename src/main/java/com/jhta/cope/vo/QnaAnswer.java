@@ -17,6 +17,8 @@ public class QnaAnswer {
 	@DateTimeFormat(pattern = "yyyy-mm-dd HH:mm:ss")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Date createDate;
+	private int available;
+	private int rn;
 
 	public int getNo() {
 		return no;
@@ -65,14 +67,26 @@ public class QnaAnswer {
 	public void setComments(List<QnaComment> comments) {
 		this.comments = comments;
 	}
+	public int getAvailable() {
+		return available;
+	}
+	public void setAvailable(int available) {
+		this.available = available;
+	}
+	public int getRn() {
+		return rn;
+	}
+	public void setRn(int rn) {
+		this.rn = rn;
+	}
 
 	@Override
 	public String toString() {
 		return "QnaAnswer [no=" + no + ", qnaNo=" + qnaNo + ", writer=" + writer + ", contents=" + contents
-				+ ", createDate=" + createDate + ", getNo()=" + getNo() + ", getQnaNo()=" + getQnaNo()
-				+ ", getWriter()=" + getWriter() + ", getContents()=" + getContents() + ", getCreateDate()="
-				+ getCreateDate() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+				+ ", comments=" + comments + ", createDate=" + createDate + ", available=" + available + ", rn=" + rn
+				+ "]";
 	}
+
+	
 
 }

@@ -9,6 +9,7 @@ public class FreeLecture {
 	private int lectureTime;
 	private String lectureLevel;
 	private String lectureSummary;
+	private String available;
 	
 	public FreeLecture() {}
 
@@ -66,6 +67,14 @@ public class FreeLecture {
 
 	public void setLectureSummary(String lectureSummary) {
 		this.lectureSummary = lectureSummary;
+	}
+	
+	public String getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(String available) {
+		this.available = available;
 	}
 
 	@Override

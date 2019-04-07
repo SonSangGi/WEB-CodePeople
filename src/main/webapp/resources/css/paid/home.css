@@ -137,14 +137,14 @@
 
 .paid-home-course-wrapper {
 	position: relative;
-	height: 300px;
+	height: 350px;
 }
 
 .paid-home-info-overlay {
 	position: absolute;
 	top: 0px;
 	width: 253px;
-	height: 309px;
+	height: 350px;
 	background: white;
 	opacity: 0.9;
 	display: none;
@@ -205,4 +205,14 @@
 
 .selected {
 	border-bottom: 5px solid #ff7373;
+}
+
+.paid-home-panel-top-title-wrapper {
+	height: 100px;
+}
+
+.number-of-like {
+	font-weight: 800;
+	font-size:12px;
+	
 }

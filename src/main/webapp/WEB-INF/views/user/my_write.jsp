@@ -15,12 +15,15 @@
 		display:block;
 		width:100%;
 		padding:5px;
-		border-bottom:1px solid lightgray;
+		border:1px solid lightgray;
 		font-size:16px;
+		margin-bottom:5px;
+		border-left:3px solid #ff7373;
 	}
-	.label{
-	    padding: 0px 6px 0px 5px;
-	    border-radius: 33.25em;
+	.label{    
+	padding: 2px 6px 2px 5px;
+    border-radius: 33.25em;
+    margin: 2px;
 	}
 	.label-primary{
 		background-color:#33b7b1;
@@ -36,8 +39,8 @@
      <%@include file="/WEB-INF/views/user/my_header.jsp" %>
     <div class="user-info-body" style="min-height:300px;margin-top:30px;padding-left:30px;">
             <div class="row">
-               <div class="col-xs-6" style="border-right:1px solid lightgrey;">
-                  <h3>나의 질문</h3>
+               <div class="col-xs-6">
+                  <h3>나의 질문<small><label class="label label-primary">${fn:length(qnas) }</label></small></h3>
                   <c:choose>
                   	  <c:when test="${fn:length(qnas) eq 0 }">
 		                  <span style="font-size:17px;">아직 질문을 작성하지 않았습니다.</span>
@@ -48,13 +51,11 @@
 	                  	<c:forEach items="${qnas }" var="qna">
 	                  	<tr>
 	                  		<td>
+	                  			<p style="font-size:12px;color:gray;margin:0px;"><fmt:formatDate value="${qna.createDate }" pattern="yyyy-MM-dd HH:mm"/> 작성</p>
 	                  			<a href="/qna/detail.do?qnaNo=${qna.no}">${fn:substring(qna.title,0,20)}${fn:length(qna.title) >= 20 ? '...':'' }</a>
 	                  			<c:if test="${fn:length(qna.answers)> 0 }">
-	                  				<label class="label label-primary">${fn:length(qna.answers) }</label>
+	                  				 <label class="label label-primary">${fn:length(qna.answers) }</label>
 	                  			</c:if>
-	                  			<small style="float:right;">
-	                  				<fmt:formatDate value="${qna.createDate }" pattern="yyyy-MM-dd HH:mm"/>
-	                  			</small>
 	                  		</td>
 	                  		
 	                  	</c:forEach>
@@ -65,7 +66,7 @@
                <div class="col-xs-6">
 
 				<div>
-                  <h3>나의 답변</h3>
+                  <h3>나의 답변<small><label class="label label-primary">${fn:length(answers) }</label></small></h3>
                   
                   
                   <c:choose>
@@ -78,15 +79,13 @@
 	                  	<c:forEach items="${answers }" var="answer">
 	                  		<tr>
 	                  		<td>
-		                  		<a href="/qna/detail.do?qnaNo=${answer.qnaNo}">
+		                  		<p style="font-size:12px;color:gray;margin:0px;"><fmt:formatDate value="${answer.createDate }" pattern="yyyy-MM-dd HH:mm"/> 작성</p>
+	                  			<a href="/qna/detail.do?qnaNo=${answer.qnaNo}">
 		                  			<c:out value='${fn:substring(answer.contents,0,20)}'/>${fn:length(answer.contents) >= 20 ? '...':'' }
 		                  			<c:if test="${fn:length(answer.comments)>0 }">
 		                  				<label class="label label-primary">${fn:length(answer.comments) }</label>
 		                  			</c:if>
 		                  		</a>
-		                  		<small style="float:right;">
-		                  			<fmt:formatDate value="${answer.createDate }" pattern="yyyy-MM-dd HH:mm"/>
-		                  		</small>
 		                  	</td>
 		                  	</tr>
 	                  	</c:forEach>

@@ -21,6 +21,21 @@
 			UPDATE_DATE desc
 	</select>
 	
+	<select id="getLectureHistoryByHistoryNo" parameterType="int" resultType="LectureHistory">
+		select
+			HISTORY_NO as no,
+			DETAIL_NO as "paidLectureDetail.no",
+			BUY_LECTURE_NO as "buyLecture.no",
+			PASS as "pass",
+			HISTORY_LENGTH as "historyLength",
+			UPDATE_DATE as "updateDate"
+		from
+			LECTURE_HISTORY
+		where
+			HISTORY_NO = #{value}
+	</select>
+	
+	
 	<insert id="insertLectureHistory" parameterType="LectureHistory">
 		<selectKey keyProperty="no" resultType="int" order="BEFORE">
 			select history_no_seq.nextval from dual
@@ -29,10 +44,34 @@
 			HISTORY_NO,
 			DETAIL_NO,
 			BUY_LECTURE_NO,
-			PASS,
-			HISTORY_LENGTH,
 			UPDATE_DATE)
-		values (#{no}, #{paidLectureDetail.no}, #{buyLecture.no}, #{pass}, #{historyLength}, sysdate)
+		values (#{no}, #{paidLectureDetail.no}, #{buyLecture.no}, sysdate)
 	</insert>
+	
+	
+	<update id="updateLectureHistory" parameterType="LectureHistory">
+		update LECTURE_HISTORY
+		set
+			DETAIL_NO = #{paidLectureDetail.no},
+			BUY_LECTURE_NO = #{buyLecture.no},
+			PASS = #{pass},
+			HISTORY_LENGTH = #{historyLength},
+			UPDATE_DATE = #{updateDate}
+		where
+			HISTORY_NO = #{no}
+	</update>
+	
+	<select id="getCountPassByBuyLectureNo" parameterType="int" resultType="int">
+		SELECT
+			COUNT(*)
+		from
+			LECTURE_HISTORY
+		where
+			BUY_LECTURE_NO = #{value}
+		and
+			PASS = 'Y'
+	</select>
+	
+	
 	
 </mapper>

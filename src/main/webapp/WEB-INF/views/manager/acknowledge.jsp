@@ -39,20 +39,57 @@
                                     <thead>
                                         <tr>
 	                                        <th>요청 번호</th>
-	                                    	<th>이름</th>
-	                                    	<th>임시 강의 번호</th>
+	                                    	<th>강사 이름</th>
+	                                    	<th>강의 제목</th>
 	                                    	<th>요청 날짜</th>
 	                                    	<th>승인확인</th>
                                     	</tr>
                                     </thead>
                                     <tbody>
+                                    <c:forEach var="paidLecture" items="${paidLectures }">
+                                        <c:if test="${paidLecture.approveStatus eq 'N' and paidLecture.exposureStatus eq 'N' }">
                                         <tr>
-                                        	<td>1</td>
-                                        	<td>Dakota Rice</td>
-                                        	<td>1</td>
-                                        	<td>Niger</td>
-                                        	<td>Oud-Turnhout</td>
+                                        	<td>${paidLecture.no }</td>
+                                        	<td>${paidLecture.instructor.user.name }</td>
+                                        	<td><a id="paid-lecture-sample-video-${paidLecture.no }" href="/paid/approveLessonVideo.do?paidLectureNo=${paidLecture.no }">${paidLecture.title }</a></td>
+                                        	<td><fmt:formatDate value="${paidLecture.createDate }" pattern="yyyy.MM.dd"/></td>
+                                        	<td><button type="button" id="paid-lecture-approve-${paidLecture.no }" class="btn btn-success btn-xs">승인</button> <button type="button" id="paid-lecture-deny-${paidLecture.no }" class="btn btn-primary btn-xs">반려</button></td>
                                         </tr>
+                                        </c:if>
+                                    </c:forEach>
+                                    <c:forEach var="paidLecture" items="${paidLectures }">
+                                        <c:if test="${paidLecture.approveStatus eq 'D' and paidLecture.exposureStatus eq 'N' }">
+                                        <tr>
+                                        	<td>${paidLecture.no }</td>
+                                        	<td>${paidLecture.instructor.user.name }</td>
+                                        	<td><a id="paid-lecture-sample-video-${paidLecture.no }" href="/paid/approveLessonVideo.do?paidLectureNo=${paidLecture.no }">${paidLecture.title }</a></td>
+                                        	<td><fmt:formatDate value="${paidLecture.createDate }" pattern="yyyy.MM.dd"/></td>
+                                        	<td><button type="button" class="btn btn-primary btn-xs" disabled>반려됨</button></td>
+                                        </tr>
+                                        </c:if>
+                                    </c:forEach>
+                                    <c:forEach var="paidLecture" items="${paidLectures }">
+                                        <c:if test="${paidLecture.approveStatus eq 'Y' and paidLecture.exposureStatus eq 'Y' }">
+                                        <tr>
+                                        	<td>${paidLecture.no }</td>
+                                        	<td>${paidLecture.instructor.user.name }</td>
+                                        	<td><a id="paid-lecture-sample-video-${paidLecture.no }" href="/paid/approveLessonVideo.do?paidLectureNo=${paidLecture.no }">${paidLecture.title }</a></td>
+                                        	<td><fmt:formatDate value="${paidLecture.createDate }" pattern="yyyy.MM.dd"/></td>
+                                        	<td><button type="button" id="paid-lecture-delete-${paidLecture.no }" class="btn btn-danger btn-xs">삭제</button></td>
+                                        </tr>
+                                        </c:if>
+                                    </c:forEach>
+                                    <c:forEach var="paidLecture" items="${paidLectures }">
+                                        <c:if test="${paidLecture.approveStatus eq 'Y' and paidLecture.exposureStatus eq 'N' }">
+                                        <tr>
+                                        	<td>${paidLecture.no }</td>
+                                        	<td>${paidLecture.instructor.user.name }</td>
+                                        	<td><a id="paid-lecture-sample-video-${paidLecture.no }" href="/paid/approveLessonVideo.do?paidLectureNo=${paidLecture.no }">${paidLecture.title }</a></td>
+                                        	<td><fmt:formatDate value="${paidLecture.createDate }" pattern="yyyy.MM.dd"/></td>
+                                        	<td><button type="button" id="paid-lecture-recover-${paidLecture.no }" class="btn btn-warning btn-xs">복구</button></td>
+                                        </tr>
+                                        </c:if>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -79,14 +116,19 @@
 	                                    	<th>기능</th>
                                     	</tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="freeLecture-tbody">
                                     <c:forEach var="freeLecture" items="${freeLectures }">
                                         <tr>
                                         	<td>${freeLecture.no }</td>
                                         	<td>${freeLecture.lectureTitle }</td>
                                         	<td>${freeLecture.lectureTime }</td>
                                         	<td>${freeLecture.lectureLevel }</td>
-                                        	<td><button type="button" class="btn btn-danger btn-xs" onclick="location.href='/free/delete.do?freeLectureNo=${freeLecture.no }'">삭제</button></td>
+                                        <c:if test="${freeLecture.available eq 'Y' }">
+                                        	<td><button type="button" id="free-lecture-delete-${freeLecture.no }" class="btn btn-danger btn-xs">삭제</button></td>
+                                        </c:if>
+                                        <c:if test="${freeLecture.available eq 'N' }">
+                                        	<td><button type="button" id="free-lecture-recover-${freeLecture.no }" class="btn btn-warning btn-xs">복구</button></td>
+                                        </c:if>
                                         </tr>
 									</c:forEach>
                                     </tbody>
@@ -107,5 +149,6 @@
 </body>
 
 <%@include file="/WEB-INF/views/manager/common/commonjs.jsp" %>
+<script src="/resources/js/manager/acknowledge.js"></script>
 
 </html>

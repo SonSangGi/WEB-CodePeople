@@ -38,11 +38,10 @@
 	          <div class="my-video-overlay">
 	          	<h4>${history.buyLecture.paidLecture.title }</h4>
 	          	<div class="my-graph">
-                	<div style="width:5%;"></div>
+                	<div style="width:${history.buyLecture.percentage}%;"></div>
               	</div>
 	            <div class="my-graph-info">
-	                <span>10개 강의 중 1개 완료</span>
-	                <span>5%</span>
+	                <span>${history.buyLecture.percentage}%</span>
               	</div>
 	          	<strong>Summary</strong>
 	          	<p style="background: #ffb1b130;padding: 5px;border-radius: 5px;">${history.buyLecture.paidLecture.summary }</p>
@@ -70,35 +69,16 @@
               <div class="">
                 <h3>최근 나의 활동</h3>
                 <ul style="border-left:1px solid lightgray;padding:10px;">
+                <c:forEach items="${have }" var="badge">
                   <li style="margin-bottom:10px;">
                     <i class="sg-li"></i>
                     <span class="sg-text-sub">오늘</span>
                     <div class="">
-                      자바를 잡아 완강 완료! <span class="sg-text-sub">3000xp ++</span>
+                      ${badge.name } 뱃지 획득! <span class="sg-text-sub">${badge.exp }exp ++</span>
                     </div>
                   </li>
-                  <li style="margin-bottom:10px;">
-                    <i class="sg-li"></i>
-                    <span class="sg-text-sub">오늘</span>
-                    <div class="">
-                      자바를 잡아 완강 완료! <span class="sg-text-sub">3000xp ++</span>
-                    </div>
-                  </li>
-                  <li style="margin-bottom:10px;">
-                    <i class="sg-li"></i>
-                    <span class="sg-text-sub">오늘</span>
-                    <div class="">
-                      자바를 잡아 완강 완료! <span class="sg-text-sub">3000xp ++</span>
-                    </div>
-                  </li>
-                  <li style="margin-bottom:10px;">
-                    <i class="sg-li"></i>
-                    <span class="sg-text-sub">오늘</span>
-                    <div class="">
-                      자바를 잡아 완강 완료! <span class="sg-text-sub">3000xp ++</span>
-                    </div>
-                  </li>
-
+                </c:forEach>
+                
                 </ul>
               </div>
             </div>

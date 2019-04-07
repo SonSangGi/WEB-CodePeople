@@ -52,4 +52,26 @@ public class LectureHistoryServiceImpl implements LectureHistoryService {
 	public void insertLectureHistory(LectureHistory lectureHistory) {
 		lectureHistoryDao.insertLectureHistory(lectureHistory);
 	}
+
+	@Override
+	public void updateLectureHistory(LectureHistory lectureHistory) {
+		lectureHistoryDao.updateLectureHistory(lectureHistory);
+		
+	}
+
+	@Override
+	public LectureHistory getLectureHistoryByHistoryNo(int historyNo) {
+		LectureHistory lectureHistory = lectureHistoryDao.getLectureHistoryByHistoryNo(historyNo);
+		BuyLecture buyLecture = buyLectureService.getBuyLectureByBuyLectureNo(lectureHistory.getBuyLecture().getNo());
+		lectureHistory.setBuyLecture(buyLecture);
+		PaidLectureDetail paidLectureDetail = paidLectureService.getPaidLectureDetailByNo(lectureHistory.getPaidLectureDetail().getNo());
+		lectureHistory.setPaidLectureDetail(paidLectureDetail);
+
+		return lectureHistory;
+	}
+
+	@Override
+	public int getCountPassByBuyLectureNo(int buyLectureNo) {
+		return lectureHistoryDao.getCountPassByBuyLectureNo(buyLectureNo);
+	}
 }

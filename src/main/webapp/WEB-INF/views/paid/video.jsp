@@ -36,33 +36,38 @@
 
 	<div class="container-fluid">
 
+		<input type="hidden" id="bookmarkLength" name="bookmarkLength" value="${bookmark }">
+
 		<div class="video-note-page">
 			<div class="col-xs-3 video-in-notelist">
 				<p class="video-in-notelist-label">NOTE LIST</p>
 				<div class="col-xs-12 video-note-list-wrapper">
-			 <c:forEach var="note" varStatus="status" items="${notes }">
-					
-					<div class="video-each-note">
-						<input type="hidden" value="${note.no }" name="videoNoteNo" class="videoNoteNo"/>
-						<input type="hidden" value="${note.buyLecture.no }" name="buyLectureNo" class="buyLectureNo"/>
+					<div class="video-each-note" id="new-note-generator" style="border : 1px solid green !important;">
+						<input type="hidden" value="" name="videoNoteNo" class="videoNoteNo"/>
 						<div class="paid-note-toparea">
-							<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span id="paid-each-section-name">${note.buyLecture.paidLecture.title }</span></span>
-
-							<div class="video-each-section-date">
-								<span class="glyphicon glyphicon-time"></span><span>
-								    <fmt:formatDate pattern = "yyyy-MM-dd" value = "${note.createDate }" />
-								</span>
-							</div>
-							<h3 class="video-each-note-title">${note.title}</h3>
+							<h4 class="video-each-note-title">이 곳을 클릭해서 새 노트를 입력하세요</h4>
 						</div>
 						<div class="video-note-hidden-content">
-							${note.content }						
+							내용을 입력하세요
 						</div>
 					</div>
-					
-					
-			</c:forEach>
-
+						
+						
+					<div class="note-status">
+					 <c:forEach var="note" varStatus="status" items="${notes }">
+							<div class="video-each-note">
+								<input type="hidden" value="${note.no }" name="videoNoteNo" class="videoNoteNo"/>
+								<div class="paid-note-toparea">
+									<span class="video-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span id="paid-each-section-name">${note.buyLecture.paidLecture.title }</span></span>
+		
+									<h3 class="video-each-note-title">${note.title}</h3>
+								</div>
+								<div class="video-note-hidden-content">
+									${note.content }						
+								</div>
+							</div>
+					</c:forEach>
+					</div>
 				</div>
 			</div>
 
@@ -78,7 +83,6 @@
 								</canvas>
 				        	</div>
 						        <input type="hidden" name="selectedNoteNo" id="selectedNoteNo"/>
-						        <input type="hidden" name="buyLectureNo" id="buyLectureNo"/>
 					        <div id="video-note-btn-wrapper" style="display:inline-block;">
 					          	<input type="button" class="btn sg-btn-primary video-create-note-save" value="노트 저장하기" style="float: right; margin-bottom: 100px;"/>       
 					          	<input type="button"class="btn video-create-note-cancel" value="동영상으로 돌아가기" style="float: right; margin-right: 10px; margin-left: 40px;"/>
@@ -92,7 +96,7 @@
 					      
 					      <div>
 							  <input type="text" placeholder="" name="title" id="title-box" >
-					          <input type="hidden" id="buyLectureNo" name="buyLectureNo" value="${no }">
+					          <input type="hidden" id="buyLectureNo" name="buyLectureNo" value="${buyLecture.no }">
 					      </div>
 					      
 					      
@@ -115,6 +119,7 @@
 				<div class="video-content-list">
 
 					<c:forEach var="result" varStatus="status" items="${lectureWrapper}">
+						<c:set var = "sum" value = "0" />
 							<div class="col-xs-10 col-xs-offset-1 video-section-whole-box" id="group-${status.count }">
 								<div class="row video-section-top-box">
 									<div class="row" style="margin-top: 20px;">
@@ -122,7 +127,19 @@
 											<span class="video-section-no-box"><span>SECTION </span><span id="video-section-no"> ${result.get(0).sectionNo}</span></span>
 										</div>
 										<div class="col-xs-2 video-section-complete-box">
-											<span id="video-section-lesson-complete" class="${status.count }"> 1 </span><span> / </span><span id="video-section-lesson-list">${fn:length(result) } </span>
+											<span id="video-section-lesson-complete" class="${status.count }"> 
+											
+												<c:forEach var="history" varStatus="status" items="${recentLectureHistories}">
+													<c:choose>
+														<c:when test="${history.pass eq 'Y' && history.paidLectureDetail.sectionNo eq result.get(0).sectionNo}">
+															<c:set var= "sum" value="${sum + 1}"/>
+														</c:when>
+													</c:choose>
+												</c:forEach>
+														<c:out value="${sum}"/>
+											</span>
+											<span> / </span>
+											<span id="video-section-lesson-list">${fn:length(result) } </span>
 										</div>
 									</div>
 									<div class="row">
@@ -135,27 +152,26 @@
 									<div class="col-xs-1"></div>
 									<div class="col-xs-10 video-section-lessonbox">
 										<div class="video-lesson-per-one">
-										<a href="/paid/video.do?fileName=${list.filePath }"> 
+										<a href="/paid/video.do?fileName=${list.filePath }&detailNo=${list.no}"> 
 											<div class="col-xs-10 video-identify-wrapper">
 												<span id="video-lesson-no">${number.count}</span><span>. </span><span
 													id="video-lesson-name"> ${list.lessonName}</span>
 											</div>
 										</a>
-											<div class="col-xs-2" style="text-align: right;">
+											<div class="col-xs-2 complete-section" style="text-align: right;">
 											
 											
 								<c:forEach var="sectionFlag" varStatus="flagNum" items="${lectureHistories }">
 									<c:if test="${sectionFlag.paidLectureDetail.sectionNo eq list.sectionNo}">
 										<c:choose>
 											<c:when test="${sectionFlag.paidLectureDetail.lessonNo eq list.lessonNo}">
-												<c:if test="${sectionFlag.pass eq 'Y' }">
+												<c:choose>
+												<c:when test="${sectionFlag.pass eq 'Y' }">
 													<span id="video-complete-symbol">●</span>
-												</c:if>
-												<c:if test="${sectionFlag.pass eq 'N' }">
-													<span id="video-complete-symbol">○</span>
-												</c:if>
-													<!--<span id="complete-symbol">${checkFlag.paidLectureDetail.lessonNo }</span>
-											  		-->
+												</c:when>
+												<c:when test="${sectionFlag.pass eq 'N' }">
+												</c:when>
+												</c:choose>
 											</c:when>
 										</c:choose>
 									</c:if>	
@@ -182,7 +198,8 @@
 						<div class="col-xs-10 video-header-right">
 							<button class="sg-btn-primary" id="video-smart-copy">SMART COPY</button>
 							<button class="sg-btn-secondary" id="video-myNote">MY NOTE</button>
-							<a href="/paid/detail.do?no=${lectureDetails.get(0).getPaidLecture().getNo() }"><span id="potal-dashboard">대시보드로 가기</span></a>
+							<a href="/paid/detail.do?no=${lectureDetails.get(0).getPaidLecture().getNo() }">
+							<span id="potal-dashboard">대시보드로 가기</span></a>
 						</div>
 					</div>
 				</div>
@@ -196,6 +213,30 @@
 						<a id="2.0">2 x</a>
 					</div>
 				</div>
+
+				<div class="bookmark-input-area">
+					<input type="hidden" name="historyNo" id="lectureHistoryNo" value="${lectureHistory.no }">
+				</div>
+
+				<div class="mark-area">
+					<c:forEach var="bookmark" varStatus="status" items="${bookmarks }" >
+						<img class="mark-image" style="position:relative; left:'${bookmark.length}';"
+						width="20px" id="mark-${bookmark.length}" src="/resources/img/paid/bookmark-video.png" alt="${bookmark.content }"/>
+					</c:forEach>
+				</div>
+				<div class="caption-storage" style="display: none;">
+					<c:forEach var="bookmark" varStatus="status" items="${bookmarks }" >
+						<span class="caption-list" id="caption-${bookmark.length}" style="position:relative; color:white; background-color:black;">${bookmark.content }</span>
+					</c:forEach>
+				</div>
+				
+				<div class="caption">
+					
+				</div>
+				
+				
+				
+				
 
 				<div class="video-footer">
 					<div class="video-controller">
@@ -219,13 +260,13 @@
 
 
 							<span class="footer-center-buttons">
-								<span id="video-link-questionBoard">
-									<span class="glyphicon glyphicon-question-sign"></span>
-									<span>Q&A</span>
+								<span id="video-link-exposure">
+									<span class="glyphicon glyphicon-bookmark"></span>
+									<span>북마크 보기</span>
 								</span>
 								<span id="video-link-bookmark">
-									<span class="glyphicon glyphicon-bookmark"></span>
-									<span>BOOKMARK</span>
+									<span class="glyphicon glyphicon-plus-sign"></span>
+									<span>북마크 추가</span>
 								</span>
 							</span>
 
@@ -249,9 +290,12 @@
 				<c:when test="${!empty LOGIN_USER}">
 				
 			<div>
+				<input type="hidden" name="historyNo" id="lectureHistoryNo" value="${lectureHistory.no }">
+				<input type="hidden" name="historyLength" id="lectureHistoryLength" value="${lectureHistory.historyLength }">
+				
 				<video onchange='getBarSize()' id='media-video' autoplay poster="data:/resources/img/paid/video/loading.gif" >
-	                <source src='http://localhost:3000/video?fileName=${fileName }' type='video/mp4'>
-	                <source src='http://localhost:3000/video?fileName=${fileName }' type='video/webm'>
+	                <source src='http://www.codepeople.com:3000/video?fileName=${fileName }' type='video/mp4'>
+	                <source src='http://www.codepeople.com:3000/video?fileName=${fileName }' type='video/webm'>
 				</video>
 			</div>
 				
@@ -265,6 +309,9 @@
 		</div>
 
 
+		<div class="alert" style="position:absolute;display:block;width:200px;height:200px;right:10px;top:50%;background-color:white;display:none;">
+		</div>
+	
 	</div>
 	
 	<script type="text/javascript">
@@ -302,11 +349,12 @@
 	 	     }
 	});
 	
-	
 	$(".video-each-note").on('click', function(event) {
     	
         $(this).css("background-color", "#40e0d0");
         $(this).siblings().css("background-color", "");
+        $("#new-note-generator").css("background-color", "");
+        
     	
     	let noteContent = $(this).children(".video-note-hidden-content").html();
     	let noteTitle = $(this).children().children(".video-each-note-title").text();
@@ -322,11 +370,10 @@
     	
     	console.log("마지막 노트 번호", $("#selectedNoteNo").val());
     });
-
 	
 	function postNote() {
 		var title = $("#title-box").val();
-		var buyLectureNo = $(".buyLectureNo").val();
+		var buyLectureNo = $("#buyLectureNo").val();
 		var content = $("#content").val();
 		var selectedNoteNo = $("#selectedNoteNo").val();
 		
@@ -339,7 +386,7 @@
 		var updateComment = "노트 업데이트 완료!";
 		var appendComment = "새로운 노트 작성 완료!";
 
-		if (selectedNoteNo != null || selectedNoteNo == "") {
+		if (selectedNoteNo != null || selectedNoteNo != "") {
 	 	    
 			$.ajax({
 	 	        data : {"title" : title, "buyLectureNo" : buyLectureNo, "content" : content, "selectedNoteNo" : selectedNoteNo},
@@ -350,6 +397,7 @@
 		    	},
 	 	        success : function(data) {
 		 	        	alert(updateComment);
+		 	        	NotePageUpdateAjax();
 	 	        }
 	 	    });
 	 	    
@@ -363,20 +411,119 @@
 		    	},
 	 	        success : function(data) {
 		 	        	alert(appendComment);
+		 	        	NotePageUpdateAjax();
 
 	 	        }
 	 	    });
 		}
 	}
+
+	
+	function NotePageUpdateAjax() {
+
+		var buyLectureNo = $("#buyLectureNo").val();
+		
+		$.ajax({
+ 	        data : {buyLectureNo : buyLectureNo},
+ 	        type : "POST",
+ 	        url : "detail/NotePageUpdateAjax.do",
+	    	error : function(error) {
+	    		alert("error");
+	    	},
+ 	        success : function(data) {
+ 	        	
+				if(data.length > 0){
+						var text = '';
+					$(data).each(function(index,result){
+						text += '<div class="video-each-note">'
+						text +=  '<input type="hidden" value="' + result.no + '" name="videoNoteNo" class="videoNoteNo"/>'
+						text += '<div class="paid-note-toparea">'
+						text += '<span class="video-section-info-wrapper">'
+						text += '<span class="glyphicon glyphicon-pencil"></span>'
+						text += '<span id="paid-each-section-name">'
+						text +=  result.buyLecture.paidLecture.title
+						text += '</span></span>'
+						text += '<h3 class="video-each-note-title">'
+						text +=  result.title
+						text += '</h3>'
+						text += '</div><div class="video-note-hidden-content">'
+						text +=  result.content
+						text += '</div></div>'
+					})
+						$('.note-status').html('');
+						$('.note-status').html(text);
+							
+
+						$(".video-each-note").on('click', function(event) {
+					    	
+					        $(this).css("background-color", "#40e0d0");
+					        $(this).siblings().css("background-color", "");
+					    	
+					    	let noteContent = $(this).children(".video-note-hidden-content").html();
+					    	let noteTitle = $(this).children().children(".video-each-note-title").text();
+					    	let noteNo = $(this).children(".videoNoteNo").val();
+					    	
+					    	console.log(noteContent);
+					    	console.log(noteTitle);
+					    	console.log("노트 넘버", noteNo);
+					    	
+					    	$("#selectedNoteNo").val(noteNo);
+					    	$(".note-editable").html(noteContent);
+					    	$("#title-box").val(noteTitle);
+					    	
+					    	console.log("마지막 노트 번호", $("#selectedNoteNo").val());
+					    });
+				}
+ 	        }
+ 	    });
+	}
+	
 	
 	$(".video-create-note-save").on("click", function() {
 		postNote();
 	})
 	
+	var ws = new WebSocket("ws://www.codepeople.com/chat.do");
+	ws.onmessage = function(event) {
+		var onAudio = new Audio('/resources/sound/on.mp3');
+		var items = event.data.split("/");
+		var protocol = items[0];
+		if("BADGE" == protocol){
+			$('.alert').fadeIn();
+			$('.alert').append("<div style='font-size:18px;font-weight:bold;'>새로운 뱃지를<br>획득하셨습니다!</div>");
+			onAudio.play();
+			setTimeout(function() {
+				$('.alert').fadeOut();
+			}, 5000);
+		}
+	}
+	
+	
+	$("#new-note-generator").on("click", function() {
+		$("#new-note-generator").css("background-color", "#ff7373");
+		$(".video-each-note").css("background-color", "");
+	})
+	
+	
+	
+	var completeCount = 0; 
+	
+	$(".complete-section").each(function(inext, item) {
+		var complete = $(this).children("#video-complete-symbol").text();
+		console.log(complete);
+		
+		if (!complete) {
+			var $span = $('<span id="video-complete-symbol">○</span>');
+			$(this).append($span);
+		}
+		
+		if (complete == "●") {
+			completeCount++;
+		}
+	})
+
+	
+	
 	</script>
-
-
 </body>
-
-
 </html>

@@ -1,7 +1,5 @@
 package com.jhta.cope.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrlTemplate;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +46,18 @@ public class FreeLectureController {
 
 	@RequestMapping("/form")
 	public String form() {
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		if (user == null) {
+			return "redirect:/free/list.do?fail=lp";
+		}else if ((user.getAuthStatus() != 9)) {	
+			return "redirect:/free/list.do?fail=g"; 
+		}
+
 		return "freelecture/form";
 	}
-
+	
+	// 무료강의, 무료 섹션 등록 처리
 	@RequestMapping(value = "/submit", method = RequestMethod.POST)
 	public String submit(HttpServletRequest request, MultipartFile lectureImgFile, FreeLecture freeLecture,
 			String[] sectionTitles, String[] sectionContents) throws Exception {
@@ -113,7 +120,9 @@ public class FreeLectureController {
 		return "redirect:" + callback + "?callback_func=" + callback_func + file_result;
 	}
 
-	@RequestMapping("/list")
+	// 무료강의 리스트 페이지 처리
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	// required = false 해당 파라미터가 필수인지 여부
 	public String list(Model model, Integer cp, @RequestParam(required = false, name = "keyword") String keyword,
 			@RequestParam(required = false, name = "searchType") String searchType) {
 
@@ -144,10 +153,10 @@ public class FreeLectureController {
 		return "freelecture/detail";
 	}
 
+	// 배우러가기 클릭시 해당 섹션의 첫 페이지 이동하게 처리하기
 	@RequestMapping(value = "/section", method = RequestMethod.GET)
 	public String section(Model model, @RequestParam("freeLectureNo") int freeLectureNo, Integer count) {
-		List<FreeLectureSection> freeLectureSections = freeLectureService
-				.getFreeLectureSectionByLectureNo(freeLectureNo);
+		List<FreeLectureSection> freeLectureSections = freeLectureService.getFreeLectureSectionByLectureNo(freeLectureNo);
 		if (count == null) {
 			count = 1;
 		}
@@ -165,7 +174,14 @@ public class FreeLectureController {
 	@RequestMapping(value = "/comment-submit", method = RequestMethod.POST)
 	public String commentSubmit(FreeLectureComent freeLectureComent, @RequestParam("sno") int sno,
 			@RequestParam("lno") int lno, @RequestParam("count") int count) {
-		freeLectureComent.setWriter((User) SessionUtils.getAttribute("LOGIN_USER"));
+		
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		if (user == null) {
+			return "redirect:/free/section.do?freeLectureNo=" + lno + "&count=" + count + "&fail=lp";
+		}
+		
+		freeLectureComent.setWriter(user);
 		freeLectureComent.setSno(sno);
 		freeLectureService.insertFreeLectureComent(freeLectureComent);
 		return "redirect:/free/section.do?freeLectureNo=" + lno + "&count=" + count;
@@ -180,12 +196,13 @@ public class FreeLectureController {
 		return "redirect:/free/section.do?freeLectureNo=" + lno + "&count=" + count;
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String freeLectureDelete(@RequestParam("freeLectureNo") int freeLectureNo) {
 		freeLectureService.deleteFreeLectureSection(freeLectureNo);
 		freeLectureService.deleteFreeLecture(freeLectureNo);
-		return "redirect:/free/list.do";
-	}
+		
+		return null;
+	}*/
 
 	@ResponseBody
 	@RequestMapping(value = "/comment-update", method = RequestMethod.GET)
@@ -202,7 +219,11 @@ public class FreeLectureController {
 	@ResponseBody
 	@RequestMapping(value = "/reply-insert", method = RequestMethod.GET)
 	public FreeLectureComentReply insertReply(FreeLectureComentReply freeLectureComentReply) {
-
+		
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		
+		freeLectureComentReply.setWriter(user);
+		
 		freeLectureService.insertFreeLectureComentReply(freeLectureComentReply);
 
 		return freeLectureComentReply;
@@ -222,7 +243,6 @@ public class FreeLectureController {
 	public String view(@RequestParam("sectionNo") int sectionNo, @RequestParam("userNo") int userNo) {
 
 		int a = freeLectureService.getFreeLectureViewsCount(sectionNo, userNo);
-		System.out.println(sectionNo);
 
 		if (a == 1) {
 			return "false";
@@ -236,13 +256,20 @@ public class FreeLectureController {
 		
 		// 섹션을 가져옴
 		FreeLectureSection freeLectureSection = freeLectureService.getFreeSection(sectionNo);
-		System.out.println(sectionNo);
-		System.out.println(freeLectureSection);
 		// 가져온 섹션.setViews(가져온섹션.getViews()+1)
 		freeLectureSection.setViews(freeLectureSection.getViews()+1);
 		//freeLectureService.updateFreeLectureViews(가져온 섹션);
 		freeLectureService.updateFreeLectureViews(freeLectureSection);
 		return "true";
 	}
-
+	
+	/*// 삭제 기능(available Y -> N)
+	@RequestMapping(value = "/freeDelete", method = RequestMethod.GET)
+	public String freeDelete(@RequestParam("freeLectureNo") int no ) {
+		FreeLecture freeLecture = freeLectureService.getFreeLecture(no);
+		freeLecture.setLectureAvailable("N");
+		freeLectureService.updateFreeLectureAvailable(freeLecture);
+		
+		return "redirect:/free/list.do";
+	} */
 }

@@ -10,5 +10,7 @@ public interface BuyLectureService {
 	public List<BuyLecture> getBuyLectureByUserNo(int userNo);
 	public List<BuyLecture> getBuyLectureByUserNoResultMap(int userNo);
 	public BuyLecture getBuyLectureByBuyLectureNo(int buyLectureNo);
+	public int getCountBuyLectureByPaidLectureNo(int paidLectureNo);
+
 
 }

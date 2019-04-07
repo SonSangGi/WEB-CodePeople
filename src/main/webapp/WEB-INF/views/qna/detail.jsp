@@ -41,14 +41,13 @@
 				<span style="font-weight:bold;font-size:17px;margin-left:10px;">${qna.writer.name }</span><span style="color: #337ab7; font-size: 12px;">(나)</span> <small><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${qna.createDate }"/></small>
 					</c:otherwise>
 				</c:choose>
-				<button type="button" class="sg-btn sg-nb sg-btn-3rd sg-btn-sm history-back" style="float:right;">목록으로</button>
-
-          <c:if test="${LOGIN_USER != null and LOGIN_USER.no == qna.writer.no }">
 	          <div style="float:right;">
-	          	<button type="button" class="btn-modify-qna sg-btn sg-btn-3rd sg-nb sg-btn-xs" value="${qna.no}"><i class="fas fa-pencil-alt" style="color:#229085;"></i>수정</button>
-	          	<button type="button" class="btn-del-qna sg-btn sg-btn-primary sg-nb sg-btn-xs" value="${qna.no }"><i class="fas fa-times" style="color:red;"></i>삭제</button>
+				<button type="button" class="sg-btn sg-nb sg-btn-xs history-back" style="border:2px solid #009eb7;"><i class="fas fa-align-justify" style="color:#009eb7"></i> 목록</button>
+		        <c:if test="${LOGIN_USER != null and LOGIN_USER.no == qna.writer.no }">
+			       	<button type="button" class="btn-modify-qna sg-btn sg-btn-3rd sg-nb sg-btn-xs" value="${qna.no}"><i class="fas fa-pencil-alt" style="color:#229085;"></i>수정</button>
+			       	<button type="button" class="btn-del-qna sg-btn sg-btn-primary sg-nb sg-btn-xs" value="${qna.no }"><i class="fas fa-times" style="color:red;"></i>삭제</button>
+		        </c:if>
 	          </div>
-          </c:if>
         </div>
       </div>
     </div>
@@ -79,7 +78,7 @@
 								style="color: #337ab7; font-size: 12px;">(나)</span>
 						</c:otherwise>
 					</c:choose>
-				님의 답변입니다.</h3>
+				님의 답변입니다.<small style="font-size:12px;">(<fmt:formatDate value="${answer.createDate }" pattern="yyyy-MM-dd HH:mm:ss"/>)</small></h3>
 		        <hr>
 		
 		        <div class="answer-contents">
@@ -224,7 +223,10 @@
 				data:{answerNo:answerNo,contents:comment.val()},
 				success:function(data){
 					html = ' <div class="comment-contents" >';
-			        html += '<a href="#">'+data.writer.name+'</a>';
+					html += '<img class="f-i" alt="${answer.writer.name }님의 프로필사진" src="/resources/img/user/icon/';
+					(data.writer.avatar.image == 'Default') ? html += 'icon.png' : html += data.writer.avatar.image;
+					html += '" style="width: 23px;height: 23px;border-radius: 100px;">';
+			        html += '<span color="gray">'+data.writer.name+'<span style="color:#337ab7;font-size:12px;">(나)</span></span>';
 			        html += '<p>'+data.contents+'</p>';
 			        html += '<small>'+moment().format('YYYY-MM-DD HH:mm:ss');+'</small>';
 			        html += '</div>';

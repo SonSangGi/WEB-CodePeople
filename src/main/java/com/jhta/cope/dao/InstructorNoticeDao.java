@@ -2,13 +2,11 @@ package com.jhta.cope.dao;
 
 import java.util.List;
 
-import com.jhta.cope.vo.Criteria;
 import com.jhta.cope.vo.InstructorNotice;
 
 public interface InstructorNoticeDao {
 
-	public void insertNotice(InstructorNotice instructorNotice);
-	public int getNoticeCount();
-	public List<InstructorNotice> getAllNoticesByCriteria(Criteria criteria);
+	public void insertInstructorNotice(InstructorNotice instructorNotice);
+	public List<InstructorNotice> getInstructorNoticeByPaidLectureNo(int paidLectureNo);
 
 }

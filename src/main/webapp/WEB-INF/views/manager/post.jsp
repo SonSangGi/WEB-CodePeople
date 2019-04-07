@@ -39,10 +39,10 @@
 					          	<ul id="qna-pagination" class="pagination">
 					          	<!-- 
 						          	<c:if test="${qnaPageInfo.curPage ne 1 }">
-						          		<li><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>
+						          		<li><a><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>
 									</c:if>
 								 -->
-								 		<li class="page-item disabled"><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>
+								 		<li class="page-item disabled"><a id="qna-first"><span aria-hidden="true">«</span><span class="sr-only">1</span></a></li>
 									<c:forEach var="pageNum" begin="${qnaPageInfo.startPage }" end="${qnaPageInfo.endPage }">
 									<c:if test="${pageNum eq 1 }">
 										<li class="active"><a id="qna-page-${pageNum }">${pageNum }</a></li>
@@ -51,9 +51,12 @@
 										<li><a id="qna-page-${pageNum }">${pageNum }</a></li>
 									</c:if>
 									</c:forEach>
-									<c:if test="${qnaPageInfo.curPage ne qnaPageInfo.totalPages && qnaPageInfo.totalPages > 0 }">
-										<li><a href="#"><span aria-hidden="true">»</span><span class="sr-only">마지막 페이지</span></a></li>
-						          	</c:if>
+									<c:if test="${qnaPageInfo.curPage eq qnaPageInfo.totalPages }">
+										<li class="page-item disabled"><a id="qna-final"><span aria-hidden="true">»</span><span class="sr-only">${qnaPageInfo.totalPages }</span></a></li>
+									</c:if>
+									<c:if test="${qnaPageInfo.curPage ne qnaPageInfo.totalPages }">
+										<li><a id="qna-final"><span aria-hidden="true">»</span><span class="sr-only">${qnaPageInfo.totalPages }</span></a></li>
+									</c:if>
 					          	</ul>
 					        </nav>
                             <div class="content table-responsive table-full-width">
@@ -72,7 +75,12 @@
                                         	<td>${post.no }</td>
                                         	<td>${post.writer.name }</td>
                                         	<td><a id="post-info-${post.no }" href="/qna/detail.do?qnaNo=${post.no }">${post.title }</a></td>
+                                        	<c:if test="${post.available eq 1 }">
                                         	<td><button type="button" id="btn-delete-post-${post.no }" class="btn btn-danger btn-xs">삭제</button></td>
+                                        	</c:if>
+                                        	<c:if test="${post.available eq 0 }">
+                                        	<td><button type="button" id="btn-recover-post-${post.no }" class="btn btn-warning btn-xs">복구</button></td>
+                                        	</c:if>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
@@ -80,7 +88,6 @@
                             </div>
                         </div>
                     </div>
-                    
 
                     <div class="col-md-12">
                         <div class="card card">
@@ -89,13 +96,21 @@
                                 <p class="category">Here is a subtitle for this table</p>
                             </div>
                             <nav style="text-align: center;">
-					          	<ul id="qna-answer-pagination" class="pagination">
-					          			<li class="page-item disabled"><a href="#"><span aria-hidden="true">«</span><span class="sr-only">첫 페이지</span></a></li>
+					          	<ul id="qna-answer-pagination" class="pagination">   	
+					          			<li class="page-item disabled"><a id="qna-answer-first"><span aria-hidden="true">«</span><span class="sr-only">1</span></a></li>
 									<c:forEach var="pageNum" begin="${qnaAnswerPageInfo.startPage }" end="${qnaAnswerPageInfo.endPage }">
+									<c:if test="${pageNum eq 1 }">
+										<li class="active"><a id="qna-answer-page-${pageNum }">${pageNum }</a></li>
+									</c:if>
+									<c:if test="${pageNum ne 1 }">
 										<li><a id="qna-answer-page-${pageNum }">${pageNum }</a></li>
+									</c:if>
 									</c:forEach>
-									<c:if test="${qnaAnswerPageInfo.curPage ne qnaAnswerPageInfo.totalPages && qnaAnswerPageInfo.totalPages > 0 }">
-										<li><a href="#"><span aria-hidden="true">»</span><span class="sr-only">마지막 페이지</span></a></li>
+									<c:if test="${qnaAnswerPageInfo.curPage eq qnaAnswerPageInfo.totalPages }">
+										<li class="page-item disabled"><a id="qna-answer-final"><span aria-hidden="true">»</span><span class="sr-only">${qnaAnswerPageInfo.totalPages }</span></a></li>
+									</c:if>
+									<c:if test="${qnaAnswerPageInfo.curPage ne qnaAnswerPageInfo.totalPages }">
+										<li><a id="qna-answer-final"><span aria-hidden="true">»</span><span class="sr-only" id="qna-answer-final">${qnaAnswerPageInfo.totalPages }</span></a></li>
 									</c:if>
 					          	</ul>
 					        </nav>
@@ -115,7 +130,12 @@
                                         	<td>${answer.no }</td>
                                         	<td>${answer.writer.name }</td>
                                         	<td><input type="hidden" id="qna-number-${answer.qnaNo }" value="${answer.qnaNo }"/><a id="qna-answer-modal-${answer.qnaNo }" data-toggle="modal" data-target="#qna-answer-info">${answer.contents }</a></td>
-                                        	<td></td>
+                                        	<c:if test="${answer.available eq 1 }">
+                                        	<td><button type="button" id="btn-delete-answer-${answer.no }" class="btn btn-danger btn-xs">삭제</button></td>
+                                        	</c:if>
+                                        	<c:if test="${answer.available eq 0 }">
+                                        	<td><button type="button" id="btn-recover-answer-${answer.no }" class="btn btn-warning btn-xs">복구</button></td>
+                                        	</c:if>
                                         </tr>
                                         </c:forEach>
                                     </tbody>
@@ -123,75 +143,11 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">리뷰 게시물</h4>
-                                <p class="category">Here is a subtitle for this table</p>
-                            </div>
-                            <div class="content table-responsive table-full-width">
-                                <table class="table table-hover">
-                                    <thead>
-                                    	<tr>
-	                                        <th>글 번호</th>
-	                                    	<th>작성자</th>
-	                                    	<th>제목</th>
-	                                    	<th>신고여부</th>
-	                                    	<th>처리</th>
-                                    	</tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        	<td>1</td>
-                                        	<td>Dakota Rice</td>
-                                        	<td>$36,738</td>
-                                        	<td>Niger</td>
-                                        	<td>Oud-Turnhout</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">리뷰 댓글</h4>
-                                <p class="category">Here is a subtitle for this table</p>
-                            </div>
-                            <div class="content table-responsive table-full-width">
-                                <table class="table table-hover">
-                                    <thead>
-	                                    <tr>
-	                                        <th>글 번호</th>
-	                                    	<th>작성자</th>
-	                                    	<th>내용</th>
-	                                    	<th>신고여부</th>
-	                                    	<th>처리</th>
-                                    	</tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        	<td>1</td>
-                                        	<td>Dakota Rice</td>
-                                        	<td>$36,738</td>
-                                        	<td>Niger</td>
-                                        	<td>Oud-Turnhout</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+				</div>
+			</div>
         <%@include file="/WEB-INF/views/manager/common/footer.jsp" %>
-        
     </div>
+</div>
 </div>
 
 <!-- Modal -->

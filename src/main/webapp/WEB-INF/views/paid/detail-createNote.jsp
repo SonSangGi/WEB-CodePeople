@@ -6,7 +6,7 @@
 	    <form action="detail/addNote.do" method="POST" class="form-horizontal">
 		      <div class="form-group">
 		      	  <p>title</p>
-				  <input type="text" placeholder="기록되지 않는 것은 기억되지 않는다 - d.w.kim -" name="title" id="title-box" >
+				  <input type="text" placeholder="노트 제목을 입력해주세요" name="title" id="title-box" >
 		          <input type="hidden" id="buyLectureNo" name="buyLectureNo" value="${no }">
 		      </div>
 		      <div class="form-group" style="margin-top: 10px;">

@@ -36,7 +36,31 @@
             <div class="paid-top-default">
                 <div class='col-xs-12 paid-top-menu'>
                     <div class='col-xs-10' id='paid-info-topleft'>
-                    
+                    	<div class="like-wrapper">
+                    	<c:choose>
+                    		<c:when test="${empty LOGIN_USER }">
+                    				<span><img src="/resources/img/paid/heartFill.png" width="30px" class="fill"/></span>
+			                    	<span style="display: none;"><img src="/resources/img/paid/heartEmpty.png" width="30px" class="empty" /></span>
+			                    	<span id="like">${lectureDetails[0].paidLecture.like }</span><span>명이 좋아합니다</span>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<c:choose>
+                    				<c:when test="${likeStatus eq 1 }">
+			                    		<span class="like-image"><img src="/resources/img/paid/heartFill.png" width="30px" class="fill"/></span>
+			                    		<span class="like-image" style="display: none;"><img src="/resources/img/paid/heartEmpty.png" width="30px" class="empty" /></span>
+			                    		<span id="like">${lectureDetails[0].paidLecture.like }</span><span>명이 좋아합니다</span>
+                    				</c:when>
+                    				<c:otherwise>
+                    					<span class="like-image" style="display: none;"><img src="/resources/img/paid/heartFill.png" width="30px" class="fill" /></span>
+			                    		<span class="like-image"><img src="/resources/img/paid/heartEmpty.png" width="30px" class="empty"/></span>
+			                    		<span id="like">${lectureDetails[0].paidLecture.like }</span><span>명이 좋아합니다</span>
+                    				</c:otherwise>	
+                    			</c:choose>
+                    		</c:otherwise>
+                    	</c:choose>
+                    	</div>
+                    	
+                    	<input type="hidden" name="paidLectureNo" id="paidLectureNo" value="${lectureDetails[0].paidLecture.no}">
                    		<c:forEach var="result" items="${title }">
 	                        <h1 class='paid-title'>
 	                            ${result }
@@ -61,6 +85,7 @@
                         	<c:when test="${paymentFlag == 'N'}">
 	                        	<div>
 	                        		<input type="hidden" class="lecturePrice" value=" ${lectureDetails[0].paidLecture.price }">
+	                        		<input type="hidden" class="lectureNoForPayment" value="${lectureDetails[0].paidLecture.no }">
 		                            <button class="sg-btn-primary" id="paid-purchase-btn">지금 구매하기</button>
 	                        	</div>
 	                        	<div>
@@ -69,7 +94,23 @@
 	                        	</div>
                         	</c:when>
                         	<c:otherwise>
- 	                           <button class="sg-btn-primary" id="paid-continue-btn">continue to LECTURE 24</button>
+                        		<c:choose>
+                        			<c:when test="${empty lectureHistories }">
+                        			<a href="/paid/video.do?fileName=${lectureDetails[0].filePath }&detailNo=${lectureDetails[0].no}">
+		 	                           <button class="sg-btn-primary paid-continue-btn" id="continue-0">
+		 	                           ORIENTATION
+		 	                           </button>
+		 	                           </a>
+                        			</c:when>
+                        			<c:otherwise>
+		 	                           <a href="/paid/video.do?fileName=${lectureHistories.get(0).paidLectureDetail.filePath }&detailNo=${lectureHistories.get(0).paidLectureDetail.no}">
+			 	                           <button class="sg-btn-primary paid-continue-btn" id="continue-${lectureHistories.get(0).paidLectureDetail.no }">
+			 	                           continue to <span style="font-size: 20px; font-weight: 600;">[ ${lectureHistories.get(0).paidLectureDetail.lessonName } ]</span>
+			 	                           </button>
+		 	                           </a>
+                        			</c:otherwise>
+                        		</c:choose>
+                        	
                         	</c:otherwise>
                         </c:choose>
                         
@@ -102,7 +143,19 @@
                     </div>
 
                     <div id='paid-bar-total'>
+                    	<input type="hidden" value="${numbersOfPass }" id="numbersOfPass" />
+                    	<input type="hidden" value="${lectureDetails.size() }" id="lessonLength" />
                         <div id="paid-bar-progress">
+                     
+                     <c:if test="${!empty numbersOfPass }">
+                        <div class="completePercent">
+                        	<div id="completePercent">
+                        		▼
+                        	</div>
+                        	<div id="numOfPercent">
+                        	</div>
+                        </div>
+                     </c:if>
                         </div>
                     </div>
                 </div>
@@ -113,7 +166,6 @@
                     <li><a href=# id="detail-contents">COURSE CONTENTS</a></li>
                     <li><a href=# id="detail-note">MY NOTE</a></li>
                     <li><a href=# id="detail-bookmark">BOOKMARK</a></li>
-                    <li><a href=# id="detail-question">Q&A</a></li>
                     <li><a href=# id="detail-announce">공지사항</a></li>
                 </ul>
             </div>

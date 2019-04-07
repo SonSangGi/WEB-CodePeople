@@ -122,6 +122,13 @@
 			USER_EMAIL = #{value}
 	</select>
 	
+	<select id="CheckUserBadgeByUserNoAndBadgeNo" parameterType="map" resultType="map">
+		select *
+		from USER_BADGE
+		where USER_NO = #{userNo}
+		and BADGE_NO = #{badgeNo}
+	</select>
+	
 	<select id="getBadgeByNo" resultType="Badge" parameterType="int">
 		select
 			BADGE_NO as no,
@@ -152,19 +159,21 @@
 	</select>
 	
 	<select id="notHaveBadge" parameterType="int" resultType="Badge">
-		select DISTINCT
-			A.BADGE_NO as no,
-			A.BADGE_NAME as name,
-			A.BADGE_ICON as icon,
-			A.BADGE_EXP as exp,
-			A.BADGE_CONDITION as condition
-		from 
-			BADGE A, USER_BADGE B
-		where 
-			B.BADGE_NO != A.BADGE_NO
-		and 
-			B.USER_NO = #{value}
-		order by A.BADGE_EXP
+		select
+		BADGE_NO as no,
+		BADGE_NAME as name,
+		BADGE_ICON as icon,
+		BADGE_EXP as exp,
+		BADGE_CONDITION as condition
+        from 
+			BADGE
+		where (BADGE_NO) 
+				not in
+					   (select A.BADGE_NO
+                       from USER_BADGE A, badge B
+                       where USER_NO = #{value}
+                       and A.badge_no = B.badge_no)
+       order by BADGE_NO
 	</select>
 	
 	<resultMap type="Follow" id="getFollowResultMap">
@@ -299,6 +308,41 @@
 	</update>
 	
 	
+	<!-- Paid Lecture 관련 ㅠㅜㅠ -->
+	<select id="getPaidLectureByRank" resultMap="com.jhta.cope.dao.PaidLectureDao.paidLectureResultMap" parameterType="map">
+		select *
+		from(
+		select 
+		<choose>
+			<when test="keyword == 'new'">
+			ROW_NUMBER() over(order by LECTURE_CREATE_DATE desc) rn,
+			</when>
+			<when test="keyword == 'like'">
+			ROW_NUMBER() over(order by LECTURE_LIKES desc) rn,
+			</when>
+		</choose>
+			PAID_LECTURE_NO,
+			INSTRUCTOR_NO,
+			LECTURE_LANG,
+			LECTURE_TITLE,
+			LECTURE_LEVEL,
+			LECTURE_SPECIALIZED,
+			LECTURE_SUMMARY,
+			LECTURE_DESCRIPTION,
+			LECTURE_PRICE,
+			LECTURE_THUMNAIL_PATH,
+			LECTURE_CREATE_DATE,
+			LECTURE_LIKES,
+			LECTURE_VIEW_COUNT,
+			EXPOSURE_STATUS,
+			APPROVE_STATUS
+		from paid_lecture
+		where EXPOSURE_STATUS = 'Y'
+		and APPROVE_STATUS = 'Y'
+		)
+		where rn &lt;= 8
+	</select>
+	
 		<!-- byLecture만 담김 -->
 	<resultMap type="LectureHistory" id="historyBuyLectureResultMap">
 		<id property="no" column="HISTORY_NO"/>
@@ -308,9 +352,39 @@
 		<association property="buyLecture" column="BUY_LECTURE_NO" javaType="BuyLecture" select="com.jhta.cope.dao.BuyLectureDao.getBuyLectureByNoResultMap"></association>
 	</resultMap>
 	
+	<!-- 내가 본 전체 동영상 -->
+	
+	<select id="getHistoryCountByUserNo" resultType="int" parameterType="int">
+	select count(*)
+			from BUY_LECTURE A,LECTURE_HISTORY B
+			where 
+			    a.buy_lecture_no = b.buy_lecture_no
+			and
+			    a.user_no = #{value}
+            and b.pass = 'Y'
+	</select>
+	
+	<select id="completionCheckMyLecture" parameterType="map" resultType="map">
+		select detail_no
+		from paid_lecture_detail
+		where paid_lecture_no = #{lectureNo}
+		minus
+		select a.detail_no
+		from lecture_history A, buy_lecture B, paid_lecture_detail C 
+		where A.buy_lecture_no = B.buy_lecture_no
+		and b.user_no = #{userNo}
+		and A.detail_no = C.detail_no
+		and c.paid_lecture_no = #{lectureNo}
+		and A.pass = 'Y';
+	</select>
+	
 	<!-- 결제 및 강의 정보 -->
 	<select id="getLectureHistoryByCriteria" parameterType="Criteria" resultMap="historyBuyLectureResultMap">
-		select *
+		select DISTINCT
+		D.BUY_LECTURE_NO,
+		D.PAID_LECTURE_NO,
+		D.USER_NO,
+		D.CREATE_DATE
 		from(select 
 			<choose>
 				<when test="sort == 'end'">
@@ -343,14 +417,47 @@
 			and
 			    B.PASS = 'N'
 			</if>
-			<if test="keyword == 'end'">
+			<if test="sort == 'end'">
 			and
 			    B.PASS = 'Y'
 			</if>
 			
-			)
+			)D
 			
 		where rn &gt;= #{beginIndex}
 		and rn &lt;= #{endIndex}
+	</select>
+	
+	
+	<select id="getMyComplateLectureByUserNo" parameterType="int" resultMap="com.jhta.cope.dao.PaidLectureDao.paidLectureResultMap">
+		select 
+		B.PAID_LECTURE_NO,
+		B.INSTRUCTOR_NO,
+		B.LECTURE_LANG,
+		B.LECTURE_TITLE,
+		B.LECTURE_LEVEL,
+		B.LECTURE_SPECIALIZED,
+		B.LECTURE_SUMMARY,
+		B.LECTURE_DESCRIPTION,
+		B.LECTURE_PRICE,
+		B.LECTURE_THUMNAIL_PATH,
+		B.LECTURE_CREATE_DATE,
+		B.LECTURE_LIKES,
+		B.LECTURE_VIEW_COUNT,
+		B.EXPOSURE_STATUS,
+		B.APPROVE_STATUS
+		from
+			COMPLATE_LECTURE A, PAID_LECTURE B
+		where user_no = #{value}
+        and A.lecture_no = b.paid_lecture_no
+	</select>
+	
+	<select id="checkTheFirstLecture" parameterType="map" resultType="int">
+		select A.history_no
+		from 
+			lecture_history A,buy_lecture B 
+		where A.buy_lecture_no = B.buy_lecture_no 
+		and B.user_no = #{userNo} 
+		and A.detail_no = #{detailNo}
 	</select>
 </mapper>

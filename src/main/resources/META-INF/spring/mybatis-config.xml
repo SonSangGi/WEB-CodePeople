@@ -16,6 +16,7 @@
 		<typeAlias alias="QnaAnswer" type="com.jhta.cope.vo.QnaAnswer"/>
 		<typeAlias alias="QnaComment" type="com.jhta.cope.vo.QnaComment"/>
 		<typeAlias alias="Instructor" type="com.jhta.cope.vo.Instructor"/>
+		<typeAlias alias="InstructorNotice" type="com.jhta.cope.vo.InstructorNotice"/>
 		<typeAlias alias="Criteria" type="com.jhta.cope.vo.Criteria"/>
 		<typeAlias alias="FreeLecture" type="com.jhta.cope.vo.FreeLecture"/>
 		<typeAlias alias="FreeLectureSection" type="com.jhta.cope.vo.FreeLectureSection"/>
@@ -27,8 +28,11 @@
 		<typeAlias alias="FreeLectureComentReply" type="com.jhta.cope.vo.FreeLectureComentReply"/>
 		<typeAlias alias="LectureHistory" type="com.jhta.cope.vo.LectureHistory"/>
 		<typeAlias alias="Note" type="com.jhta.cope.vo.Note"/>
-		<typeAlias alias="PaidQna" type="com.jhta.cope.vo.PaidQna"/>
-	</typeAliases>
+		<typeAlias alias="Notice" type="com.jhta.cope.vo.Notice"/>
+		<typeAlias alias="PaidLectureWrapper" type="com.jhta.cope.vo.PaidLectureWrapper"/>
+		<typeAlias alias="PaidLectureLike" type="com.jhta.cope.vo.PaidLectureLike"/>
+		<typeAlias alias="VisitorCount" type="com.jhta.cope.vo.VisitorCount"/>
+		</typeAliases>
 
 	<mappers>
 		<mapper resource="META-INF/mybatis/mappers/user.xml" />
@@ -43,6 +47,6 @@
 		<mapper resource="META-INF/mybatis/mappers/buyLecture.xml" />
 		<mapper resource="META-INF/mybatis/mappers/lectureHistory.xml" />
 		<mapper resource="META-INF/mybatis/mappers/note.xml" />
-		<mapper resource="META-INF/mybatis/mappers/paidQna.xml" />
+		<mapper resource="META-INF/mybatis/mappers/paidLectureLike.xml" />
 	</mappers>
 </configuration>

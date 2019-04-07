@@ -18,8 +18,6 @@ public class EtcUtils {
 			input = new FileInputStream(file);
 			output = new FileOutputStream(new File(request.getSession().getServletContext().getRealPath("/")
 					+ File.separator + path + fileName));
-			System.out.println(request.getSession().getServletContext().getRealPath("/")
-					+ File.separator + path + fileName);
 
 			int readBuffer = 0;
 			byte[] buffer = new byte[1024];
@@ -27,7 +25,7 @@ public class EtcUtils {
 				output.write(buffer, 0, readBuffer);
 			}
 		} catch (IOException e) {
-			System.out.println(e);
+			System.err.println(e);
 		} finally {
 			try {
 				input.close();

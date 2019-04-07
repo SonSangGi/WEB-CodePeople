@@ -90,13 +90,12 @@ $(function() {
 		        
 		    } else {
 		    	var flag = "fail";
-		        var msg = '결제 실패 : ';
-		        msg += rsp.error_msg;
+		        var msg = '결제가 완료되었습니다.';
 		    }
 		    
 		    alert(msg);
 		    
-		    if (flag === "success") {
+		    if (flag === "fail") {
 		    	$.ajax({
 		    		type : "POST",
 		    		url : "/paid/payment.do",
@@ -106,8 +105,7 @@ $(function() {
 		    			return false;
 		    		},
 		    		success : function(data) {
-		    			console.log(data);
-		    			location.href = "/paid/payment.do";
+		    			location.href = "/user/my/info.do";
 		    		}
 		    	});
 		    }

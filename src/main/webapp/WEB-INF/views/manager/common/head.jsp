@@ -6,13 +6,6 @@
 	<link rel="icon" type="image/png" sizes="96x96" href="/resources/img/manager/favicon.png">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-<c:if test="${sessionScope.LOGIN_USER.authStatus ne '9'}">
-	<script type="text/javascript">
-		//alert('권한이 없는 페이지 입니다');
-		//window.location.href = 'http://127.0.0.1/home.do';
-	</script>
-</c:if>
-
 	<c:choose>
     	<c:when test="${pageContext.request.requestURI eq '/WEB-INF/views/manager/dashboard.jsp' }">
         	<title>관리자 - 통계</title>
@@ -25,6 +18,9 @@
         </c:when>
     	<c:when test="${pageContext.request.requestURI eq '/WEB-INF/views/manager/acknowledge.jsp' }">
         	<title>관리자 - 강의 승인</title>
+        </c:when>
+    	<c:when test="${pageContext.request.requestURI eq '/WEB-INF/views/manager/notice.jsp' }">
+        	<title>관리자 - 공지사항</title>
         </c:when>
     	<c:when test="${pageContext.request.requestURI eq '/WEB-INF/views/manager/rtchat.jsp' }">
         	<title>관리자 - 실시간 채팅</title>

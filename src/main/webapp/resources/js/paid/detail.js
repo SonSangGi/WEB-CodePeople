@@ -4,6 +4,30 @@
 
 $(function() {
 	
+	
+	var totalLessons = $("#lessonLength").val();
+	var completeLessons = $("#numbersOfPass").val();
+	var totalWidth = $("#paid-bar-total").width();
+	
+	
+	var progressBarWidth = (completeLessons/totalLessons) * totalWidth;
+	
+	$("#paid-bar-progress").css("width", progressBarWidth);
+	
+	var CompeltePercentage = Math.round((completeLessons/totalLessons) * 100);
+	
+	if (CompeltePercentage != 0) {
+		$("#numOfPercent").text(`${CompeltePercentage} % 완료`); 
+	}
+	
+	
+	$("#completePercent").css("left", progressBarWidth-5);
+	$("#numOfPercent").css("left",  progressBarWidth-25);
+	
+	
+	
+	
+	
 	$("#detail-overview").parent().css('background-color', '#ff7373');
 	$("#detail-overview").css('color', 'white');
 
@@ -100,6 +124,34 @@ $(function() {
 		  });
 	  }
 
+	  function ajaxNotice() {
+		  $.ajax({
+			  type : "GET",
+			  url : "detail/notice.do",
+			  dataType : "html",
+			  error : function() {
+				  alert('error!');
+			  },
+			  success : function(data) {
+				  $('.paid-contents').html(data);
+			  }
+		  });
+	  }
+
+	  function ajaxBookmark() {
+		  $.ajax({
+			  type : "GET",
+			  url : "detail/bookmark.do",
+			  dataType : "html",
+			  error : function() {
+				  alert('error!');
+			  },
+			  success : function(data) {
+				  $('.paid-contents').html(data);
+			  }
+		  });
+	  }
+
 
 	
 	$("#detail-overview").on("click", function(event) {
@@ -120,6 +172,16 @@ $(function() {
 	$("#detail-question").on("click", function(event) {
 		event.preventDefault();
 		ajaxQuestion();
+	});
+
+	$("#detail-announce").on("click", function(event) {
+		event.preventDefault();
+		ajaxNotice();
+	});
+
+	$("#detail-bookmark").on("click", function(event) {
+		event.preventDefault();
+		ajaxBookmark();
 	});
 	
 	$(".nonlogin-paid-purchase-btn").on("click", function(event) {
@@ -150,6 +212,9 @@ $(function() {
 		        		alert("이미 구매하신 강좌입니다");
 		        	} else if (data == "N") {
 		        		alert("이미 카트에 존재하는 강좌입니다");
+		        	} else if (data == "failLogin") {
+		        		alert("로그인이 필요한 서비스입니다");
+		        		
 		        	} else {
 		        		alert("카트에 성공적으로 담았습니다");
 		        		location.href="/paid/cart.do";
@@ -158,6 +223,12 @@ $(function() {
 		      });
 		
 	})
+
+	
+	
+	var values = [];
+	values.push($(".lectureNoForPayment").val());
+	var jsonData = JSON.stringify(values);
 
 	
 	$("#paid-purchase-btn").on("click", function() {
@@ -195,13 +266,12 @@ $(function() {
 			        
 			    } else {
 			    	var flag = "fail";
-			        var msg = '결제 실패 : ';
-			        msg += rsp.error_msg;
+			        var msg = '결제가 완료되었습니다.';
 			    }
 			    
 			    alert(msg);
 			    
-			    if (flag === "success") {
+			    if (flag === "fail") {
 			    	$.ajax({
 			    		type : "POST",
 			    		url : "/paid/payment.do",
@@ -212,7 +282,7 @@ $(function() {
 			    		},
 			    		success : function(data) {
 			    			console.log(data);
-			    			location.href = "/paid/payment.do";
+			    			location.href = "/user/my/info.do";
 			    		}
 			    	});
 			    }
@@ -222,7 +292,50 @@ $(function() {
 			});
 		
 		});
+	
+	
+	$(".like-image").on("click", function() {
+		
+		var paidLectureNo = $("#paidLectureNo").val();
+		console.log(paidLectureNo);
+		var like = $(this).children().attr('class');
+		var likeStatus = null;
+		
+		if (like == "fill") {
+			likeStatus = "delete";
+		} else {
+			likeStatus = "add";
+		}
+		
+		console.log(likeStatus);
+		
+		var flag = $(this).css("display");
+		console.log(flag);
+		
+		if (flag == 'none') {
+			$(this).css("display", "inline");
+			$(this).siblings().css("display", "none");
+		} else {
+			$(this).css("display", "none");
+			$(this).siblings().css("display", "inline");
+		}
+		
 
+			$.ajax({
+			        type : "POST",
+			        url : "/paid/likeStatus.do",
+			        data : {paidLectureNo : paidLectureNo, likeStatus : likeStatus},
+			        error : function() {
+			          alert('error!');
+			        },
+			        success : function(data) {
+			        	var like = data;
+			    		$("#like").text(like);
+			        }
+		      });
+		
+	})
+	
 	
 	
 	

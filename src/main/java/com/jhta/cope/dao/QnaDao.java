@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jhta.cope.vo.Criteria;
+import com.jhta.cope.vo.Notice;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.QnaComment;
@@ -24,4 +25,7 @@ public interface QnaDao {
 	public List<QnaComment> getCommentByUserNo(int userNo);
 	public int getQnaCount(Map<String,String> keyword);
 	public int getQnaAnswersCount();
+	public List<Notice> getNoticeByCriteria(Criteria criteria);
+	public int getNoticeCount(String keyword);
+	public Notice getNoticeByNoticeNo(int rn);
 }

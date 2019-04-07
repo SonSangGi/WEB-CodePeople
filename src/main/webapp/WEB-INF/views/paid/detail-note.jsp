@@ -9,14 +9,17 @@
   	  </div>       
         <div class="col-xs-12 paid-note-list-wrapper">
             
+           <input type="hidden" class="buyLectureNo" name="buyLectureNo" value="${buyLecture.no }"/>
            <c:forEach var="note" varStatus="status" items="${notes }">
-           <input type="hidden" class="buyLectureNo" name="buyLectureNo" value="${note.buyLecture.no }"/>
             <div class="paid-each-note">
 	            <div class="paid-note-toparea">
 	                <span class="paid-section-info-wrapper"><span class="glyphicon glyphicon-pencil"></span><span id="paid-each-section-name">${note.buyLecture.paidLecture.title }</span></span>
 					
 					<div class="paid-each-section-date">
-						<span class="glyphicon glyphicon-time"></span><span>${note.createDate }</span>
+						<span class="glyphicon glyphicon-time"></span>
+						<span>
+						<fmt:formatDate pattern = "yyyy-MM-dd" value = "${note.createDate }" />
+						</span>
 					</div>
 					<h3 id="paid-each-note-title">${note.title}</h3>
 				</div>
@@ -72,6 +75,12 @@
  	  
 	 		$("#btn-add-note").on("click", function(event) {
 	 			event.preventDefault();
+		    	   var buyLectureNo = $(".buyLectureNo").val();
+			 		  if (buyLectureNo  == undefined) {
+			 			  alert("구매 유저만 노트를 등록할 수 있습니다");
+			 			  return;
+			 		  }
+
 	 			ajaxCreateNote();
 	 		});
 	  

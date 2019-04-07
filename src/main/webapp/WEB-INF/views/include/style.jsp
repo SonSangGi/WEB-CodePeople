@@ -8,6 +8,6 @@
 <link rel="stylesheet" href="/resources/bootstrap/css/bootstrap-theme.min.css">
 <script src="/resources/bootstrap/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href='/resources/css/sg.css?ver=<%=new Date() %>'>
-<link rel="stylesheet" href="/resources/css/chat.css">
+<link rel="stylesheet" href="/resources/css/chat.css?ver=1">
 <script src="/resources/js/sg.js?ver=<%=new Date()%>"/></script>
 <script src="/resources/js/chat.js?ver=0"></script>

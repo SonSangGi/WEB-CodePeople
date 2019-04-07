@@ -29,7 +29,7 @@
             <i class="fas fa-search" style="color:#ff7373;position: absolute;top: 12px;right: 15px;"></i>
         	</div>
         </div>
-        <div class="my-video-container" style="display: inline-block;">
+        <div class="my-video-container" style="display: inline-block;min-height:624px">
 
  		<c:forEach items="${myHistorys }" var="history" varStatus="status">
           <div class="my-video-box">
@@ -46,15 +46,14 @@
 	          <div class="my-video-overlay">
 	          	<h4>${history.buyLecture.paidLecture.title }</h4>
 	          	<div class="my-graph">
-                	<div style="width:5%;"></div>
+                	<div style="width:${history.buyLecture.percentage}%;"></div>
               	</div>
 	            <div class="my-graph-info">
-	                <span>10개 강의 중 1개 완료</span>
-	                <span>5%</span>
+	                <span>${history.buyLecture.percentage}%</span>
               	</div>
 	          	<strong>Summary</strong>
 	          	<p style="background: #ffb1b130;padding: 5px;border-radius: 5px;">${history.buyLecture.paidLecture.summary }</p>
-	          	<p style="position:absolute;bottom:5px;right:5px;"><a href="/paid/detail.do?no=${history.buyLecture.paidLecture.no }" class="sg-btn sg-btn-primary sg-nb">LEANING</a></p>
+	          	<p style="position:absolute;bottom:5px;right:5px;"><a href="/paid/detail.do?no=${history.buyLecture.paidLecture.no }" class="sg-btn sg-btn-primary sg-nb">LEARNING</a></p>
 	          </div>
           </div>
 		</c:forEach>
@@ -89,7 +88,6 @@ $(function(){
 			type:"post",
 			data:{keyword:keyword,sort:sort,cp:cp},
 			success:function(result){
-				console.log(result)
 				if(result.length){
 					$(result).each(function(index,history){
 						var text = '<div class="my-video-box">';
@@ -106,7 +104,7 @@ $(function(){
 				        text += '<p style="font-weight:bold;">level: '+history.buyLecture.paidLecture.level+'</p>';
 				        text += '<strong>Summary</strong>';
 				        text += '<p style="background: #ffb1b130;padding: 5px;border-radius: 5px;">'+history.buyLecture.paidLecture.summary+'</p>';
-				        text += '<p style="position:absolute;bottom:5px;right:5px;"><a href="/paid/detail.do?no='+history.buyLecture.paidLecture.no +'" class="sg-btn sg-btn-primary sg-nb">LEANING</a></p></div></div>';
+				        text += '<p style="position:absolute;bottom:5px;right:5px;"><a href="/paid/detail.do?no='+history.buyLecture.paidLecture.no +'" class="sg-btn sg-btn-primary sg-nb">LEARNING</a></p></div></div>';
 				        $('.my-video-container').append(text);
 					})
 					if(result.length == 8){

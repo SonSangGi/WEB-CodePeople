@@ -8,6 +8,7 @@ public class BuyLecture {
 	private PaidLecture paidLecture;
 	private User user;
 	private Date createDate;
+	private int percentage;
 	
 	public int getNo() {
 		return no;
@@ -33,6 +34,13 @@ public class BuyLecture {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	
+	public int getPercentage() {
+		return percentage;
+	}
+	public void setPercentage(int percentage) {
+		this.percentage = percentage;
 	}
 	@Override
 	public String toString() {

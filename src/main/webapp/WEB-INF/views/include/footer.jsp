@@ -7,11 +7,10 @@
             <div class="col-sm-8">
                <span>
                   (JHTA)FinalProject | 조장:손상기 | 부조장:김동원 | 조원:| 김영범 | 김승용 | 양재준 | <br>
-                  손상기: 로그인,회원가입,마이페이지,채팅,화면 구성 및 퍼블리싱 <br>
-                  김동원:<br>
-                  김영범:<br>
-                  김승용:<br>
-                  양재준:<br>
+                  손상기: 로그인, 회원가입, 메인 페이지, 마이페이지, 채팅, 알림, Q&A게시판, 화면 구성 및 퍼블리싱 <br>
+                  김동원: 강사 관련, 유료 강좌 관련, 강좌 비디오 플레이어 제작, 화면 디자인<br>
+                  김영범: 무료 강좌 관련<br>
+                  양재준: 관리자 관련<br>
                </span>
             </div>
             <div class="" style="font-weight:bold">
@@ -50,10 +49,12 @@
    <a class="sg-none chat-btn"><i class="fas fa-comment" style="font-size:20px;background-color:#c9545c;border-radius:100px;padding:20px;cursor:pointer"><small class="sg-text-white">COPE TALK</small></i></a>
    <div class="chat-container">
      <div class="chat-header">
-       <img src="https://d81pi4yofp37g.cloudfront.net/wp-content/uploads/300.png" class="chat-icon">
-       <span style="color:white;">손상기</span>
+       <img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" class="chat-icon" style="width:50px;height:50px;">
+       <span style="color:white;font-size:17px;font-weight:bold;">${LOGIN_USER.name }</span>
        <a style="width:20px;height:20px;display:inline-block;color:white;float:right;font-size:20px;cursor:pointer" class="chat-close">x</a>
-			<button class="chat-back"><i class="fas fa-long-arrow-alt-left"></i></button>
+       <div class="t-r" style="margin-right:30px;">
+		   <button class="chat-back sg-none" style="color:white;font-size:20px;"><i class="fas fa-home"></i></button>
+       </div>
      </div>
      <div class="chat-body">
      <c:forEach items="${friends }" var="friend">
@@ -101,7 +102,7 @@ $(function(){
 	var domain = window.location.pathname.split('/');
 	domain = domain[domain.length - 1];
 	
-	var ws = new WebSocket("ws://127.0.0.1/chat.do");
+	var ws = new WebSocket("ws://www.codepeople.com/chat.do");
 	ws.onmessage = function(event) {
 		var onAudio = new Audio('/resources/sound/on.mp3');
 		var failAudio = new Audio('/resources/sound/fail.mp3');
@@ -171,7 +172,7 @@ $(function(){
 				var offUser = JSON.parse(items[1]);
 				$("#on-user-"+offUser.id).addClass("label-default").removeClass("label-success").text("OFF");
 		}
-		// 친구 추가 결과
+		// 친구 추가 수락 및 거절
 		else if("FRIEND" == protocol){
 			var target = items[1];
 			var sendUserName = items[2];
@@ -189,7 +190,14 @@ $(function(){
 				failAudio.play();
 			}
 			$("#on-user-"+offUser.id).addClass("label-default").removeClass("label-success").text("OFF");
-	}
+		}
+		// 뱃지 알림
+		else if("BADGE" == protocol){
+			var onAudio = new Audio('/resources/sound/on.mp3');
+			var text = "<p style='font-size:18px;font-weight:bold;'>새로운 뱃지를 획득하셨습니다!</p>";
+			addAlert(text,5000);
+			onAudio.play();
+		}
 	}
 	  
        ///#@!#@! 마이 페이지 채팅 #@!#@!#@!

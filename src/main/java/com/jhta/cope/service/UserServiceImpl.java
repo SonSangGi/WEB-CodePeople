@@ -14,9 +14,11 @@ import com.jhta.cope.dao.UserDao;
 import com.jhta.cope.handler.MailHandler;
 import com.jhta.cope.vo.Avatar;
 import com.jhta.cope.vo.Badge;
+import com.jhta.cope.vo.BuyLecture;
 import com.jhta.cope.vo.Criteria;
 import com.jhta.cope.vo.Follow;
 import com.jhta.cope.vo.LectureHistory;
+import com.jhta.cope.vo.PaidLecture;
 import com.jhta.cope.vo.TempKey;
 import com.jhta.cope.vo.User;
 
@@ -27,14 +29,14 @@ public class UserServiceImpl implements UserService {
 	UserDao userDao;
 	@Inject
 	JavaMailSender mailSender;
-
+	@Autowired
+	PaidLectureService paidLectureService;
+	
 	@Override
 	public void insertUser(User user) throws Exception {
 
 		userDao.insertUser(user);
-		
-		System.out.println(user);
-		
+
 		User getUser = userDao.getUserByEmail(user.getEmail());
 		if (getUser != null) {
 			Map<String, Object> map = new HashMap<>();
@@ -44,9 +46,13 @@ public class UserServiceImpl implements UserService {
 			MailHandler mailHandler = new MailHandler(mailSender);
 			mailHandler.setFrom("ssg3799@gmail.com", "CodePeople");
 			mailHandler.setSubject("[CodePeople 이메일 인증]");
-			mailHandler.setText(new StringBuffer().append("<h1>메일인증</h1>")
-					.append("<a href='http://localhost/user/emailConfirm.do?userEmail=").append(user.getEmail())
-					.append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
+			mailHandler.setText(new StringBuffer().append("<div style='text-align:center;'><h1 style='text-align:center;color:white;background-color:#fb9595;'>CodePeople</h1>")
+					.append("<h1 style='text-align:center;'>환영합니다. "+user.getName()+"님</h1>")
+					.append("<p style='text-align:center;'>CodePeople을 이용해주셔서 감사합니다.</p>")
+					.append("<p style='text-align:center;'>사이트 가입을 완료하기 위해서는 아래 이메일 인증 링크를 이용해 가입해 주시기바랍니다.</p>")
+					.append("<a style='display:inline-block;border:1px solid lightgray;padding:3px;' href='http://www.codepeople.com/login/emailConfirm.do?userEmail=")
+					.append(user.getEmail())
+					.append("&key=").append(key).append("' target='_blenk'>이메일 인증 완료하기</a></div>").toString());
 			mailHandler.setTo(user.getEmail());
 			mailHandler.send();
 
@@ -66,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void insertAvatar(String userId) throws Exception {
+	public void insertAvatar(String userId) {
 		User user = userDao.getUserById(userId);
 		if (user != null) {
 			Avatar avatar = new Avatar();
@@ -110,7 +116,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void insertUserBadge(int userNo,int badgeNo) {
+	public void insertUserBadge(int userNo, int badgeNo) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("userNo", userNo);
 		map.put("badgeNo", badgeNo);
@@ -131,13 +137,12 @@ public class UserServiceImpl implements UserService {
 	public List<Follow> getMyFollowingById(String userId) {
 		return userDao.getMyFollowingById(userId);
 	}
-	
 
 	@Override
 	public List<Follow> getFriends(String userId) {
 		return userDao.getFriends(userId);
 	}
-	
+
 	@Override
 	public Follow myFollowChecking(Follow follow) {
 		return userDao.myFollowChecking(follow);
@@ -165,8 +170,53 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<LectureHistory> getLectureHistoryByCriteria(Criteria criteria) {
-		return userDao.getLectureHistoryByCriteria(criteria);
+		
+		List<LectureHistory> temps = userDao.getLectureHistoryByCriteria(criteria);
+		for (LectureHistory temp : temps) {
+			
+			int p = paidLectureService.completePercent(temp.getBuyLecture());
+			temp.getBuyLecture().setPercentage(p);
+			System.out.println(p);
+		}
+		return temps;
 	}
 
+	@Override
+	public List<PaidLecture> getPaidLectureByRank(String keyword) {
+		Map<String, String> map = new HashMap<>();
+		map.put("keyword", keyword);
+		return userDao.getPaidLectureByRank(map);
+	}
+	public List<PaidLecture> getMyComplateLectureByUserNo(int userNo){
+		return userDao.getMyComplateLectureByUserNo(userNo);
+	};
+
+	public int getHistoryCountByUserNo(int no) {
+		return userDao.getHistoryCountByUserNo(no);
+	}
+
+	@Override
+	public Map<String, Integer> CheckUserBadgeByUserNoAndBadgeNo(int userNo,int badgeNo) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("badgeNo", badgeNo);
+		return userDao.CheckUserBadgeByUserNoAndBadgeNo(map);
+	}
+
+	@Override
+	public Map<String, Integer> completionCheckMyLecture(int userNo, int lectureNo) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("lectureNo", lectureNo);
+		return userDao.completionCheckMyLecture(map);
+	}
+
+	@Override
+	public Integer checkTheFirstLecture(int userNo, int detailNo) {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("userNo", userNo);
+		map.put("detailNo", detailNo);
+		return userDao.checkTheFirstLecture(map);
+	}
 	
 }

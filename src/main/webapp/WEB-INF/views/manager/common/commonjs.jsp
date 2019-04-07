@@ -15,6 +15,3 @@
 
     <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
 	<script src="/resources/js/manager/common/paper-dashboard.js"></script>
-
-	<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-	<script src="/resources/js/manager/common/demo.js"></script>

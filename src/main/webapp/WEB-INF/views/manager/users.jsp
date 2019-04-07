@@ -59,13 +59,17 @@
                                     	</tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="user" items="${users }">
-                                    <c:if test="${user.authStatus eq '2'}">
+                                    <c:forEach var="instructor" items="${instructors }">
                                         <tr>
-                                        	<td id="teacher-no-${user.no }">${user.no }</td>
-                                        	<td><a id="teacher-modal-${user.no }" data-toggle="modal" data-target="#teacher-info">${user.id }</a></td>
+                                        	<td style="display:none;">${instructor.user.no }</td>
+                                        	<td id="teacher-no-${instructor.no }">${instructor.no }</td>
+										<c:if test="${instructor.user.authStatus eq '2' or instructor.user.authStatus eq '1' }">
+                                        	<td><a id="teacher-modal-${instructor.no }" data-toggle="modal" data-target="#teacher-info">${instructor.user.id }</a></td>
+										</c:if>
+										<c:if test="${instructor.user.authStatus eq '-1' or instructor.user.authStatus eq '-2' }">
+                                        	<td><a id="teacher-modal-${instructor.no }" data-toggle="modal" data-target="#teacher-info">${instructor.user.id }</a> <i class="ti-trash"></td>
+                                        </c:if>
                                         </tr>
-                                    </c:if>
                                     </c:forEach>
                                     </tbody>
                                 </table>
@@ -89,10 +93,34 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="user" items="${users }">
+                                    <c:if test="${user.authStatus eq '2' }">
+                                    	<tr>
+                                        	<td id="student-no-${user.no }">${user.no }</td>
+                                        	<td><a id="student-modal-${user.no }" data-toggle="modal" data-target="#student-info">${user.id }</a></td>
+                                        </tr>
+                                    </c:if>
                                     <c:if test="${user.authStatus eq '1'}">
                                         <tr>
                                         	<td id="student-no-${user.no }">${user.no }</td>
                                         	<td><a id="student-modal-${user.no }" data-toggle="modal" data-target="#student-info">${user.id }</a></td>
+                                        </tr>
+                                    </c:if>
+                                    <c:if test="${user.authStatus eq '0'}">
+                                        <tr>
+                                        	<td id="student-no-${user.no }">${user.no }</td>
+                                        	<td><a id="student-modal-${user.no }" data-toggle="modal" data-target="#student-info">${user.id }</a></td>
+                                        </tr>
+                                    </c:if>
+                                    <c:if test="${user.authStatus eq '-1'}">
+                                        <tr>
+                                        	<td id="student-no-${user.no }">${user.no }</td>
+                                        	<td><a id="student-modal-${user.no }" data-toggle="modal" data-target="#student-info">${user.id }</a> <i class="ti-trash"></i></td>
+                                        </tr>
+                                    </c:if>
+                                    <c:if test="${user.authStatus eq '-2'}">
+                                        <tr>
+                                        	<td id="student-no-${user.no }">${user.no }</td>
+                                        	<td><a id="student-modal-${user.no }" data-toggle="modal" data-target="#student-info">${user.id }</a> <i class="ti-trash"></i></td>
                                         </tr>
                                     </c:if>
                                     </c:forEach>
@@ -129,7 +157,7 @@
 								<th style="width: 20%">아이디</th>
 								<th style="width: 15%">이름</th>
 								<th style="width: 30%">이메일</th>
-								<th style="width: 25%">구매금액</th>
+								<th style="width: 25%">삭제/복구</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -171,7 +199,7 @@
 								<th style="width: 20%">아이디</th>
 								<th style="width: 15%">이름</th>
 								<th style="width: 30%">이메일</th>
-								<th style="width: 25%">구매금액</th>
+								<th style="width: 25%">삭제/복구</th>
 							</tr>
 						</thead>
 						<tbody>

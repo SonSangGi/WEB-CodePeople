@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>${freeSection.sectionTitles } - 코드피플</title>
 <%@include file="/WEB-INF/views/include/style.jsp"%>
 <script src="https://momentjs.com/downloads/moment.js"></script>
 <style>
@@ -42,8 +42,9 @@ aside {
 	padding: 10px;
 }
 
-.yb_entry_area {
-	
+.yb_entry_area p {
+	font-size: 16px;
+	font-style: Nanum Gothic;
 }
 
 article {
@@ -163,7 +164,7 @@ hr {
 			<aside>
 				<div id="yb_topic_list_index" class="index">
 					<div>
-						<a href="section.do?freeLectureNo=${param.freeLectureNo}&count=1">커버 페이지</a>
+						<a href="/free/detail.do?freeLectureNo=${freeSection.no }">커버 페이지</a>
 					</div>
 					<hr>
 					<h4>토픽 목록</h4>
@@ -214,8 +215,16 @@ hr {
 						<input type="hidden" name="count" value="${freeSection.count}">						
 						
 						<div class="yb_user_image col-xs-2">
-							<img
-								src="/resources/img/user/icon/icon.png">
+						
+						<c:choose>
+							<c:when test="${LOGIN_USER == null or LOGIN_USER.avatar.image eq 'Default' }">
+							<img src="/resources/img/user/icon/icon.png">
+							</c:when>
+							<c:otherwise>
+							<img src="/resources/img/user/icon/${LOGIN_USER.avatar.image }">
+							</c:otherwise>
+						</c:choose>
+						
 						</div>
 						<div class="yb_form_wrap">
 							<div class="yb_form col-xs-10">
@@ -271,11 +280,11 @@ hr {
 									<a class="sg-btn sg-btn-3rd sg-btn-xs sg-nb" href="/free/comment-delete.do?cno=${comment.cno }&lno=${param.freeLectureNo}&count=${freeSection.count}"><i class="fas fa-times"></i> 삭제</a>
 								</div>
 								</c:when>
-								<c:otherwise>
+								<c:when test="${LOGIN_USER.no != null }">
 								<div class="coment_buttons" style="display: inline-block; float: right">
 									<button class="comment-Reply-btn sg-btn sg-btn-3rd sg-btn-xs sg-nb"><i class="fas fa-reply"></i> 답글</button>
 								</div>
-								</c:otherwise>
+								</c:when>
 							</c:choose>
 							
 							<!-- 답글 컨테이너 -->
@@ -303,7 +312,6 @@ hr {
 			$('#lecture-view').on('click', function(event) {
 				var sectionNo = $(this).val();
 				var userNo = '${LOGIN_USER.no}'||'';
-				console.log(sectionNo);
 				if(userNo != ''){
 					$.ajax({
 						type:"post",
@@ -328,35 +336,34 @@ hr {
 				if($(".reply-comment-"+commentCno).size()){
 					$(".reply-comment-"+commentCno).remove();
 				}else{
-				$.ajax({
-				      type: 'get',
-				      url: '/free/reply-list.do',
-				      data: {lcno:commentCno},  //가져온 번호{cno:commentCno,contents,cccda}
-				      dataType: 'Json',
-				      success: function(data){
-				    	$.each(data, function(index, item) {
-				     	var html ='';
-				    	 	html += '<div class="col-xs-offset-2 col-xs-10 reply-comment-'+commentCno+'">';
-				    		html += '<div class="yb_user_image col-xs-2">';
-				    		html += '<img src="/resources/img/user/icon/';
-				    		if(item.writer.avatar.image != 'Default'){
-				    		 html += item.writer.avatar.image;
-				    		}else {
-				    			html +='icon.png';
-				    		}
-				    		html += '"/>';
-				    		html += '</div>';
-				    		html += '<div class="yb_name_time col-xs-10">';
-				    		html += '<strong>' + item.writer.name +'</strong> <a href="#"><time>' + moment().format('YYYY-MM-DD HH:mm:ss'); + '</time></a>';								
-				    		html += '</div>';
-				    		html += '<div class="yb_comment_contents col-xs-10" id=comment-list-' + item.crno + '>' + item.contents;
-				    		html += '</div>'; 
-				    		
-				    		$('.reply-' + item.lcno).append(html);
-				    	}) 
-				    		$()
-					}
-				});
+					$.ajax({
+					      type: 'get',
+					      url: '/free/reply-list.do',
+					      data: {lcno:commentCno},  //가져온 번호{cno:commentCno,contents,cccda}
+					      dataType: 'Json',
+					      success: function(data){
+					    	$.each(data, function(index, item) {
+					     	var html ='';
+					    	 	html += '<div class="col-xs-offset-2 col-xs-10 reply-comment-'+commentCno+'">';
+					    		html += '<div class="yb_user_image col-xs-2">';
+					    		html += '<img src="/resources/img/user/icon/';
+					    		if(item.writer.avatar.image != 'Default'){
+					    		 html += item.writer.avatar.image;
+					    		}else {
+					    			html +='icon.png';
+					    		}
+					    		html += '"/>';
+					    		html += '</div>';
+					    		html += '<div class="yb_name_time col-xs-10">';
+					    		html += '<strong>' + item.writer.name +'</strong> <time>' + moment().format('YYYY-MM-DD HH:mm:ss'); + '</time>';								
+					    		html += '</div>';
+					    		html += '<div class="yb_comment_contents col-xs-10" id=comment-list-' + item.crno + '>' + item.contents;
+					    		html += '</div>'; 
+					    		
+					    		$('.reply-' + item.lcno).append(html);
+					    	}) 
+						}
+					});
 				}
 			});
 			
@@ -364,7 +371,12 @@ hr {
 				var commentCno = $(this).attr('id').replace('reply-insert-', '');
 				var replyContents = $('#reply-contents-'+commentCno).val();
 				var userNo = $('#reply-user-'+commentCno).val();
-				
+		
+				if (replyContents == "") {
+					alert("내용을 입력하세요")
+					return false;
+				}
+			
 				$.ajax({
 				      type: 'get',
 				      url: '/free/reply-insert.do',
@@ -374,17 +386,22 @@ hr {
 				    	
 				      	$("#comment-list-" + data.lcno).parent().siblings(".reply-contents").hide()
 					}
-				});
+				}); 
 			});
 			
 			$('#yb_coment_list').on('click','[id^=comment-update]',function(event) {
 				var commentCno = $(this).attr('id').replace('comment-update-', '');
-				var commentContents = $('#comment-contents-'+commentCno);
-			
+				var commentContents = $('#comment-contents-'+commentCno).val();
+				
+				if (commentContents == "") {
+					alert("내용을 입력하세요")
+					return false;
+				}
+				
 				$.ajax({
 				      type: 'get',
 				      url: '/free/comment-update.do',
-				      data: {cno:commentCno, contents:commentContents.val()},  //가져온 번호{cno:commentCno,contents,cccda}
+				      data: {cno:commentCno, contents:commentContents},  //가져온 번호{cno:commentCno,contents,cccda}
 				      dataType: 'Json',
 				      success: function(data){
 				    	$("#comment-list-" + data.cno).text(data.contents);
@@ -411,6 +428,13 @@ hr {
 				height : 130
 			})
 		})
+		$(".comment-submit").click(function(event) {
+			if ($("#input-comment").val() == "") {
+				alert("내용을 입력하세요")
+				return false;
+			}
+			return true;
+		});
 	</script>
 	<%@include file="/WEB-INF/views/include/footer.jsp"%>
 </body>

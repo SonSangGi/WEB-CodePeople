@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.jhta.cope.dao.QnaDao;
 import com.jhta.cope.vo.Criteria;
+import com.jhta.cope.vo.Notice;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
 import com.jhta.cope.vo.QnaComment;
@@ -92,5 +93,19 @@ public class QnaServiceImpl implements QnaService{
 		qnaDao.updateQna(qna);
 	}
 
+	@Override
+	public List<Notice> getNoticeByCriteria(Criteria criteria) {
+		return qnaDao.getNoticeByCriteria(criteria);
+	}
+
+	@Override
+	public int getNoticeCount(String keyword) {
+		return qnaDao.getNoticeCount(keyword);
+	}
+	
+	@Override
+	public Notice getNoticeByNoticeNo(int NoticeNo) {
+		return qnaDao.getNoticeByNoticeNo(NoticeNo);
+	}
 
 }

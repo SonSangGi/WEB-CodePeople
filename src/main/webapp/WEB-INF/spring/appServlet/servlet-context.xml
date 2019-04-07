@@ -28,10 +28,15 @@
 		<interceptor>
 			<mapping path="/**"/>
 			<exclude-mapping path="/home.do"/>
-			<exclude-mapping path="/qna/detail.do"/>
 			<exclude-mapping path="/qna/list.do"/>
+			<exclude-mapping path="/qna/detail.do"/>
+			<exclude-mapping path="/qna/notice.do"/>
+			<exclude-mapping path="/qna/noticeDetail.do"/>
+			<exclude-mapping path="/paid/main.do"/>
+			<exclude-mapping path="/paid/home.do"/>
 			<exclude-mapping path="/login/**"/>
 			<exclude-mapping path="/free/**"/>
+			<exclude-mapping path="/error/**"/>
 			<beans:ref bean="loginInterceptor"/>
 		</interceptor>
 		<interceptor>

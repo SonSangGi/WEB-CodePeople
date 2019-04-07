@@ -4,28 +4,41 @@
 	pageEncoding="UTF-8"%>
 <!--네비게이션 바~~-->
 <div class="wrapper">
+
+<c:if test="${LOGIN_USER.authStatus == 9 }">
+	<div style="position:fixed;width:130px;height:130px;background-color:#c9545c;left:15px;bottom:20px;z-index:1;border-radius:100px;border:1px solid #c9545c;padding:25px;text-align:center;">
+		<a href="/manager/dashboard.do" style="color:white;">
+			<i class="fas fa-lock" style="font-size: 59px;"></i>
+			<br><small>관리자 페이지</small>
+		</a>
+</div>
+</c:if>
+
+<!-- 로딩 화면 -->
 <div class="sg-loading-fade">
 	<div class="sg-loading-box">
 		<img alt="" src="/resources/img/user/loading.gif" style="width: 365px;height: 365px;border-radius: 500px;">
 	</div>
 </div>
-	<div class="sg-header">
-		<div class="col-sm-offset-2 col-sm-7 sg-menu-left" style="display: block">
+
+<!-- 헤더 -->
+	<header class="sg-header">
+		<div class="col-sm-offset-2 col-sm-6 sg-menu-left" style="display: block">
 			<span>
 			<a href="/home.do" style="float: left"><img alt="CODEPEOPLE LOGO" src="/resources/img/user/cope_logo.png" class="cope-logo"></a>
 			</span>
 			<div class="sg-menu" style="margin-left: 30%;">
 				<ul>
-					<li><a href="/paid/main.do">강의</a>
+					<li><a href="/paid/main.do">PREMIUM</a>
 						<ul>
-							<li><a href="/paid/home.do?lang=java">Java</a></li>
-							<li><a href="/paid/home.do?lang=javascript">javaScript</a></li>
-							<li><a href="/paid/home.do?lang=spring">Spring</a></li>
-							<li><a href=#>로드 맵</a></li>
+							<li><a href="/paid/home.do?lang=java" style="color:#ff8100;"><img alt="" src="https://visualpharm.com/assets/78/Java-595b40b65ba036ed117d147f.svg" width="30"> JAVA</a></li>
+							<li><a href="/paid/home.do?lang=spring"  style="color:#35a853;"><img alt="" src="http://assets.tianmaying.com/avatars/90227ff73b68435eb2449571d0258043.png" width="30"> SPRING</a></li>
+							<li><a href="/paid/home.do?lang=javascript" style="color:#e4aa00;"><img alt="" src="https://image.flaticon.com/icons/svg/919/919828.svg" width="30"> JS</a></li>
 						</ul></li>
-					<li><a href="/free/list.do">외부강의</a></li>
-					<li><a href="/qna/list.do">Q&A</a></li>
-					<li style="float: right;margin: 13px;">
+					<li><a href="/free/list.do">OPEN</a></li>
+					<li><a href="/qna/list.do?cp=1">Q&A</a></li>
+					<li><a href="/qna/notice.do?cp=1">NOTICE</a></li>
+					<li style="float: right;margin-top: 13px;">
 						<form style="padding-left: 50px;" method=get action="http://www.google.co.kr/search" target="_blank" id="sg-form-search" >
 							<input type="text" name="q" value="" placeholder="검색" style="text-align: center; border-radius: 10px; border: none; height: 30px;" name="q">
 							<button type="submit" style="border: none; background: none; color: white; font-size: 20px;position:absolute;top:-3px;right:0px;" name="btnG"> <img src="/resources/img/user/icon/google.png" width='20'></button>
@@ -34,16 +47,17 @@
 				</ul>
 			</div>
 		</div>
-		<div class="col-xs-3 sg-menu-right">
+		<div class="col-xs-4 sg-menu-right">
 			<c:choose>
 				<c:when test="${LOGIN_USER eq null}">
 					<nav class="sg-menu-login" style="font-size: 15px; color: white; font-weight: bold; margin-top: 20px;">
-						<a href="#" class="sg-text-white login-in">로그인</a> || <a href="/login/signup.do" class="sg-text-white">회원가입</a>
+						<a class="sg-text-white login-in" style="cursor:point">LOGIN</a> || <a href="/login/signup.do" class="sg-text-white">JOIN</a>
 					</nav>
 				</c:when>
 				<c:otherwise>
 					<a style="margin:0px;padding:0px;" class="btn-sg-menu"><img src="/resources/img/user/icon/${LOGIN_USER.avatar.image eq 'Default' ? 'icon.png' : LOGIN_USER.avatar.image}" alt=""style="width: 30px; height: 30px; border-radius: 100px; margin: 10px; float: left;background-color:white;">
 					<span style="font-size:15px;display: inline-block;padding-top: 16px;">${LOGIN_USER.name}</span></a>
+					<a style="margin-left:20px;!important" href="/instructor/main.do"><i class="fas fa-book"></i></a>
 					<a style="margin-left:20px;" href="/paid/cart.do"><img src="/resources/img/paid/cart-white.png" width=25px; id="cart-menu"></a>
 					<div class="sg-menu-info">
 						<div class="sg-info-menu-box">
@@ -77,9 +91,9 @@
 			</c:choose>
 
 		</div>
-	</div>
-	<!--  -->
-	<!--네비게이션바 끝~~-->
+	</header>
+	<!--헤더 끝~~-->
+	
 	<!--유저 헤더 시작~~-->
 	<div class="sg-user-header sg-background"
 		style="background: url(/resources/img/user/background/<c:choose><c:when test="${LOGIN_USER == null }">Productsp-Page-Header-1500x300.jpg</c:when><c:otherwise>${LOGIN_USER.avatar.bgImg != 'Default' ? LOGIN_USER.avatar.bgImg:'Productsp-Page-Header-1500x300.jpg'}</c:otherwise></c:choose>) 0% 30% / cover !important;">
@@ -124,9 +138,6 @@
 						<input type="password" name="password" id="input-login-pwd">
 						<button class="sg-btn sg-btn-primary" style="display: block;width: 100%;height: 58px;margin-top: -3px;">로그인</button>
 					</form>
-					<div style="text-align:right;">
-						<a href="#">아이디/비밀번호 찾기</a>
-					</div>
 				</div>
 				<div class="col-md-4" style="padding-top: 60px; height: 100%;">
 					<a href="/login/googleSignIn.do"><img alt="Connect with Google" src="https://d81pi4yofp37g.cloudfront.net/wp-content/plugins/wordpress-social-login/assets/img/32x32/wpzoom/google.png" style="    margin-bottom: 20px;
@@ -163,6 +174,9 @@
 		}else if (reqListener == "lp") {
 			$(".sg-modal-fade").show();
 			$(".sg-text-alert").text("로그인을 해주시기 바랍니다.");
+		}else if (reqListener == "g") {
+			$(".sg-modal-fade").show();
+			$(".sg-text-alert").text("권한이 없습니다.");
 		}
 		}
 		

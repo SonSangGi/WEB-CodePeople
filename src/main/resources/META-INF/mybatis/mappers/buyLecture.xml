@@ -71,4 +71,18 @@
 		where
 			BUY_LECTURE_NO = #{value}
 	</select>
+	
+	
+		<select id="getCountBuyLectureByPaidLectureNo" parameterType="int" resultType="int">
+		select
+			count(*)
+		from
+			BUY_LECTURE
+		where
+			PAID_LECTURE_NO = #{value}
+	</select>
+	
+	
+	
+	
 </mapper>

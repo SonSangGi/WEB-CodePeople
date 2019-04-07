@@ -43,7 +43,8 @@
 			LECTURE_CONTENTS as lectureContent,
 			LECTURE_TIME as lectureTime,
 			LECTURE_LEVEL as lectureLevel,
-			LECTURE_LECTURE_SUMMARY as lectureSummary
+			LECTURE_LECTURE_SUMMARY as lectureSummary,
+			LECTURE_AVAILABLE as available
 		from
 			FREE_LECTURE
 	</select>
@@ -210,34 +211,38 @@
 			from
 				(SELECT 
 				ROWNUM as rn,
-					FREE_LECTURE_NO as no,
-					LECTURE_TITLE as lectureTitle,
-					LECTURE_IMAGE as lectureImg,
-					LECTURE_CONTENTS as lectureContent,
-					LECTURE_TIME as lectureTime,
-					LECTURE_LEVEL as lectureLevel,
-					LECTURE_LECTURE_SUMMARY as lectureSummary
+					A.FREE_LECTURE_NO as no,
+					A.LECTURE_TITLE as lectureTitle,
+					A.LECTURE_IMAGE as lectureImg,
+					A.LECTURE_CONTENTS as lectureContent,
+					A.LECTURE_TIME as lectureTime,
+					A.LECTURE_LEVEL as lectureLevel,
+					A.LECTURE_LECTURE_SUMMARY as lectureSummary,
+					A.LECTURE_AVAILABLE as available
 				FROM 
-					FREE_LECTURE
-				<where>
-					<if test="searchType == 'all' and keyword != null">
-						(LOWER(LECTURE_TITLE) like '%' || #{keyword} || '%' or
-		        		LOWER(LECTURE_CONTENTS) like '%' || #{keyword} || '%')
-					</if>
-					<if test="searchType == 'title' and keyword != null">
-						LOWER(Lecture_title) like '%' || #{keyword} ||'%'
-					</if>
-				</where> 
+					FREE_LECTURE A
+				where A.LECTURE_AVAILABLE = 'Y' 
+				<if test="searchType == 'all' and keyword != null">
+					and (LOWER(A.LECTURE_TITLE) like '%' || #{keyword} || '%' or
+	        		LOWER(A.LECTURE_CONTENTS) like '%' || #{keyword} || '%')
+				</if>
+				<if test="searchType == 'title' and keyword != null">
+					and LOWER(A.Lecture_title) like '%' || #{keyword} ||'%'
+				</if>
+				order by A.FREE_LECTURE_NO
 				)
-			where rn &gt;= #{beginIndex}
-		    and rn &lt;= #{endIndex}
+				where
+					rn &gt;= #{beginIndex}
+				    and rn &lt;= #{endIndex}
 	</select>
 	
-	<select id="getFreeLectureCount" parameterType="int" resultType="int">
+	<select id="getFreeLectureCount" resultType="int">
 		select 
 			count(*)
 		from
-			FREE_LECTURE 
+			FREE_LECTURE
+		where 
+			LECTURE_AVAILABLE = 'Y'
 	</select>
 	
 	<insert id="insertFreeLectureViews" parameterType="FreeLectureViews">
@@ -288,5 +293,14 @@
 			FREE_LECTURE_SECTION
 		where
 			LECTURE_SECTION_NO = #{value} 
-	</select>	
+	</select>
+	
+	<update id="updateFreeLectureAvailable" parameterType="FreeLecture">
+		update 
+			FREE_LECTURE
+		set
+			LECTURE_AVAILABLE = #{lectureAvailable}
+		where
+			FREE_LECTURE_NO = #{no}
+	</update>	
 </mapper>

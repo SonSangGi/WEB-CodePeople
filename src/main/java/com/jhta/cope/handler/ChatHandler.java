@@ -1,5 +1,6 @@
 package com.jhta.cope.handler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.jhta.cope.dao.UserDao;
 import com.jhta.cope.vo.Chat;
 import com.jhta.cope.vo.Follow;
 import com.jhta.cope.vo.User;
+import com.sun.activation.viewers.TextEditor;
 
 public class ChatHandler extends TextWebSocketHandler {
 
@@ -55,7 +57,6 @@ public class ChatHandler extends TextWebSocketHandler {
 			String recvUserId = payLoadItem[1];
 			String msg = payLoadItem[2];
 			String sendUser = new ObjectMapper().writeValueAsString(ChatHandler.getSessionUser(session));
-			System.out.println(recvUserId+","+msg);
 			WebSocketSession ws = sessionMap.get(recvUserId);
 			chatDao.insertChat(new Chat().setRecvUser(new User().setId(recvUserId))
 					.setSendUser(ChatHandler.getSessionUser(session)).setContents(msg));
@@ -95,7 +96,6 @@ public class ChatHandler extends TextWebSocketHandler {
 		user.setUserOn("ON");
 		userDao.updateUser(user);
 		sessionMap.put(user.getId(), session);
-
 		boolean isSendLoginMsg = (Boolean) session.getAttributes().get("SEND_LOGIN_MSG_FLAG");
 
 		List<Follow> friends = userDao.getFriends(user.getId());
@@ -139,10 +139,6 @@ public class ChatHandler extends TextWebSocketHandler {
 		return (User) attr.get("LOGIN_USER");
 	}
 
-	private String getAllOnUserId() {
-		return StringUtils.collectionToDelimitedString(sessionMap.keySet(), ",");
-	}
-
 	public static List<User> getAllOnUsers() {
 		List<User> users = new ArrayList<>();
 		for (String key : sessionMap.keySet()) {
@@ -152,5 +148,14 @@ public class ChatHandler extends TextWebSocketHandler {
 		}
 		return users;
 	}
-
+	
+	public static void serverToClientMessage(String userId,String msg,Object object) {
+		WebSocketSession ws = sessionMap.get(userId);
+		try {
+			ws.sendMessage(new TextMessage(msg+"/"+object));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

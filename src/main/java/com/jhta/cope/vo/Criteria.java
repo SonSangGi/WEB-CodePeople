@@ -9,6 +9,7 @@ public class Criteria {
 	private String sort; // 정렬 기준이에요..
 	private String searchType; // 검색 종류입니다. 제목으로 검색,날짜로 검색 등등
 	private int userNo;
+	private String lang;
 
 	public Criteria() {
 	}
@@ -74,6 +75,14 @@ public class Criteria {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 	@Override

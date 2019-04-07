@@ -11,40 +11,45 @@ public class Avatar {
 		return userNo;
 	}
 
-	public void setUserNo(int userNo) {
+	public Avatar setUserNo(int userNo) {
 		this.userNo = userNo;
+		return this;
 	}
 
 	public String getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public Avatar setImage(String image) {
 		this.image = image;
+		return this;
 	}
 
 	public String getBgImg() {
 		return bgImg;
 	}
 
-	public void setBgImg(String bgImg) {
+	public Avatar setBgImg(String bgImg) {
 		this.bgImg = bgImg;
+		return this;
 	}
 
 	public String getNick() {
 		return nick;
 	}
 
-	public void setNick(String nick) {
+	public Avatar setNick(String nick) {
 		this.nick = nick;
+		return this;
 	}
 
 	public int getExp() {
 		return exp;
 	}
 
-	public void setExp(int exp) {
+	public Avatar setExp(int exp) {
 		this.exp = exp;
+		return this;
 	}
 
 	@Override

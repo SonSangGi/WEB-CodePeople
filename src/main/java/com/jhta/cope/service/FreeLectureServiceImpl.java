@@ -21,6 +21,7 @@ public class FreeLectureServiceImpl implements FreeLectureService {
 	@Autowired
 	FreeLectureDao freeLectureDao;
 
+	// 무료 강의, 무료 섹션 등록 서비스
 	@Override
 	public void insertFreeLecture(FreeLecture freeLecture, List<FreeLectureSection> sections) {
 		freeLectureDao.insertFreeLecture(freeLecture);
@@ -158,5 +159,9 @@ public class FreeLectureServiceImpl implements FreeLectureService {
 	public FreeLectureSection getFreeSection(int sectionNo) {
 		FreeLectureSection freeLectureSection = freeLectureDao.getFreeSection(sectionNo);
 		return freeLectureSection;
+	}
+	@Override
+	public void updateFreeLectureAvailable(FreeLecture freeLecture) {
+		freeLectureDao.updateFreeLectureAvailable(freeLecture);	
 	}
 }

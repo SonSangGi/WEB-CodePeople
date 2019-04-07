@@ -54,7 +54,7 @@
                 <h4>INSTRUCTOR</h4>
                 <div id="paid-content-instructor">
                     <div class="col-xs-1" style='padding: 0px;'>
-                        <img id="paid-instructor-photo" src='resources/img/johndoe.jpg'>
+                        <img id="paid-instructor-photo" src="/resources/img/user/icon/${lectureDetails[0].paidLecture.instructor.user.avatar.image eq 'Default' ? 'icon.png' : lectureDetails[0].paidLecture.instructor.user.avatar.image}">
                     </div>
                     <div class="col-xs-11">
                         <div>

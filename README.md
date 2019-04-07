@@ -2,13 +2,14 @@
 ![1](./README_imgs/1.PNG)
 
 ### 맡은 업무
-* 로그인 및 회원가입
-* Q&A 게시판, 공지사항 게시판
-* 마이페이지
+* 로그인 및 마이페이지 [동영상보기](https://www.youtube.com/watch?v=22e68DM7W6A)
+* 회원가입            [동영상보기](https://www.youtube.com/watch?v=vPJlJ2kw0zw)
+* Q&A 게시판          [동영상보기](https://www.youtube.com/watch?v=Dn-40-QY4N0&t=9s)
+* 공지사항 게시판      [동영상보기](https://www.youtube.com/watch?v=m4pZYL0Urjw)
 * 채팅 및 알림 등 웹소켓 관련
-* 메인페이지
+* 메인페이지           [동영상보기](https://www.youtube.com/watch?v=rb3aCEjEUBk)
 * 프로젝트 설계 및 초기 설정
-* 페이지 디자인
+* 페이지 디자인 
 ![2](./README_imgs/2.PNG)
 ![3](./README_imgs/3.PNG)
 ![4](./README_imgs/4.PNG)

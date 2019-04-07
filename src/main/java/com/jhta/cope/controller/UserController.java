@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.jhta.cope.handler.ChatHandler;
 import com.jhta.cope.service.BuyLectureService;
 import com.jhta.cope.service.ChatService;
+import com.jhta.cope.service.LectureHistoryService;
 import com.jhta.cope.service.PaidLectureService;
 import com.jhta.cope.service.QnaService;
 import com.jhta.cope.service.UserService;
@@ -54,6 +56,9 @@ public class UserController {
 	PaidLectureService paidLectureService;
 	@Autowired
 	BuyLectureService buyLectureService;
+	
+	@Autowired
+	LectureHistoryService lectureHistoryService;
 
 	@Resource(name = "iconPath")
 	String iconPath;
@@ -99,6 +104,7 @@ public class UserController {
 			keyword = keyword.replaceAll(" ", "");
 			keyword = keyword.toLowerCase();
 		}
+		
 		int rows = 8;
 
 		Criteria criteria = new Criteria(cp, rows);
@@ -112,7 +118,6 @@ public class UserController {
 
 	@RequestMapping("/chat")
 	public String chat(Model model) {
-		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
 		return "user/my_chat";
 	}
 
@@ -243,6 +248,7 @@ public class UserController {
 		return chats;
 	}
 
+	// 채팅 읽음 업데이트
 	@RequestMapping("/chat/viewChat")
 	@ResponseBody
 	public String viewChat(String recvUserId) {
@@ -262,5 +268,68 @@ public class UserController {
 		follow.setFollower(user).setFollowing(new User().setId(followingId));
 		userService.deleteFollow(follow);
 	}
+	
+	
+	
+	
+	// paidLecture 업데이트 
+	@RequestMapping(value = "/getCurrentTime", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	@ResponseBody
+	public String getCurrentTime(@RequestParam("currentTime") Integer currentTime,
+			  @RequestParam("historyNo") Integer historyNo) {
+		
+		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
+		LectureHistory lectureHistory = lectureHistoryService.getLectureHistoryByHistoryNo(historyNo);
+		
+		// 30초마다 업데이트
+		// 30초 단위 && 기록된 시간보다 최근 시간이 크면 최근 시간으로 업데이트
+		if (lectureHistory.getHistoryLength() < currentTime) {
+			lectureHistory.setHistoryLength(currentTime);
+			lectureHistoryService.updateLectureHistory(lectureHistory);
+		}
+		
+		// 기록된 시간이 전체 전체 레슨 시간의 90% 이상이 될 경우
+		if (lectureHistory.getHistoryLength() >= 0.9 * lectureHistory.getPaidLectureDetail().getLessonLength()) {
+			// pass 여부를 Y 로 설정
+			lectureHistory.setPass("Y");
+			lectureHistoryService.updateLectureHistory(lectureHistory);
+			int count = userService.getHistoryCountByUserNo(user.getNo());
+			if(count == 1) {
+				if(userService.CheckUserBadgeByUserNoAndBadgeNo(user.getNo(), 1) == null) {
+					// 뱃지 생성
+					userService.insertUserBadge(user.getNo(), 1);
+					//아바타 업데이트
+					userService.updateAvatar(user.getAvatar().setExp(user.getAvatar().getExp()+100));
+					//세션에 변경된 값 적용
+					SessionUtils.addAttribute("LOGIN_USER", user);
+					//메세지 전송
+					ChatHandler.serverToClientMessage(user.getId(), "BADGE", null);
+				}
+			}else if(count == 10) {
+				if(userService.CheckUserBadgeByUserNoAndBadgeNo(user.getNo(), 2) == null) {
+					userService.insertUserBadge(user.getNo(), 2);
+					//아바타 업데이트
+					userService.updateAvatar(user.getAvatar().setExp(user.getAvatar().getExp()+100));
+					//세션에 변경된 값 적용
+					SessionUtils.addAttribute("LOGIN_USER", user);
+					//메세지 전송
+					ChatHandler.serverToClientMessage(user.getId(), "BADGE", null);
+				}
+			}else if(count == 20) {
+				if(userService.CheckUserBadgeByUserNoAndBadgeNo(user.getNo(), 3) == null) {
+					userService.insertUserBadge(user.getNo(), 3);
+					//아바타 업데이트
+					userService.updateAvatar(user.getAvatar().setExp(user.getAvatar().getExp()+100));
+					//세션에 변경된 값 적용
+					SessionUtils.addAttribute("LOGIN_USER", user);
+					//메세지 전송
+					ChatHandler.serverToClientMessage(user.getId(), "BADGE", null);
+				}
+			}
+		}
+		
+		return "";
+	}
+
 
 }

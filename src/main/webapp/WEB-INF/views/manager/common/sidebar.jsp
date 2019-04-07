@@ -68,16 +68,16 @@
                     </a>
                 </li>
                 <c:choose>
-                	<c:when test="${pageContext.request.requestURI eq '/WEB-INF/views/manager/rtchat.jsp' }">
+                	<c:when test="${pageContext.request.requestURI eq '/WEB-INF/views/manager/notice.jsp' }">
 	                	<li class="active">
 	                </c:when>
 	                <c:otherwise>
 	                	<li>
 	                </c:otherwise>
 	                </c:choose>
-                    <a href="rtchat.do">
-                        <i class="ti-text"></i>
-                        <p>실시간 채팅</p>
+                    <a href="notice.do">
+                        <i class="ti-pencil-alt"></i>
+                        <p>공지사항</p>
                     </a>
              	</li>
             </ul>

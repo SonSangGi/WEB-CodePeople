@@ -121,8 +121,8 @@ body {
   display: none;
   position: fixed;
   width: 100%;
-  height: 10%;
-  top: 92%;
+  height: 20%;
+  top: 90%;
   left: 0;
   right: 0;
   bottom: 0;
@@ -148,7 +148,7 @@ video::-webkit-media-controls {
 }
 
 #progressBar {
-	position:absolute;
+	position:relative;
 	width:0px;
 	height:10px;
 	background:#ff7373;
@@ -206,9 +206,17 @@ video::-webkit-media-controls {
 	padding-bottom: 5px;
 	padding-right: 10px;
 	padding-left: 10px;
-	margin-left: 30%;
+	margin-left: 32%;
 	font-weight: 600;
 	opacity: 0.6;
+}
+
+#video-link-exposure {
+	opacity: 0.6;
+}
+
+#video-link-exposure:hover {
+	opacity: 1;
 }
 
 #video-smart-copy:hover {
@@ -425,4 +433,31 @@ video {
   background-size: 30px 30px;
   background-position: center;
   
+}
+
+.video-controller {
+	position: fixed;
+}
+
+.mark-area {
+	position: fixed;
+	top:87%;
+}
+
+.bookmark-input-area {
+	position: fixed;
+	top:84%;
+}
+
+#new-note-generator {
+	background-color: transparent !important; 
+}
+
+.caption {
+	position: fixed;
+	top:50%;
+}
+
+.mark-image {
+	display: none;
 }

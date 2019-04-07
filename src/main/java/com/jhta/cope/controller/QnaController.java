@@ -28,6 +28,7 @@ import com.jhta.cope.service.QnaService;
 import com.jhta.cope.util.EtcUtils;
 import com.jhta.cope.util.SessionUtils;
 import com.jhta.cope.vo.Criteria;
+import com.jhta.cope.vo.Notice;
 import com.jhta.cope.vo.Pagination;
 import com.jhta.cope.vo.Qna;
 import com.jhta.cope.vo.QnaAnswer;
@@ -46,22 +47,25 @@ public class QnaController {
 	@RequestMapping(value = "list")
 	public String list(Model model, Integer cp, @RequestParam(required = false, name = "keyword") String keyword,
 			@RequestParam(required = false, name = "searchType") String searchType,
-			@RequestParam(required = false, name = "sort") String sort,HttpServletRequest request) {
+			@RequestParam(required = false, name = "sort") String sort,
+			@RequestParam(required = false, name = "rows") Integer rows, HttpServletRequest request) {
 
 		if (cp == null) {
 			cp = 1;
 		}
-		int rows = 10;
+		if(rows == null) {
+			rows = 10;
+		}
 		if (keyword != null) {
 			keyword = keyword.toLowerCase();
 		}
-		
+
 		int totalRows = qnaService.getQnaCount(keyword, searchType);
 		Pagination pagination = new Pagination(cp, rows, totalRows);
-		if(pagination.getTotalPages()< cp) {
+		if (pagination.getTotalPages() < cp) {
 			cp = 1;
 		}
-		
+
 		Criteria criteria = new Criteria(cp, rows);
 		criteria.setSearchType(searchType);
 		criteria.setKeyword(keyword);
@@ -92,9 +96,9 @@ public class QnaController {
 
 		if (com.jhta.cope.util.StringUtils.indexOfIgnoreCase(resultViewCountCookie, newResultViewCountCookie) == -1) {
 			Cookie cookie = new Cookie("qnaSeq", resultViewCountCookie + newResultViewCountCookie);
-			cookie.setMaxAge(60*60*24*3);
+			cookie.setMaxAge(60 * 60 * 24 * 3);
 			res.addCookie(cookie);
-			qna.setViews(qna.getViews()+1);
+			qna.setViews(qna.getViews() + 1);
 			qnaService.updateQna(qna);
 		}
 
@@ -153,7 +157,7 @@ public class QnaController {
 	}
 
 	// 글 삭제
-	@RequestMapping(value = "delQna")
+	@RequestMapping(value = "delQna", method = RequestMethod.GET)
 	public String deleteQna(int qnaNo) {
 		Qna qna = qnaService.getQnaByNo(qnaNo);
 		User user = (User) SessionUtils.getAttribute("LOGIN_USER");
@@ -192,5 +196,60 @@ public class QnaController {
 		} else {
 			return "redirect:list.do?fail=not";
 		}
+	}
+
+	// 공지사항
+	@RequestMapping(value = "notice")
+	public String noticeList(Model model, @RequestParam(required = false, name = "cp") Integer cp,
+			@RequestParam(required = false, name = "keyword") String keyword, HttpServletRequest request) {
+
+		if (cp == null) {
+			cp = 1;
+		}
+		int rows = 10;
+		if (keyword != null) {
+			keyword = keyword.toLowerCase();
+		}
+
+		int totalRows = qnaService.getNoticeCount(keyword);
+		Pagination pagination = new Pagination(cp, rows, totalRows);
+		if (pagination.getTotalPages() < cp) {
+			cp = 1;
+		}
+
+		Criteria criteria = new Criteria(cp, rows);
+		criteria.setKeyword(keyword);
+
+		List<Notice> notices = qnaService.getNoticeByCriteria(criteria);
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("notices", notices);
+
+		return "qna/notice";
+	}
+
+	@RequestMapping(value = "noticeDetail")
+	public String noticeDetail(Model model, int rn, HttpServletRequest req, HttpServletResponse res) {
+		Notice notice = qnaService.getNoticeByNoticeNo(rn);
+		model.addAttribute("notice", notice);
+
+		Cookie[] cookies = req.getCookies();
+		Map<String, String> cookieMap = new HashMap<>();
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				cookieMap.put(cookies[i].getName(), cookies[i].getValue());
+			}
+		}
+
+		String resultViewCountCookie = cookieMap.get("noticeSeq");
+		String newResultViewCountCookie = "|" + rn;
+
+		if (com.jhta.cope.util.StringUtils.indexOfIgnoreCase(resultViewCountCookie, newResultViewCountCookie) == -1) {
+			Cookie cookie = new Cookie("noticeSeq", resultViewCountCookie + newResultViewCountCookie);
+			cookie.setMaxAge(60 * 60 * 24 * 3);
+			res.addCookie(cookie);
+		}
+		int lows = qnaService.getNoticeCount(null);
+		model.addAttribute("lows", lows);
+		return "qna/noticedetail";
 	}
 }

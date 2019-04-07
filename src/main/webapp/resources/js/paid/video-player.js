@@ -1,13 +1,204 @@
 $(function() {
-
+	
         const video = document.getElementById('media-video');
+        const historyNo = $("#lectureHistoryNo").val();
+        const prevLength = $("#lectureHistoryLength").val();
         
+        
+        function sendAjaxCurrentTime() {
+            let currentTime = Math.round(video.currentTime);
+            console.log(currentTime);
+            console.log(historyNo);
+            
+            if (!video.paused) {
+            	$.ajax({
+            		type : "POST",
+            		data : {"currentTime" : currentTime, "historyNo" : historyNo},
+            		url : "/user/my/getCurrentTime.do",
+            		error : function() {
+            			console.log('error!');
+            		},
+            		success : function(data) {
+            			console.log(data);
+            		}
+            	});
+            }
+        }
+        
+		
+		$(".mark-image").on("click", function() {
+			var num = $(this).attr("id").replace("mark-", "");
+			video.currentTime = num;
 
-        // 플레이어 구성 콘텐츠 나타내기
+		})
+        
+    	$("#video-link-bookmark").on("click", function(event) {
+    		$("#currentTime").remove();
+    		
+    		let currentTime = Math.round(video.currentTime);
+    		const duration = Math.round(video.duration);
+    		var barsize = $('#media-video').width() * 0.988;
+    		var position = parseInt(currentTime * (barsize / video.duration));
+    		
+            var $mark = $(`<img class="mark-image" style="position:relative;" width="20px" id="mark-${currentTime}" src="/resources/img/paid/bookmark-video.png"/>`);
+            var $div = $(`<input type="text" style="position:absolute; z-index:9999;" class="markComment" id="input-${currentTime}" name="markComment" value=""/>
+            			<input type="hidden" id="currentTime" name="currentTime" value="${currentTime}"/>`);
+            $mark.appendTo($('.mark-area'));
+            $div.appendTo($('.bookmark-input-area'));
+            $("#" + `input-${currentTime}`).css("margin-left", (position - 80));
+            $("#" + `input-${currentTime}`).css("border", "3px solid #ff7373");
+            $("#" + `input-${currentTime}`).css("background", "navy");
+            $("#" + `input-${currentTime}`).css("color", "#ff7373");
+            
+            var imageNum = $(".mark-image").length;
+            $("#" + `mark-${currentTime}`).css("left", position);
+            $("#" + `mark-${currentTime}`).css("display", "inline");
+    	})
+    	
+    	
+    	
+	$(".mark-image").on("mouseover", function() {
+		
+		var num = $(this).attr("id").replace("mark-", "");
+
+		var content = $("#" + `caption-${num}`).text();
+        var $newCaption = $(`<span class="newCaption-list" id="newCaption-${num}" style="color:white; background-color:black;">${content}</span>`);
+        $newCaption.appendTo($('.caption'));
+		
+         $(".newCaption-list").css("margin-left", "900px");
+		
+	});
+
+    $(".mark-image").on("mouseout", function() {
+    		var num = $(this).attr("id").replace("mark-", "");
+    		$("#" + `newCaption-${num}`).remove();
+    		
+    });
+    	
+    	
+    	 function markPosition() {
+    	
+    		$(".mark-image").each(function(index, item) {
+        		var currentTime = $(item).attr("id").replace("mark-", "");
+        		
+        		const duration = Math.round(video.duration);
+        		var barsize = $('#media-video').width() * 0.988;
+        		var num = $(".mark-image").length;
+        		var position = parseInt(currentTime * (barsize / video.duration));
+        		
+       			$(item).css("left", (position) - (20 * index));
+        	})
+    	};       
+    	
+    	
+		$("#video-link-exposure").on("click", function() {
+    		$(".mark-image").each(function(index, item) {
+        		var currentTime = $(item).attr("id").replace("mark-", "");
+        		
+        		const duration = Math.round(video.duration);
+        		var barsize = $('#media-video').width() * 0.988;
+        		var num = $(".mark-image").length;
+        		var position = parseInt(currentTime * (barsize / video.duration));
+        		
+       			$(item).css("left", (position) - (20 * index));
+        	})
+        	
+        	
+        	var flag = $(".mark-image").css("display");
+    		
+    		if (flag === "none") {
+    			$(".mark-image").css("display", "inline");
+    		} else {
+    			$(".mark-image").css("display", "none");
+    		}
+        	
+		})
+    	
+    	
+    	function captionPosition() {
+    		$(".caption-list").each(function(index, item) {
+    			var currentTime = $(item).attr("id").replace("caption-", "");
+    			
+    			const duration = Math.round(video.duration);
+    			var barsize = $('#media-video').width() * 0.988;
+    			
+    			var position = parseInt(currentTime * (barsize / video.duration));
+    			
+    			$(item).css("left", position);
+    			$(item).css("display", "inline");
+    		})
+    	}
+    	
+    	
+    	$(".bookmark-input-area").keyup(function(key) {
+			var markComment = $(".markComment").val();
+			console.log(markComment);
+
+			
+			if (key.keyCode == 27) {
+	            $("#" + `input-${currentTime}`).remove();
+	            $("#" + `mark-${currentTime}`).css("left", position);
+
+			}
+
+			if (key.keyCode == 13) {
+				
+				var currentTime = $("#currentTime").val();
+				var $comment = $(`<span class="caption-list" style="position:relative; color:white; background-color:black;"
+				id="caption-${currentTime}">${markComment}</span>`);
+
+
+				$.ajax({
+					type : "POST",
+					data : {currentTime : currentTime, historyNo : historyNo, markComment:markComment},
+					url : "/paid/addBookmark.do",
+					error : function() {
+						console.log('error!');
+					},
+					success : function(data) {
+						$(".markComment").remove();
+						$("#" + `mark-${currentTime}`).css("display", "none");
+
+			            $comment.appendTo($('.caption-storage'));
+						
+			            $("#" + `mark-${currentTime}`).on("mouseover", function() {
+//							
+							var num = $(this).attr("id").replace("mark-", "");
+							var content = $("#" + `caption-${num}`).text();
+					        var $newCaption = $(`<span class="newCaption-list" id="newCaption-${num}" style="color:white; background-color:black;">${content}</span>`);
+					         $newCaption.appendTo($('.caption'));
+					         $(".newCaption-list").css("margin-left", "900px");
+						});
+
+					    $(".mark-image").on("mouseout", function() {
+					    		var num = $(this).attr("id").replace("mark-", "");
+					    		$("#" + `newCaption-${num}`).remove();
+					    		
+					    	});
+					    
+						$(".mark-image").on("click", function() {
+							var num = $(this).attr("id").replace("mark-", "");
+							video.currentTime = num;
+
+						})
+
+						
+						
+					}
+				});
+			}
+    	});
+    	
+    	
+    	
+    	
+
+    	// 플레이어 구성 콘텐츠 나타내기
 
         function addBlockCss() {
             $('.video-header').css("display", "block");
             $('.video-footer').css("display", "block");
+            $('.mark-area').css("display", "block");
         };
 
         function fadeOutBlock() {
@@ -23,6 +214,7 @@ $(function() {
         function displayNone() {
             $('.video-header').css("display", "none");
             $('.video-footer').css("display", "none");
+            $(".mark-image").css("display", "none");
         };
 
         $("#media-player").on("mouseenter", () => {
@@ -92,8 +284,6 @@ $(function() {
             return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
         }
 
-       
-
        video.onloadedmetadata = function() {
     	   
     	   // 영상 시간 가져오기
@@ -116,10 +306,6 @@ $(function() {
 		function snap() {
 		    context.fillRect(20, 20, 150, 100);
 		    context.drawImage(video, 0, 0, width, height);
-		    console.log(context);
-		    
-		    canvas.crossOrigin="anonymous"
-			canvas.toDataURL("image/png");
 
 		}
       
@@ -127,10 +313,6 @@ $(function() {
 		$("#video-smart-copy").on("click", function() {
 			snap();
 		});
-		
-		
-      
-       
        
        function currenttime() {
            let currenttime = Math.round(video.currentTime);
@@ -139,7 +321,6 @@ $(function() {
            $("#currenttime").text(`${minutes}:${seconds}`);
         };
 
-        setInterval(currenttime,500);
 
         // fullscreen 모드
         $("#fullscreen").on("click", () => {
@@ -153,7 +334,6 @@ $(function() {
             $('#backBar').css('width', barsize + 'px');
        }
        
-       getBarSize();
 
         function update() {
             if (!video.ended) {
@@ -167,10 +347,7 @@ $(function() {
 
         function updateBar() {
             let updateBar = setInterval(update, 100);
-        };
-       
-        updateBar();
-        
+        };        
         
         
         function playOrPause() {
@@ -293,6 +470,29 @@ $(function() {
 				return;
 			}
 		});
+		
+		var bookmarkLength = $("#bookmarkLength").val();
+        
+        function init() {
+            getBarSize();
+            updateBar();
+            setInterval(currenttime,500);
+            
+            if (bookmarkLength != "") {
+            	video.currentTime = bookmarkLength;
+            	return;
+            }
+            
+            
+            if (prevLength) {
+            	video.currentTime = prevLength;
+            }            
+            
+            setInterval(sendAjaxCurrentTime, 10000);
 
+        }
+        
+        init();
 
+		
 });

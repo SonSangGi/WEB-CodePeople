@@ -66,7 +66,6 @@ public class LoginController {
 		Long expireTime = accessGrant.getExpireTime();
 		if (expireTime != null && expireTime < System.currentTimeMillis()) {
 			accessToken = accessGrant.getRefreshToken();
-			System.out.printf("accessToken is expired. refresh token = {}", accessToken);
 		}
 		Connection<Google> connection = googleConnectionFactory.createConnection(accessGrant);
 		Google google = connection == null ? new GoogleTemplate(accessToken) : connection.getApi();
@@ -107,8 +106,6 @@ public class LoginController {
 
 		Gson gson = new Gson();
 		Map<String, Object> map = gson.fromJson(result, HashMap.class);
-		System.out.println("resultcode: " + map.get("resultcode"));
-		System.out.println("message: " + map.get("message"));
 		if (map.get("message").equals("success")) {
 			Map<String, Object> responseMap = (Map<String, Object>) map.get("response");
 			User user = new User();
@@ -130,7 +127,6 @@ public class LoginController {
 	public String login(@RequestParam("id") String id, @RequestParam("password") String password,
 			HttpServletRequest request) {
 		User user = userService.getUserById(id);
-		System.out.println(user);
 		if (user == null) {
 			return "redirect:/home.do?fail=login";
 		}
@@ -199,7 +195,8 @@ public class LoginController {
 		}
 		return result;
 	}
-
+	
+	//메일
 	@RequestMapping(value = "/emailConfirm")
 	public String emailConfirm(@RequestParam("userEmail") String userEmail, @RequestParam("key") String key,
 			Model model) {

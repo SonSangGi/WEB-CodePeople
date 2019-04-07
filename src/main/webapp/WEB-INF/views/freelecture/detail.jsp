@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>${freeLecture.lectureTitle} - 코드피플</title>
 <%@include file="/WEB-INF/views/include/style.jsp"%>
 <style>
 .container {

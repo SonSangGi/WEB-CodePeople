@@ -35,4 +35,5 @@ public interface FreeLectureDao {
 	int getFreeLectureViewsCount(Map<String, Integer> map);
 	void updateFreeLectureViews(FreeLectureSection freeLectureSection);
 	FreeLectureSection getFreeSection(int sectionNo);
+	void updateFreeLectureAvailable(FreeLecture freeLecture); 
 }

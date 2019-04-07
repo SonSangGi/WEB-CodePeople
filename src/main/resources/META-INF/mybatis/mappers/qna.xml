@@ -60,17 +60,21 @@
 
 	<select id="getAnswerByUserNo" parameterType="int" resultMap="getAnswerByNoResultMap">
 		select
-			ANSWER_NO,
-			ANSWER_WRITER,
-			ANSWER_CONTENTS,
-			ANSWER_CREATE_DATE,
-			QNA_NO
+			A.ANSWER_NO,
+			A.ANSWER_WRITER,
+			A.ANSWER_CONTENTS,
+			A.ANSWER_CREATE_DATE,
+			A.QNA_NO
 		from
-			QNA_ANSWER
+			QNA_ANSWER A,QNA B
 		where
-		ANSWER_WRITER = #{value}
+			A.QNA_NO = B.QNA_NO
+		and 
+			B.QNA_AVAILABLE = 1
+		and
+			ANSWER_WRITER = #{value}
 		order by 
-			ANSWER_CREATE_DATE
+			ANSWER_CREATE_DATE desc
 	</select>
 
 	<select id="getAllAnswers" parameterType="Criteria" resultMap="getAnswerByNoResultMap">
@@ -78,7 +82,7 @@
 			A.rn,
 			A.ANSWER_NO,
 			A.ANSWER_WRITER,
-		        <![CDATA[REGEXP_REPLACE(A.ANSWER_CONTENTS,'<[^>]*>','') as ANSWER_CONTENTS]]>,
+		    <![CDATA[REGEXP_REPLACE(A.ANSWER_CONTENTS,'<[^>]*>','') as ANSWER_CONTENTS]]>,
 			A.ANSWER_CREATE_DATE,
 			A.QNA_NO
 		from (
@@ -141,6 +145,8 @@
 		from
 			QNA
 		where
+			QNA_AVAILABLE = 1
+		and
 			QNA_WRITER = #{value}
 		order by 
 			QNA_CREATE_DATE desc
@@ -190,13 +196,7 @@
 
 	<select id="getAllQnasByCriteria" parameterType="Criteria" resultMap="getQnaByNoResultMap">
 		select
-			rn,
-			QNA_NO,
-			QNA_TITLE,
-			QNA_WRITER,
-			QNA_CONTENTS,
-			QNA_CREATE_DATE,
-			QNA_VIEWS
+			*
 		from (
 		select
 		<choose>
@@ -367,7 +367,61 @@
 		QNA_NO = #{no}
 	</update>
 
-	<update id="updateAnswer" parameterType="QnaAnswer">
-
-	</update>
+	<select id="getNoticeByNoticeNo" parameterType="int" resultType="Notice">
+		select 
+			rn,
+			NOTICE_NO as no,
+			NOTICE_TITLE as title,
+			NOTICE_CONTENTS as contents,
+			NOTICE_CREATE_DATE as createDate,
+			NOTICE_AVAILABLE as available
+		from
+		(select
+            ROW_NUMBER() over(order by NOTICE_CREATE_DATE desc) rn,
+			NOTICE_NO,
+			NOTICE_TITLE,
+			NOTICE_CONTENTS,
+			NOTICE_CREATE_DATE,
+			NOTICE_AVAILABLE
+		from NOTICE) A
+    where A.rn = #{value}
+	</select>
+	
+	<select id="getNoticeByCriteria" parameterType="Criteria" resultType="Notice">
+		select *
+		from(
+		select
+			ROW_NUMBER() over (order by NOTICE_CREATE_DATE desc) rn,
+			NOTICE_NO as no,
+			NOTICE_TITLE as title,
+			NOTICE_CONTENTS as contents,
+			NOTICE_CREATE_DATE as createDate,
+			NOTICE_AVAILABLE as available
+		from NOTICE
+		<where>
+			NOTICE_AVAILABLE = 1
+			<if test="keyword != null">
+				and (LOWER(NOTICE_TITLE) like '%' || #{keyword} || '%' or
+				LOWER(NOTICE_CONTENTS) like '%' || #{keyword} || '%')
+			</if>
+		</where>
+			) A
+			where rn &gt;= #{beginIndex}
+			and rn &lt;= #{endIndex}
+	</select>
+	
+	<select id="getNoticeCount" resultType="int" parameterType="string">
+		select
+			count(*)
+		from
+			NOTICE
+		<where>
+			NOTICE_AVAILABLE = 1
+			<if test="value != null and value != ''">
+				and (LOWER(NOTICE_TITLE) like '%' || #{keyword} || '%' or
+				LOWER(NOTICE_CONTENTS) like '%' || #{keyword} || '%')
+			</if>
+		</where>
+	</select>
+	
 </mapper>

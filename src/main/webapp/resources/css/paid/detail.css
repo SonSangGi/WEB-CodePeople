@@ -25,6 +25,12 @@
     margin-top: 10px;
 }
 
+body {
+	min-height: 100%;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+
 #paid-info-topright {
     margin-top: 80px;
     text-align: right;
@@ -35,7 +41,7 @@
     text-align: left;
 }
 
-#paid-continue-btn {
+.paid-continue-btn {
     margin-top: 20px;
     padding-left: 50px;
     padding-right: 50px;
@@ -124,7 +130,6 @@
 
 #paid-bar-progress {
 	position:absolute;
-	width:30%;
 	height:10px;
 	background:#ff7373;
     margin: 0px;
@@ -187,14 +192,14 @@
 }
 
 .paid-default-menu {
-    margin-top:60px;
+    margin-top:100px;
     text-align: center;
 }
 
 .paid-default-menu li {
     padding : 20px;
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 52px;
+    margin-right: 52px;
     float: left;
 }
 
@@ -210,4 +215,34 @@
 .create-note-cancel {
 	background: transparent;
 	color: black;
+}
+
+.like-wrapper {
+	color: gray;
+	font-weight: 600;
+}
+
+#like {
+	font-size : 16px;
+	margin-left:10px;
+	color: red;
+}
+
+.completePercent {
+	color : red;
+	margin-top: 20px;
+	font-size: 15px;
+	font-weight: 800;
+	margin-bottom: 50px;
+}
+
+.paid-each-bookmark {
+	border: 1px solid #ff7373;
+	margin-bottom: 20px;
+	border-radius: 25px;
+}
+
+.paid-each-bookmark:hover {
+	background: #ff7373;
+	color: white;
 }

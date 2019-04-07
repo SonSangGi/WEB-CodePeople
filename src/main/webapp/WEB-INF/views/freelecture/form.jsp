@@ -57,8 +57,8 @@
 			</div>
 			
 			<div>
-				<input type="button" id="btn-save" value="서버전송"  class="btn btn-primary"/>
-				<input type="button" id="btn-add-form" value="섹션 추가"  class="btn btn-default"/>
+				<input type="button" id="btn-save" value="강의 등록"  class="sg-btn sg-btn-primary sg-btn-sm"/>
+				<input type="button" id="btn-add-form" value="섹션 추가"  class="sg-btn sg-btn-3rd sg-btn-sm""/>
 			</div>
 		</form>
 	</div>
@@ -115,6 +115,28 @@
 			
 			//전송버튼
 			$("#btn-save").click(function() {
+				
+				if ($("input[name=lectureTitle]").val() == "") {
+					alert("제목을 입력하세요")
+					$("input[name=lectureTitle]").focus();
+					return false;
+				}
+				
+				if ($("input[name=lectureImgFile]").val() == "") {
+					alert("이미지를 업로드 하세요")
+					$("input[name=lectureImgFile]").focus();
+					return false;
+				}
+				
+				editerItems.getById["editor"].exec("UPDATE_CONTENTS_FIELD", []);
+			    	var editor = $("#editor").val();
+
+			        if( editor == ""  || editor == null || editor == '&nbsp;' || editor == '<p>&nbsp;</p>')  {
+			             alert("내용을 입력하세요.");
+			             editerItems.getById["editor"].exec("FOCUS"); //포커싱
+			             return false;
+			        }
+			        
 				//id가 smarteditor인 textarea에 에디터에서 대입
 				editerItems.getById["editor"].exec("UPDATE_CONTENTS_FIELD", []);
 				for (var i=0; i<formIndex; i++) {

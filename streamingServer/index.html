@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <title>video player</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="index.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+
+        <div id='media-player'>
+            <div class="toolbar">
+                <div class="video-header">
+                    <div>
+                        <span class="glyphicon glyphicon-menu-hamburger" id="lesson-menu"></span>
+                    </div>
+                </div>
+                <div class="speed-dropup">
+                    <div class="speed-option">
+                        <a id="0.5">0.5 x</a>
+                        <a id="0.75">0.75 x</a>
+                        <a id="1.0" style="background-color : #afeeee">1 x</a>
+                        <a id="1.25">1.25 x</a>
+                        <a id="1.5">1.5 x</a>
+                        <a id="2.0">2 x</a>
+                    </div>
+                </div>
+
+                <div class="video-footer">
+                    <div class="video-controller">
+                        <div id="backBar">
+                            <div id="progressBar">
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            
+                            <span class="footer-left-buttons" style="margin-left: 20px;">
+                            <span class="glyphicon glyphicon-pause" id="playPause"></span>
+                            <span class="glyphicon glyphicon-forward" id="plusCurrentTime"></span>
+                            <button id="speedSetting" class="label sg-btn-primary"> speed 1.0 x</button>
+                            <span class="glyphicon glyphicon-backward" id="minusCurrentTime"></span>
+                            <span id="currenttime" style="color:white">00:00</span>
+                            <span style="color: aliceblue"> / </span>
+                            <span id="duration" style="color:white">00:00</span>
+                            </span>
+                            
+                            <span class="footer-right-buttons">
+                            <button id="volumeUp">volumeUp + 0.1</button>
+                            <button id="volumeDown">volumeDown - 0.1</button>
+                            <span class="glyphicon glyphicon-volume-up" id="mute"></span>
+                            <span class="glyphicon glyphicon-modal-window" id="pip"></span>
+                            <span class="glyphicon glyphicon-fullscreen" id="fullscreen"></span>
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <video onchange='getBarSize()' id='media-video' autoplay>
+                <source src='http://localhost:3000/video' type='video/mp4'>
+                <source src='http://localhost:3000/video' type='video/webm'>
+            </video>
+        </div>
+    </div>
+</body>
+
+
+</html>
